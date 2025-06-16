@@ -9,8 +9,6 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/checkout@v4
-
     - name: Create labels if not exist
       shell: bash
       if: github.event.action == 'opened'
@@ -49,7 +47,7 @@ runs:
           echo "Version label already present in PR #${{ github.event.pull_request.number }}"
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.github-token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
 
     - name: Remove version-required label if version label is present
       shell: bash
