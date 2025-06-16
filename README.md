@@ -28,25 +28,84 @@ github-token:
     required: true
   ```
 
+#### Example workflow
+```yml
+name: Ensure Release Version Label validator
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+    branches:
+      - main
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+permissions:
+  pull-requests: write
+  contents: read
+
+jobs:
+  validate-version-required-label:
+    name: Validate Version Required Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Labeler validation
+        uses: jpbnetley/release-pr-label-version/labler-validator@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
 ### labeler
 > adds missing labels, and validates that the labels are added.
   - Wil add a `release:version-required` if no release label is added.
   - If a release label is added, the `release:version-required` is removed
 
 #### Permissions
-  ```yml
+```yml
+permissions:
+  pull-requests: write
+  contents: read
+```
+
+#### Inputs
+```yml
+github-token:
+    description: 'GitHub token for authentication'
+    required: true
+```
+
+#### Example workflow
+```yml
+name: Ensure Release Version Label
+
+on:
+  pull_request:
+    types: [opened, labeled, unlabeled, synchronize]
+    branches:
+      - main
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 permissions:
   pull-requests: write
   contents: read
 
-  ```
-
-#### Inputs
-  ```yml
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
-  ```
+jobs:
+  add-version-required-label:
+    name: Add Version Required Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      
+      - name: Labeler validation
+        uses: jpbnetley/release-pr-label-version/labler@main
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
 
 ### labeler-release
 > Handles semantic versioning based on labels applied to pull requests.
@@ -74,3 +133,31 @@ github-token:
     description: 'GitHub token for authentication'
     required: true
   ```
+
+#### Example workflow
+```yml
+name: Release
+
+on:
+  push:
+    branches: 
+      - main
+
+jobs:
+  release-from-version-label:
+    name: Release from Version Label
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Labeler release
+        uses: jpbnetley/release-pr-label-version/labler-release@main
+        with:
+          major-release-script: echo 'major release script'
+          minor-release-script: echo 'minor release script'
+          patch-release-script: echo 'patch release script'
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+```
+
+## Ref
+This composite actions is used in: https://github.com/jpbnetley/test-release-pr-label-version
