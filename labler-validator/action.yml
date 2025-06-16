@@ -27,4 +27,4 @@ runs:
           exit 0
         fi
       env:
-        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.github_token }}
