@@ -19,6 +19,7 @@ runs:
   using: "composite"
   steps:
     - name: Semantic release
+      shell: bash
       run: |
           # Get all label names for the PR
           PR_NUMBER=$(gh pr list --repo "$REPO" --base main --state merged --json number,mergedAt --jq 'sort_by(.mergedAt) | last.number')
