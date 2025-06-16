@@ -23,8 +23,9 @@ permissions:
 
 #### Inputs
   ```yml
-secrets:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+github-token:
+    description: 'GitHub token for authentication'
+    required: true
   ```
 
 ### labeler
@@ -42,8 +43,9 @@ permissions:
 
 #### Inputs
   ```yml
-secrets:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+github-token:
+    description: 'GitHub token for authentication'
+    required: true
   ```
 
 ### labeler-release
@@ -68,10 +70,7 @@ inputs:
   major-release-script:
     description: 'Script to run for major release'
     required: true
-
-secrets:
-  GITHUB_TOKEN:
+github-token:
     description: 'GitHub token for authentication'
     required: true
-    default: '${{ secrets.GITHUB_TOKEN }}'
   ```

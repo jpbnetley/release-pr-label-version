@@ -2,10 +2,9 @@ name: 'labeler-validator'
 description: 'Validates that the required labels are present on a pull request.'
 
 inputs:
-  github_token:
+  github-token:
     description: 'GitHub token for authentication'
     required: true
-
 
 runs:
   using: "composite"
@@ -26,4 +25,4 @@ runs:
           exit 0
         fi
       env:
-        GITHUB_TOKEN: ${{ inputs.github_token }}
+        GITHUB_TOKEN: ${{ inputs.github-token }}
