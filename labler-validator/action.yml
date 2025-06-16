@@ -1,8 +1,8 @@
 name: 'labeler-validator'
 description: 'Validates that the required labels are present on a pull request.'
 
-secrets:
-  GITHUB_TOKEN:
+inputs:
+  github_token:
     description: 'GitHub token for authentication'
     required: true
     default: '${{ secrets.GITHUB_TOKEN }}'
@@ -27,4 +27,4 @@ runs:
           exit 0
         fi
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ inputs.GITHUB_TOKEN }}
