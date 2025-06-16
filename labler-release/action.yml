@@ -1,0 +1,44 @@
+name: 'labler-release'
+description: 'Handles semantic versioning based on labels applied to pull requests.'
+
+inputs:
+  patch-release-script:
+    description: 'Script to run for patch release'
+    required: true
+  minor-release-script:
+    description: 'Script to run for minor release'
+    required: true
+  major-release-script:
+    description: 'Script to run for major release'
+    required: true
+
+secrets:
+  GITHUB_TOKEN:
+    description: 'GitHub token for authentication'
+    required: true
+    default: '${{ secrets.GITHUB_TOKEN }}'
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v4
+
+    - name: Semantic release
+      run: |
+          # Get all label names for the PR
+          PR_NUMBER=$(gh pr list --repo "$REPO" --base main --state merged --json number,mergedAt --jq 'sort_by(.mergedAt) | last.number')
+          labels=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels --jq '.labels[].name')
+
+          if echo "$labels" | grep -q "^release:version-patch$"; then
+            ${{ inputs.patch-release-script }}
+          elif echo "$labels" | grep -q "^release:version-minor$"; then
+            ${{ inputs.minor-release-script }}
+          elif echo "$labels" | grep -q "^release:version-major$"; then
+            ${{ inputs.major-release-script }}
+          elif echo "$labels" | grep -q "^release:version-skip$"; then
+            echo "release version skip"
+          else
+            echo "No release label found"
+          fi
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
