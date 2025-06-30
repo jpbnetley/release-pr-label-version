@@ -16,8 +16,8 @@ and check if any release labels have been added.
 #### Permissions
   ```yml
 permissions:
-  pull-requests: write
-  contents: read
+    pull-requests: write
+    contents: read
 
   ```
 
@@ -66,8 +66,8 @@ jobs:
 #### Permissions
 ```yml
 permissions:
-  pull-requests: write
-  contents: read
+    pull-requests: write
+    contents: read
 ```
 
 #### Inputs
@@ -113,8 +113,8 @@ jobs:
 #### Permissions
   ```yml
 permissions:
-  pull-requests: write
-  contents: read
+    pull-requests: write
+    contents: read
   ```
 
 #### Inputs
