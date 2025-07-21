@@ -7,6 +7,8 @@
     "node": "20"
   },
   "scripts": {
+    "lib:build":" pnpm --filter lib build",
+    "lib:tsc:check": "pnpm --filter lib tsc:check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
