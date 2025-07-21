@@ -3,12 +3,19 @@
   "version": "1.0.0",
   "description": "> release prs with labels",
   "type": "module",
+  "private": true,
   "engines": {
     "node": "20"
   },
   "scripts": {
     "lib:build": " pnpm --filter lib build",
     "lib:tsc:check": "pnpm --filter lib tsc:check",
+    "labler:build": "pnpm --filter labler build",
+    "labler:tsc:check": "pnpm --filter labler tsc:check",
+    "labler-release:build": "pnpm --filter labler-release build",
+    "labler-release:tsc:check": "pnpm --filter labler-release tsc:check",
+    "labler-validator:build": "pnpm --filter labler-validator build",
+    "labler-validator:tsc:check": "pnpm --filter labler-validator tsc:check",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

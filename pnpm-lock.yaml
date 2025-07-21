@@ -12,6 +12,24 @@ importers:
         specifier: ^0.12.9
         version: 0.12.9(typescript@5.8.3)
 
+  labler:
+    dependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+
+  labler-release:
+    dependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+
+  labler-validator:
+    dependencies:
+      typescript:
+        specifier: ^5.8.3
+        version: 5.8.3
+
   lib:
     dependencies:
       typescript:

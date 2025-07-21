@@ -1,31 +1,20 @@
 {
-  "name": "lib",
+  "name": "labler-release",
   "version": "1.0.0",
+  "description": "",
   "private": true,
-  "type": "module",
   "module": "dist/index.js",
-  "files": [
-    "dist"
-  ],
+  "type": "module",
   "scripts": {
     "build": "tsdown",
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:check": "tsc --noEmit"
   },
+  "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "packageManager": "pnpm@10.13.1",
   "dependencies": {
     "typescript": "^5.8.3"
-  },
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./types": {
-      "types": "./dist/types/*.d.ts",
-      "import": "./dist/types/*.js"
-    }
   }
 }
