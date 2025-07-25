@@ -31,3 +31,5 @@ export const ReleaseLabel = {
 } as const
 
 export type ReleaseLabel = (typeof ReleaseLabel)[keyof typeof ReleaseLabel]
+
+export type ReleaseLabelKey = keyof typeof ReleaseLabel
