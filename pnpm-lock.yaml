@@ -11,22 +11,17 @@ importers:
       tsdown:
         specifier: ^0.12.9
         version: 0.12.9(typescript@5.8.3)
-
-  labler:
-    dependencies:
       typescript:
         specifier: ^5.8.3
         version: 5.8.3
+
+  labler:
     devDependencies:
       lib:
         specifier: workspace:*
         version: link:../lib
 
-  labler-release:
-    dependencies:
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
+  labler-release: {}
 
   labler-validator:
     dependencies:
@@ -34,11 +29,7 @@ importers:
         specifier: ^5.8.3
         version: 5.8.3
 
-  lib:
-    dependencies:
-      typescript:
-        specifier: ^5.8.3
-        version: 5.8.3
+  lib: {}
 
 packages:
 
