@@ -1,0 +1,25 @@
+//#region src/types/enums/release-label-colors.d.ts
+declare enum ReleaseLabelColors {
+  /**
+   * Red
+   */
+  VersionRequired = "b60205",
+  /**
+   * Green
+   */
+  VersionPatch = "0e8a16",
+  /**
+   * Blue
+   */
+  VersionMinor = "0052cc",
+  /**
+   * Orange
+   */
+  VersionMajor = "d93f0b",
+  /**
+   * Light Gray
+   */
+  VersionSkip = "bfd4f2",
+}
+//#endregion
+export { ReleaseLabelColors };

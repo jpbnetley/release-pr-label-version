@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "module": "dist/index.js",
   "files": [
     "dist"
   ],
@@ -23,9 +22,6 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js"
     },
-    "./types": {
-      "types": "./dist/types/*.d.ts",
-      "import": "./dist/types/*.js"
-    }
+    "./types/*": "./dist/types/*"
   }
 }
