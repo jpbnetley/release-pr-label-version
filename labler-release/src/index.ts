@@ -1,4 +1,4 @@
-import { getInput, setFailed, error as logError, debug } from '@actions/core'
+import { getInput, setFailed, error as logError, debug, info } from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
@@ -41,12 +41,16 @@ async function run() {
   if (labels.includes(ReleaseLabelName.VersionRequired)) {
     setFailed('Version required is invalid label for a release.')
   } else if (labels.includes(ReleaseLabelName.VersionPatch)) {
-    await executeBuildScript(patchReleaseScript)
+    const response = await executeBuildScript(patchReleaseScript)
+    info(`Patch release script executed with response: ${response}`)
+    
   } else if (labels.includes(ReleaseLabelName.VersionMinor)) {
-    await executeBuildScript(minorReleaseScript)
+    const response = await executeBuildScript(minorReleaseScript)
+    info(`Minor release script executed with response: ${response}`)
   } else if (labels.includes(ReleaseLabelName.VersionMajor)) {
-    await executeBuildScript(majorReleaseScript)
+    const response = await executeBuildScript(majorReleaseScript)
+    info(`Major release script executed with response: ${response}`)
   }
 }
 
-run()
+run().catch(error => setFailed(`Action failed with error: ${error?.message ?? error}`));

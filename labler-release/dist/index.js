@@ -1,4 +1,5 @@
 import { createRequire } from "node:module";
+import { exec } from "node:child_process";
 
 //#region rolldown:runtime
 var __create$1 = Object.create;
@@ -14843,19 +14844,19 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			return __awaiter$10(this, void 0, void 0, function* () {
 				if (this._disposed) throw new Error("Client has already been disposed.");
 				const parsedUrl = new URL(requestUrl);
-				let info$1 = this._prepareRequest(verb, parsedUrl, headers);
+				let info$2 = this._prepareRequest(verb, parsedUrl, headers);
 				const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
 				let numTries = 0;
 				let response;
 				do {
-					response = yield this.requestRaw(info$1, data);
+					response = yield this.requestRaw(info$2, data);
 					if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
 						let authenticationHandler;
 						for (const handler$1 of this.handlers) if (handler$1.canHandleAuthentication(response)) {
 							authenticationHandler = handler$1;
 							break;
 						}
-						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$1, data);
+						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$2, data);
 						else return response;
 					}
 					let redirectsRemaining = this._maxRedirects;
@@ -14868,8 +14869,8 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 						if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
 							for (const header in headers) if (header.toLowerCase() === "authorization") delete headers[header];
 						}
-						info$1 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-						response = yield this.requestRaw(info$1, data);
+						info$2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+						response = yield this.requestRaw(info$2, data);
 						redirectsRemaining--;
 					}
 					if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) return response;
@@ -14894,7 +14895,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 		* @param info
 		* @param data
 		*/
-		requestRaw(info$1, data) {
+		requestRaw(info$2, data) {
 			return __awaiter$10(this, void 0, void 0, function* () {
 				return new Promise((resolve, reject) => {
 					function callbackForResult(err, res) {
@@ -14902,7 +14903,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 						else if (!res) reject(/* @__PURE__ */ new Error("Unknown error"));
 						else resolve(res);
 					}
-					this.requestRawWithCallback(info$1, data, callbackForResult);
+					this.requestRawWithCallback(info$2, data, callbackForResult);
 				});
 			});
 		}
@@ -14912,10 +14913,10 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 		* @param data
 		* @param onResult
 		*/
-		requestRawWithCallback(info$1, data, onResult) {
+		requestRawWithCallback(info$2, data, onResult) {
 			if (typeof data === "string") {
-				if (!info$1.options.headers) info$1.options.headers = {};
-				info$1.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+				if (!info$2.options.headers) info$2.options.headers = {};
+				info$2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
 			}
 			let callbackCalled = false;
 			function handleResult(err, res) {
@@ -14924,7 +14925,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 					onResult(err, res);
 				}
 			}
-			const req = info$1.httpModule.request(info$1.options, (msg) => {
+			const req = info$2.httpModule.request(info$2.options, (msg) => {
 				const res = new HttpClientResponse(msg);
 				handleResult(void 0, res);
 			});
@@ -14934,7 +14935,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			});
 			req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
 				if (socket) socket.end();
-				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$1.options.path}`));
+				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$2.options.path}`));
 			});
 			req.on("error", function(err) {
 				handleResult(err);
@@ -14964,21 +14965,21 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
 		}
 		_prepareRequest(method, requestUrl, headers) {
-			const info$1 = {};
-			info$1.parsedUrl = requestUrl;
-			const usingSsl = info$1.parsedUrl.protocol === "https:";
-			info$1.httpModule = usingSsl ? https : http;
+			const info$2 = {};
+			info$2.parsedUrl = requestUrl;
+			const usingSsl = info$2.parsedUrl.protocol === "https:";
+			info$2.httpModule = usingSsl ? https : http;
 			const defaultPort = usingSsl ? 443 : 80;
-			info$1.options = {};
-			info$1.options.host = info$1.parsedUrl.hostname;
-			info$1.options.port = info$1.parsedUrl.port ? parseInt(info$1.parsedUrl.port) : defaultPort;
-			info$1.options.path = (info$1.parsedUrl.pathname || "") + (info$1.parsedUrl.search || "");
-			info$1.options.method = method;
-			info$1.options.headers = this._mergeHeaders(headers);
-			if (this.userAgent != null) info$1.options.headers["user-agent"] = this.userAgent;
-			info$1.options.agent = this._getAgent(info$1.parsedUrl);
-			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$1.options);
-			return info$1;
+			info$2.options = {};
+			info$2.options.host = info$2.parsedUrl.hostname;
+			info$2.options.port = info$2.parsedUrl.port ? parseInt(info$2.parsedUrl.port) : defaultPort;
+			info$2.options.path = (info$2.parsedUrl.pathname || "") + (info$2.parsedUrl.search || "");
+			info$2.options.method = method;
+			info$2.options.headers = this._mergeHeaders(headers);
+			if (this.userAgent != null) info$2.options.headers["user-agent"] = this.userAgent;
+			info$2.options.agent = this._getAgent(info$2.parsedUrl);
+			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$2.options);
+			return info$2;
 		}
 		_mergeHeaders(headers) {
 			if (this.requestOptions && this.requestOptions.headers) return Object.assign({}, lowercaseKeys$1(this.requestOptions.headers), lowercaseKeys$1(headers || {}));
@@ -16528,7 +16529,7 @@ var require_exec = __commonJS({ "../node_modules/.pnpm/@actions+exec@1.1.1/node_
 	* @param     options            optional exec options.  See ExecOptions
 	* @returns   Promise<number>    exit code
 	*/
-	function exec$1(commandLine, args, options) {
+	function exec$2(commandLine, args, options) {
 		return __awaiter$3(this, void 0, void 0, function* () {
 			const commandArgs = tr.argStringToArray(commandLine);
 			if (commandArgs.length === 0) throw new Error(`Parameter 'commandLine' cannot be null or empty.`);
@@ -16538,7 +16539,7 @@ var require_exec = __commonJS({ "../node_modules/.pnpm/@actions+exec@1.1.1/node_
 			return runner.exec();
 		});
 	}
-	exports.exec = exec$1;
+	exports.exec = exec$2;
 	/**
 	* Exec a command and get the output.
 	* Output will be streamed to the live console.
@@ -16570,7 +16571,7 @@ var require_exec = __commonJS({ "../node_modules/.pnpm/@actions+exec@1.1.1/node_
 				stdout: stdOutListener,
 				stderr: stdErrListener
 			});
-			const exitCode = yield exec$1(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
+			const exitCode = yield exec$2(commandLine, args, Object.assign(Object.assign({}, options), { listeners }));
 			stdout += stdoutDecoder.end();
 			stderr += stderrDecoder.end();
 			return {
@@ -16650,10 +16651,10 @@ var require_platform = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/
 	Object.defineProperty(exports, "__esModule", { value: true });
 	exports.getDetails = exports.isLinux = exports.isMacOS = exports.isWindows = exports.arch = exports.platform = void 0;
 	const os_1$1 = __importDefault(__require("os"));
-	const exec = __importStar$4(require_exec());
+	const exec$1 = __importStar$4(require_exec());
 	const getWindowsInfo = () => __awaiter$2(void 0, void 0, void 0, function* () {
-		const { stdout: version } = yield exec.getExecOutput("powershell -command \"(Get-CimInstance -ClassName Win32_OperatingSystem).Version\"", void 0, { silent: true });
-		const { stdout: name } = yield exec.getExecOutput("powershell -command \"(Get-CimInstance -ClassName Win32_OperatingSystem).Caption\"", void 0, { silent: true });
+		const { stdout: version } = yield exec$1.getExecOutput("powershell -command \"(Get-CimInstance -ClassName Win32_OperatingSystem).Version\"", void 0, { silent: true });
+		const { stdout: name } = yield exec$1.getExecOutput("powershell -command \"(Get-CimInstance -ClassName Win32_OperatingSystem).Caption\"", void 0, { silent: true });
 		return {
 			name: name.trim(),
 			version: version.trim()
@@ -16661,7 +16662,7 @@ var require_platform = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/
 	});
 	const getMacOsInfo = () => __awaiter$2(void 0, void 0, void 0, function* () {
 		var _a$1, _b, _c, _d;
-		const { stdout } = yield exec.getExecOutput("sw_vers", void 0, { silent: true });
+		const { stdout } = yield exec$1.getExecOutput("sw_vers", void 0, { silent: true });
 		const version = (_b = (_a$1 = stdout.match(/ProductVersion:\s*(.+)/)) === null || _a$1 === void 0 ? void 0 : _a$1[1]) !== null && _b !== void 0 ? _b : "";
 		const name = (_d = (_c = stdout.match(/ProductName:\s*(.+)/)) === null || _c === void 0 ? void 0 : _c[1]) !== null && _d !== void 0 ? _d : "";
 		return {
@@ -16670,7 +16671,7 @@ var require_platform = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/
 		};
 	});
 	const getLinuxInfo = () => __awaiter$2(void 0, void 0, void 0, function* () {
-		const { stdout } = yield exec.getExecOutput("lsb_release", [
+		const { stdout } = yield exec$1.getExecOutput("lsb_release", [
 			"-i",
 			"-r",
 			"-s"
@@ -16950,10 +16951,10 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info(message) {
+	function info$1(message) {
 		process.stdout.write(message + os.EOL);
 	}
-	exports.info = info;
+	exports.info = info$1;
 	/**
 	* Begin an output group.
 	*
@@ -17082,12 +17083,19 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 
 //#endregion
 //#region src/utils/execute-build-script.ts
+/**
+* Executes a given shell script asynchronously and returns a promise that resolves when the script completes.
+*
+* @param script - The shell command to execute.
+* @returns A promise that resolves when the script finishes successfully, or rejects with an error message if the script fails.
+*
+* @throws Will reject the promise with an error message if the script execution fails.
+*/
 function executeBuildScript(script) {
 	return new Promise((resolve, reject) => {
-		const childProcess = __require("child_process");
-		childProcess.exec(script, (error$1) => {
-			if (error$1) reject(`Error executing script: ${error$1.message}`);
-			else resolve();
+		exec(script, (error$1, stdout, stderr) => {
+			if (error$1) reject(`Error executing script: ${error$1.message}\n${stderr}`);
+			else resolve(stdout);
 		});
 	});
 }
@@ -20083,10 +20091,17 @@ async function run() {
 	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequestNumber);
 	if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) return;
 	if (labels.includes(ReleaseLabelName.VersionRequired)) (0, import_core.setFailed)("Version required is invalid label for a release.");
-	else if (labels.includes(ReleaseLabelName.VersionPatch)) await executeBuildScript(patchReleaseScript);
-	else if (labels.includes(ReleaseLabelName.VersionMinor)) await executeBuildScript(minorReleaseScript);
-	else if (labels.includes(ReleaseLabelName.VersionMajor)) await executeBuildScript(majorReleaseScript);
+	else if (labels.includes(ReleaseLabelName.VersionPatch)) {
+		const response = await executeBuildScript(patchReleaseScript);
+		(0, import_core.info)(`Patch release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionMinor)) {
+		const response = await executeBuildScript(minorReleaseScript);
+		(0, import_core.info)(`Minor release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionMajor)) {
+		const response = await executeBuildScript(majorReleaseScript);
+		(0, import_core.info)(`Major release script executed with response: ${response}`);
+	}
 }
-run();
+run().catch((error$1) => (0, import_core.setFailed)(`Action failed with error: ${error$1?.message ?? error$1}`));
 
 //#endregion
