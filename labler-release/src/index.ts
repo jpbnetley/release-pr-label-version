@@ -51,6 +51,8 @@ async function run() {
     const response = await executeBuildScript(majorReleaseScript)
     info(`Major release script executed with response: ${response}`)
   }
+
+  info('Release process completed successfully.')
 }
 
 run().catch(error => setFailed(`Action failed with error: ${error?.message ?? error}`));

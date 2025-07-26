@@ -20101,6 +20101,7 @@ async function run() {
 		const response = await executeBuildScript(majorReleaseScript);
 		(0, import_core.info)(`Major release script executed with response: ${response}`);
 	}
+	(0, import_core.info)("Release process completed successfully.");
 }
 run().catch((error$1) => (0, import_core.setFailed)(`Action failed with error: ${error$1?.message ?? error$1}`));
 
