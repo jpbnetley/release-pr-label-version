@@ -20064,7 +20064,7 @@ function getLastMergedPullRequestNumber(token) {
 var import_core = __toESM$1(require_core(), 1);
 var import_github = __toESM$1(require_github(), 1);
 async function run() {
-	const token = process.env.GITHUB_TOKEN;
+	const token = (0, import_core.getInput)("github-token", { required: true });
 	if (!token) {
 		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
 		process.exit(1);

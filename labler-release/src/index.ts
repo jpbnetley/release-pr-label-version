@@ -6,7 +6,7 @@ import { context, getOctokit } from '@actions/github'
 import { getLastMergedPullRequestNumber } from './utils/get-last-merged-pull-request-number.js'
 
 async function run() {
-  const token = process.env.GITHUB_TOKEN
+  const token = getInput('github-token', { required: true })
   if (!token) {
     setFailed('GITHUB_TOKEN is not set')
     process.exit(1)
