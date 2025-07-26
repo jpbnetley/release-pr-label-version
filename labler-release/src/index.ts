@@ -53,11 +53,6 @@ async function run() {
     return
   }
 
-  if (labels.includes(ReleaseLabelName.VersionSkip)) {
-    info('Version skip was added, skipping action.')
-    return
-  }
-
   if (labels.includes(ReleaseLabelName.VersionRequired)) {
     setFailed('Version required is invalid label for a release.')
   } else if (labels.includes(ReleaseLabelName.VersionPatch)) {
