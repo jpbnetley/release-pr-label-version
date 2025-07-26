@@ -26,7 +26,7 @@ export function getLastMergedPullRequest(octokit: Octokit) {
       })
 
       const mergedPullRequest = pullRequests.find(
-        (pr) => pr.base.ref === `refs/heads/${branchName}` && pr.merged_at
+        (pr) => pr.base.ref === branchName && pr.merged_at
       )
 
       return mergedPullRequest
