@@ -1,14 +1,14 @@
 import { setFailed, info, error as logError } from '@actions/core'
 import { Octokit } from 'lib/types/models/github/octokit.js'
 
+
 /**
  * Returns a function that ensures a GitHub label exists in the specified repository.
- * If the label does not exist, it will be created using the provided name and color.
- * If the label already exists, no action is taken.
+ * If the label does not exist, it will be created using the provided Octokit instance.
  *
- * @param octokit - An authenticated Octokit instance for GitHub API requests.
- * @returns An async function that takes the repository owner, repository name,
- *          and label details ({ name, color }) and creates the label if it does not exist.
+ * @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+ * @returns An async function that takes the repository owner, repository name, and label details (name and color),
+ *          and creates the label if it does not already exist.
  *
  * @example
  * const ensureLabel = createLabelIfNotExists(octokit);

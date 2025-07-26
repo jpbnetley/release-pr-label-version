@@ -19999,12 +19999,11 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 var import_core$1 = __toESM$1(require_core(), 1);
 /**
 * Returns a function that ensures a GitHub label exists in the specified repository.
-* If the label does not exist, it will be created using the provided name and color.
-* If the label already exists, no action is taken.
+* If the label does not exist, it will be created using the provided Octokit instance.
 *
-* @param octokit - An authenticated Octokit instance for GitHub API requests.
-* @returns An async function that takes the repository owner, repository name,
-*          and label details ({ name, color }) and creates the label if it does not exist.
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that takes the repository owner, repository name, and label details (name and color),
+*          and creates the label if it does not already exist.
 *
 * @example
 * const ensureLabel = createLabelIfNotExists(octokit);
@@ -20122,13 +20121,12 @@ if (!token) {
 	process.exit(1);
 }
 const octokit = (0, import_github.getOctokit)(token);
-const executeLabelIfNotExists = createLabelIfNotExists(octokit);
 async function run() {
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;
 	const labelCreation = Object.keys(ReleaseLabel).map(async (key) => {
 		const label = ReleaseLabel[key];
-		return executeLabelIfNotExists(owner, repo, {
+		return createLabelIfNotExists(octokit)(owner, repo, {
 			name: label.name,
 			color: label.color
 		});

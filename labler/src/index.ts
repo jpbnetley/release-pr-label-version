@@ -11,7 +11,6 @@ if (!token) {
 }
 const octokit = getOctokit(token)
 
-const executeLabelIfNotExists = createLabelIfNotExists(octokit)
 
 async function run() {
   const owner = context.repo.owner
@@ -19,7 +18,7 @@ async function run() {
 
   const labelCreation = Object.keys(ReleaseLabel).map(async (key) => {
     const label = ReleaseLabel[key as keyof typeof ReleaseLabel]
-    return executeLabelIfNotExists(owner, repo, {
+    return createLabelIfNotExists(octokit)(owner, repo, {
       name: label.name,
       color: label.color,
     })

@@ -17103,6 +17103,15 @@ function executeBuildScript(script) {
 //#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
 var import_core$1 = __toESM$1(require_core(), 1);
+/**
+* Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for GitHub API requests.
+* @returns An async function that takes the repository owner, repository name, and pull request number,
+*          and returns an array of label names associated with the specified pull request.
+*
+* @throws Will call `setFailed` with an error message if the pull request labels cannot be retrieved.
+*/
 function getMergedPullRequestLabels(octokit) {
 	return async function getMergedPullRequestLabels$1(owner, repo, pullNumber) {
 		try {
@@ -20045,9 +20054,19 @@ var require_github = __commonJS({ "../node_modules/.pnpm/@actions+github@6.0.1/n
 } });
 
 //#endregion
-//#region src/utils/get-last-merged-pull-request-number.ts
-function getLastMergedPullRequestNumber(octokit) {
-	return async function lastMergedPullRequestNumber(owner, repo) {
+//#region src/utils/get-last-merged-pull-request.ts
+/**
+* Returns a function that retrieves the number of the most recently merged pull request
+* for a given GitHub repository using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for making GitHub API requests.
+* @returns An async function that takes the repository owner and name, and returns
+*          the number of the last merged pull request, or `null` if none are found.
+*
+* @throws {Error} Throws an error if the API request fails or if there is an issue retrieving the pull request number.
+*/
+function getLastMergedPullRequest(octokit) {
+	return async function lastMergedPullRequestNumber(owner, repo, branchName) {
 		try {
 			const { data: pullRequests } = await octokit.rest.pulls.list({
 				owner,
@@ -20056,8 +20075,8 @@ function getLastMergedPullRequestNumber(octokit) {
 				sort: "updated",
 				direction: "desc"
 			});
-			const mergedPullRequest = pullRequests.find((pr) => pr.merged_at);
-			return mergedPullRequest ? mergedPullRequest.number : null;
+			const mergedPullRequest = pullRequests.find((pr) => pr.base.ref === `refs/heads/${branchName}` && pr.merged_at);
+			return mergedPullRequest;
 		} catch (error$1) {
 			const errorMessage = error$1 instanceof Error ? error$1.message : String(error$1);
 			throw new Error(`Failed to get last merged pull request number: ${errorMessage}`);
@@ -20078,19 +20097,21 @@ async function run() {
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
+	const releaseBranchName = (0, import_core.getInput)("release-branch-name") || "main";
 	(0, import_core.debug)("patchScript: " + patchReleaseScript);
 	(0, import_core.debug)("minorScript: " + minorReleaseScript);
 	(0, import_core.debug)("majorScript: " + majorReleaseScript);
+	(0, import_core.debug)("releaseBranchName: " + releaseBranchName);
 	const octokit = (0, import_github.getOctokit)(token);
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;
-	const pullRequestNumber = await getLastMergedPullRequestNumber(octokit)(owner, repo);
-	if (!pullRequestNumber) {
+	const pullRequest = await getLastMergedPullRequest(octokit)(owner, repo, releaseBranchName);
+	if (!pullRequest) {
 		(0, import_core.setFailed)("No merged pull request found");
 		return;
 	}
-	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequestNumber);
-	(0, import_core.debug)(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(", "));
+	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequest.number);
+	(0, import_core.debug)(`Labels on PR (#${pullRequest}): ` + labels?.join(", "));
 	if (!labels || labels.length === 0) {
 		(0, import_core.info)("No relevant labels found");
 		return;

@@ -8,6 +8,7 @@
     "node": "20"
   },
   "scripts": {
+    "tsc:check": "pnpm -r tsc:check",
     "build": "pnpm -r build",
     "lib:build": " pnpm --filter lib build",
     "lib:tsc:check": "pnpm --filter lib tsc:check",
@@ -17,7 +18,7 @@
     "labler-release:tsc:check": "pnpm --filter labler-release tsc:check",
     "labler-validator:build": "pnpm --filter labler-validator build",
     "labler-validator:tsc:check": "pnpm --filter labler-validator tsc:check",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run --pass-with-no-tests"
   },
   "repository": {
     "type": "git",
@@ -35,6 +36,7 @@
     "@actions/github": "^6.0.1",
     "@types/node": "^20.19.9",
     "tsdown": "^0.13.0",
-    "typescript": "^5.8.3"
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
   }
 }

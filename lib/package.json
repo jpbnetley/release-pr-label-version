@@ -8,7 +8,6 @@
   ],
   "scripts": {
     "build": "tsdown",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "tsc:check": "tsc --noEmit"
   },
   "author": "",
