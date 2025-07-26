@@ -1,7 +1,6 @@
 import { setFailed, info, error as logError } from '@actions/core'
 import { Octokit } from 'lib/types/models/github/octokit.js'
 
-
 /**
  * Returns a function that ensures a GitHub label exists in the specified repository.
  * If the label does not exist, it will be created using the provided Octokit instance.
@@ -27,7 +26,7 @@ export function createLabelIfNotExists(octokit: Octokit) {
         repo,
       })
 
-      if (!labels.some((label) => label.name === label.name)) {
+      if (!labels.some((labelCheck) => labelCheck.name === label.name)) {
         // Create the label if it does not exist
         await octokit.rest.issues.createLabel({
           owner,

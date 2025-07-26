@@ -20016,7 +20016,7 @@ function createLabelIfNotExists(octokit$1) {
 				owner,
 				repo
 			});
-			if (!labels.some((label$1) => label$1.name === label$1.name)) {
+			if (!labels.some((labelCheck) => labelCheck.name === label.name)) {
 				await octokit$1.rest.issues.createLabel({
 					owner,
 					repo,
