@@ -362,7 +362,7 @@ var require_tunnel$1 = __commonJS({ "../node_modules/.pnpm/tunnel@0.0.6/node_mod
 			connectOptions.headers = connectOptions.headers || {};
 			connectOptions.headers["Proxy-Authorization"] = "Basic " + new Buffer(connectOptions.proxyAuth).toString("base64");
 		}
-		debug$1("making CONNECT request");
+		debug$2("making CONNECT request");
 		var connectReq = self.request(connectOptions);
 		connectReq.useChunkedEncodingByDefault = false;
 		connectReq.once("response", onResponse);
@@ -382,7 +382,7 @@ var require_tunnel$1 = __commonJS({ "../node_modules/.pnpm/tunnel@0.0.6/node_mod
 			connectReq.removeAllListeners();
 			socket.removeAllListeners();
 			if (res.statusCode !== 200) {
-				debug$1("tunneling socket could not be established, statusCode=%d", res.statusCode);
+				debug$2("tunneling socket could not be established, statusCode=%d", res.statusCode);
 				socket.destroy();
 				var error$1 = /* @__PURE__ */ new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
 				error$1.code = "ECONNRESET";
@@ -391,7 +391,7 @@ var require_tunnel$1 = __commonJS({ "../node_modules/.pnpm/tunnel@0.0.6/node_mod
 				return;
 			}
 			if (head.length > 0) {
-				debug$1("got illegal response body from proxy");
+				debug$2("got illegal response body from proxy");
 				socket.destroy();
 				var error$1 = /* @__PURE__ */ new Error("got illegal response body from proxy");
 				error$1.code = "ECONNRESET";
@@ -399,13 +399,13 @@ var require_tunnel$1 = __commonJS({ "../node_modules/.pnpm/tunnel@0.0.6/node_mod
 				self.removeSocket(placeholder);
 				return;
 			}
-			debug$1("tunneling connection has established");
+			debug$2("tunneling connection has established");
 			self.sockets[self.sockets.indexOf(placeholder)] = socket;
 			return cb(socket);
 		}
 		function onError$1(cause) {
 			connectReq.removeAllListeners();
-			debug$1("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
+			debug$2("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
 			var error$1 = /* @__PURE__ */ new Error("tunneling socket could not be established, cause=" + cause.message);
 			error$1.code = "ECONNRESET";
 			options.request.emit("error", error$1);
@@ -455,15 +455,15 @@ var require_tunnel$1 = __commonJS({ "../node_modules/.pnpm/tunnel@0.0.6/node_mod
 		}
 		return target;
 	}
-	var debug$1;
-	if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) debug$1 = function() {
+	var debug$2;
+	if (process.env.NODE_DEBUG && /\btunnel\b/.test(process.env.NODE_DEBUG)) debug$2 = function() {
 		var args = Array.prototype.slice.call(arguments);
 		if (typeof args[0] === "string") args[0] = "TUNNEL: " + args[0];
 		else args.unshift("TUNNEL:");
 		console.error.apply(console, args);
 	};
-	else debug$1 = function() {};
-	exports.debug = debug$1;
+	else debug$2 = function() {};
+	exports.debug = debug$2;
 } });
 
 //#endregion
@@ -16915,10 +16915,10 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* Writes debug message to user log
 	* @param message debug message
 	*/
-	function debug(message) {
+	function debug$1(message) {
 		(0, command_1.issueCommand)("debug", {}, message);
 	}
-	exports.debug = debug;
+	exports.debug = debug$1;
 	/**
 	* Adds an error issue
 	* @param message error issue message. Errors will be converted to string via toString()
@@ -20065,13 +20065,12 @@ var import_core = __toESM$1(require_core(), 1);
 var import_github = __toESM$1(require_github(), 1);
 async function run() {
 	const token = (0, import_core.getInput)("github-token", { required: true });
-	if (!token) {
-		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
-		process.exit(1);
-	}
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
+	(0, import_core.debug)("patchScript: " + patchReleaseScript);
+	(0, import_core.debug)("minorScript: " + minorReleaseScript);
+	(0, import_core.debug)("majorScript: " + majorReleaseScript);
 	const octokit = (0, import_github.getOctokit)(token);
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;

@@ -1,4 +1,4 @@
-import { getInput, setFailed, error as logError } from '@actions/core'
+import { getInput, setFailed, error as logError, debug } from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
@@ -7,13 +7,13 @@ import { getLastMergedPullRequestNumber } from './utils/get-last-merged-pull-req
 
 async function run() {
   const token = getInput('github-token', { required: true })
-  if (!token) {
-    setFailed('GITHUB_TOKEN is not set')
-    process.exit(1)
-  }
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
+
+  debug('patchScript: ' + patchReleaseScript)
+  debug('minorScript: ' + minorReleaseScript)
+  debug('majorScript: ' + majorReleaseScript)
 
   const octokit = getOctokit(token)
   const owner = context.repo.owner
