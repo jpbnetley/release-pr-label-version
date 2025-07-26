@@ -20045,7 +20045,19 @@ async function setLabelForPullRequest(token) {
 			});
 			(0, import_core$1.info)(`Added 'release:version-required' label to PR #${prNumber}`);
 			(0, import_core$1.setFailed)(`PR #${prNumber} is missing a version label`);
-		} else (0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
+		} else {
+			(0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
+			if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
+				(0, import_core$1.info)(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
+				await octokit.rest.issues.removeLabel({
+					owner,
+					repo,
+					issue_number: prNumber,
+					name: ReleaseLabelName.VersionRequired
+				});
+				(0, import_core$1.info)(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
+			}
+		}
 	} catch (error$1) {
 		if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
 		else (0, import_core$1.setFailed)("Failed to set label for pull request: Unknown error");

@@ -54,7 +54,9 @@ export async function setLabelForPullRequest(token: string) {
           owner,
           repo,
           issue_number: prNumber,
-          name: ReleaseLabelName.VersionRequired,})
+          name: ReleaseLabelName.VersionRequired
+        })
+        info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`)
       }
     }
   } catch (error) {
