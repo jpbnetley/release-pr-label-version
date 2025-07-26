@@ -11,6 +11,8 @@ async function run() {
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
 
+  setFailed('test failure') // This line is for testing purposes, remove in production
+
   debug('patchScript: ' + patchReleaseScript)
   debug('minorScript: ' + minorReleaseScript)
   debug('majorScript: ' + majorReleaseScript)
