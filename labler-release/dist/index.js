@@ -20076,7 +20076,6 @@ async function run() {
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
-	(0, import_core.setFailed)("test failure");
 	(0, import_core.debug)("patchScript: " + patchReleaseScript);
 	(0, import_core.debug)("minorScript: " + minorReleaseScript);
 	(0, import_core.debug)("majorScript: " + majorReleaseScript);
@@ -20090,7 +20089,14 @@ async function run() {
 		return;
 	}
 	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequestNumber);
-	if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) return;
+	if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) {
+		(0, import_core.info)("No relevant labels found");
+		return;
+	}
+	if (labels.includes(ReleaseLabelName.VersionSkip)) {
+		(0, import_core.info)("Version skip was added, skipping action.");
+		return;
+	}
 	if (labels.includes(ReleaseLabelName.VersionRequired)) (0, import_core.setFailed)("Version required is invalid label for a release.");
 	else if (labels.includes(ReleaseLabelName.VersionPatch)) {
 		const response = await executeBuildScript(patchReleaseScript);

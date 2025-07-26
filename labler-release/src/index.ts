@@ -1,4 +1,10 @@
-import { getInput, setFailed, error as logError, debug, info } from '@actions/core'
+import {
+  getInput,
+  setFailed,
+  error as logError,
+  debug,
+  info,
+} from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
@@ -10,8 +16,6 @@ async function run() {
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
-
-  setFailed('test failure') // This line is for testing purposes, remove in production
 
   debug('patchScript: ' + patchReleaseScript)
   debug('minorScript: ' + minorReleaseScript)
@@ -36,7 +40,17 @@ async function run() {
     pullRequestNumber
   )
 
-  if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) {
+  if (
+    !labels ||
+    labels.length === 0 ||
+    labels.includes(ReleaseLabelName.VersionSkip)
+  ) {
+    info('No relevant labels found')
+    return
+  }
+
+  if (labels.includes(ReleaseLabelName.VersionSkip)) {
+    info('Version skip was added, skipping action.')
     return
   }
 
@@ -45,7 +59,6 @@ async function run() {
   } else if (labels.includes(ReleaseLabelName.VersionPatch)) {
     const response = await executeBuildScript(patchReleaseScript)
     info(`Patch release script executed with response: ${response}`)
-    
   } else if (labels.includes(ReleaseLabelName.VersionMinor)) {
     const response = await executeBuildScript(minorReleaseScript)
     info(`Minor release script executed with response: ${response}`)
@@ -57,4 +70,6 @@ async function run() {
   info('Release process completed successfully.')
 }
 
-run().catch(error => setFailed(`Action failed with error: ${error?.message ?? error}`));
+run().catch((error) =>
+  setFailed(`Action failed with error: ${error?.message ?? error}`)
+)
