@@ -27,7 +27,7 @@ export function createLabelIfNotExists(octokit: Octokit) {
         repo,
       })
 
-      if (!labels.some((l) => l.name === label.name)) {
+      if (!labels.some((label) => label.name === label.name)) {
         // Create the label if it does not exist
         await octokit.rest.issues.createLabel({
           owner,

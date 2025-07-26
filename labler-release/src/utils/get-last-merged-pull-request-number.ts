@@ -1,10 +1,10 @@
-import { getOctokit } from '@actions/github'
+import { Octokit } from 'lib/types/models/github/octokit.js'
 
-export function getLastMergedPullRequestNumber(
-  token: string
-) {
-  const octokit = getOctokit(token)
-  return async function lastMergedPullRequestNumber(owner: string, repo: string) {
+export function getLastMergedPullRequestNumber(octokit: Octokit) {
+  return async function lastMergedPullRequestNumber(
+    owner: string,
+    repo: string
+  ) {
     try {
       const { data: pullRequests } = await octokit.rest.pulls.list({
         owner,

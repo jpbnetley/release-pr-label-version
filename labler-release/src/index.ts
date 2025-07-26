@@ -6,7 +6,12 @@ import { context, getOctokit } from '@actions/github'
 import { getLastMergedPullRequestNumber } from './utils/get-last-merged-pull-request-number.js'
 
 async function run() {
-  const token = getInput('github-token', { required: true })
+  const token = process.env.GITHUB_TOKEN
+  if (!token) {
+    setFailed('GITHUB_TOKEN is not set')
+    return
+  }
+
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
@@ -18,7 +23,7 @@ async function run() {
   const octokit = getOctokit(token)
   const owner = context.repo.owner
   const repo = context.repo.repo
-  const pullRequestNumber = await getLastMergedPullRequestNumber(token)(
+  const pullRequestNumber = await getLastMergedPullRequestNumber(octokit)(
     owner,
     repo
   )

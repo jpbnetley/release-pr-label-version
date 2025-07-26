@@ -11,9 +11,6 @@ inputs:
   major-release-script:
     description: 'Script to run for major release'
     required: true
-  github-token:
-    description: 'GitHub token for authentication'
-    required: true
 
 runs:
   using: 'node20'

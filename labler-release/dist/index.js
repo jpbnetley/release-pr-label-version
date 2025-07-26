@@ -20037,18 +20037,16 @@ var require_github = __commonJS({ "../node_modules/.pnpm/@actions+github@6.0.1/n
 	* @param     token    the repo PAT or GITHUB_TOKEN
 	* @param     options  other options to set
 	*/
-	function getOctokit$2(token, options, ...additionalPlugins) {
+	function getOctokit$1(token, options, ...additionalPlugins) {
 		const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
 		return new GitHubWithPlugins((0, utils_1.getOctokitOptions)(token, options));
 	}
-	exports.getOctokit = getOctokit$2;
+	exports.getOctokit = getOctokit$1;
 } });
 
 //#endregion
 //#region src/utils/get-last-merged-pull-request-number.ts
-var import_github$1 = __toESM$1(require_github(), 1);
-function getLastMergedPullRequestNumber(token) {
-	const octokit = (0, import_github$1.getOctokit)(token);
+function getLastMergedPullRequestNumber(octokit) {
 	return async function lastMergedPullRequestNumber(owner, repo) {
 		try {
 			const { data: pullRequests } = await octokit.rest.pulls.list({
@@ -20072,7 +20070,11 @@ function getLastMergedPullRequestNumber(token) {
 var import_core = __toESM$1(require_core(), 1);
 var import_github = __toESM$1(require_github(), 1);
 async function run() {
-	const token = (0, import_core.getInput)("github-token", { required: true });
+	const token = process.env.GITHUB_TOKEN;
+	if (!token) {
+		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
+		return;
+	}
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
@@ -20082,7 +20084,7 @@ async function run() {
 	const octokit = (0, import_github.getOctokit)(token);
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;
-	const pullRequestNumber = await getLastMergedPullRequestNumber(token)(owner, repo);
+	const pullRequestNumber = await getLastMergedPullRequestNumber(octokit)(owner, repo);
 	if (!pullRequestNumber) {
 		(0, import_core.setFailed)("No merged pull request found");
 		return;

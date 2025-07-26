@@ -1,14 +1,28 @@
 import { setFailed, info } from '@actions/core'
-import { getOctokit, context } from '@actions/github'
+import { context } from '@actions/github'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
+import { Octokit } from "lib/types/models/github/octokit.js"
 
-export async function setLabelForPullRequest(token: string) {
+/**
+ * Sets or updates version-related labels on a pull request.
+ *
+ * This function checks if a pull request has any of the required version labels
+ * (`VersionPatch`, `VersionMinor`, `VersionMajor`, or `VersionSkip`). If none are present,
+ * it adds the `release:version-required` label and marks the action as failed.
+ * If a version label is present and the `release:version-required` label is also present,
+ * it removes the `release:version-required` label.
+ *
+ * @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+ *
+ * @remarks
+ * - Relies on the `context` object for repository and pull request information.
+ * - Uses `setFailed` and `info` for logging and error reporting.
+ * - Expects `ReleaseLabelName` enum or constants to be available in scope.
+ *
+ * @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
+ */
+export async function setLabelForPullRequest(octokit: Octokit) {
   try {
-    if (!token) {
-      setFailed('GITHUB_TOKEN is not set')
-      return
-    }
-    const octokit = getOctokit(token)
     const prNumber = context.payload.pull_request?.number
     const owner = context.repo.owner
     const repo = context.repo.repo

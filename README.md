@@ -156,7 +156,8 @@ jobs:
           major-release-script: echo 'major release script'
           minor-release-script: echo 'minor release script'
           patch-release-script: echo 'patch release script'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Ref

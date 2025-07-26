@@ -20008,17 +20008,30 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 //#endregion
 //#region src/utils/set-label-for-pull-request.ts
 var import_core$1 = __toESM$1(require_core(), 1);
-var import_github = __toESM$1(require_github(), 1);
-async function setLabelForPullRequest(token) {
+var import_github$1 = __toESM$1(require_github(), 1);
+/**
+* Sets or updates version-related labels on a pull request.
+*
+* This function checks if a pull request has any of the required version labels
+* (`VersionPatch`, `VersionMinor`, `VersionMajor`, or `VersionSkip`). If none are present,
+* it adds the `release:version-required` label and marks the action as failed.
+* If a version label is present and the `release:version-required` label is also present,
+* it removes the `release:version-required` label.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+*
+* @remarks
+* - Relies on the `context` object for repository and pull request information.
+* - Uses `setFailed` and `info` for logging and error reporting.
+* - Expects `ReleaseLabelName` enum or constants to be available in scope.
+*
+* @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
+*/
+async function setLabelForPullRequest(octokit) {
 	try {
-		if (!token) {
-			(0, import_core$1.setFailed)("GITHUB_TOKEN is not set");
-			return;
-		}
-		const octokit = (0, import_github.getOctokit)(token);
-		const prNumber = import_github.context.payload.pull_request?.number;
-		const owner = import_github.context.repo.owner;
-		const repo = import_github.context.repo.repo;
+		const prNumber = import_github$1.context.payload.pull_request?.number;
+		const owner = import_github$1.context.repo.owner;
+		const repo = import_github$1.context.repo.repo;
 		if (!prNumber) {
 			(0, import_core$1.setFailed)("No pull request number found in context");
 			return;
@@ -20067,13 +20080,15 @@ async function setLabelForPullRequest(token) {
 //#endregion
 //#region src/index.ts
 var import_core = __toESM$1(require_core(), 1);
+var import_github = __toESM$1(require_github(), 1);
 function run() {
 	const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 	if (!GITHUB_TOKEN) {
 		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
 		process.exit(1);
 	}
-	setLabelForPullRequest(GITHUB_TOKEN);
+	const octokit = (0, import_github.getOctokit)(GITHUB_TOKEN);
+	setLabelForPullRequest(octokit);
 }
 run();
 
