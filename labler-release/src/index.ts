@@ -3,7 +3,7 @@ import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
 import { context, getOctokit } from '@actions/github'
-import { getLastMergedPullRequestNumber } from './utils/get-last-merged-pull-request-number.js'
+import { getLastMergedPullRequest } from './utils/get-last-merged-pull-request.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -15,19 +15,22 @@ async function run() {
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
+  const releaseBranchName = getInput('release-branch-name') || 'main'
 
   debug('patchScript: ' + patchReleaseScript)
   debug('minorScript: ' + minorReleaseScript)
   debug('majorScript: ' + majorReleaseScript)
+  debug('releaseBranchName: ' + releaseBranchName)
 
   const octokit = getOctokit(token)
   const owner = context.repo.owner
   const repo = context.repo.repo
-  const pullRequestNumber = await getLastMergedPullRequestNumber(octokit)(
+  const pullRequest = await getLastMergedPullRequest(octokit)(
     owner,
-    repo
+    repo,
+    releaseBranchName
   )
-  if (!pullRequestNumber) {
+  if (!pullRequest) {
     setFailed('No merged pull request found')
     return
   }
@@ -35,10 +38,10 @@ async function run() {
   const labels = await getMergedPullRequestLabels(octokit)(
     owner,
     repo,
-    pullRequestNumber
+    pullRequest.number
   )
 
-  debug(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(', '))
+  debug(`Labels on PR (#${pullRequest}): ` + labels?.join(', '))
 
   if (!labels || labels.length === 0) {
     info('No relevant labels found')

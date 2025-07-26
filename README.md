@@ -129,9 +129,9 @@ inputs:
   major-release-script:
     description: 'Script to run for major release'
     required: true
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
+release-branch-name: 
+    description: The release branch name
+    required: false
   ```
 
 #### Example workflow
