@@ -20084,11 +20084,11 @@ async function run() {
 	const repo = import_github.context.repo.repo;
 	const pullRequestNumber = await getLastMergedPullRequestNumber(token)(owner, repo);
 	if (!pullRequestNumber) {
-		(0, import_core.error)("No merged pull request found");
 		(0, import_core.setFailed)("No merged pull request found");
 		return;
 	}
 	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequestNumber);
+	(0, import_core.debug)(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(", "));
 	if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) {
 		(0, import_core.info)("No relevant labels found");
 		return;

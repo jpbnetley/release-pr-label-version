@@ -1,7 +1,6 @@
 import {
   getInput,
   setFailed,
-  error as logError,
   debug,
   info,
 } from '@actions/core'
@@ -29,7 +28,6 @@ async function run() {
     repo
   )
   if (!pullRequestNumber) {
-    logError('No merged pull request found')
     setFailed('No merged pull request found')
     return
   }
@@ -39,6 +37,8 @@ async function run() {
     repo,
     pullRequestNumber
   )
+
+  debug(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(', '))
 
   if (
     !labels ||
