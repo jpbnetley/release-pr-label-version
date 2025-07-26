@@ -23,7 +23,7 @@ describe('getLastMergedPullRequest', () => {
   it('returns the last merged pull request for the given branch', async () => {
     const mergedPR = {
       number: 42,
-      base: { ref: `refs/heads/${branchName}` },
+      base: { ref: `${branchName}` },
       merged_at: '2023-01-01T00:00:00Z',
     }
     const otherPR = {

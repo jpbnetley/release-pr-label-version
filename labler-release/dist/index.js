@@ -20075,7 +20075,7 @@ function getLastMergedPullRequest(octokit) {
 				sort: "updated",
 				direction: "desc"
 			});
-			const mergedPullRequest = pullRequests.find((pr) => pr.base.ref === `refs/heads/${branchName}` && pr.merged_at);
+			const mergedPullRequest = pullRequests.find((pr) => pr.base.ref === branchName && pr.merged_at);
 			return mergedPullRequest;
 		} catch (error$1) {
 			const errorMessage = error$1 instanceof Error ? error$1.message : String(error$1);
@@ -20111,13 +20111,9 @@ async function run() {
 		return;
 	}
 	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequest.number);
-	(0, import_core.debug)(`Labels on PR (#${pullRequest}): ` + labels?.join(", "));
+	(0, import_core.debug)(`Labels on PR (#${pullRequest.number}): ` + labels?.join(", "));
 	if (!labels || labels.length === 0) {
 		(0, import_core.info)("No relevant labels found");
-		return;
-	}
-	if (labels.includes(ReleaseLabelName.VersionSkip)) {
-		(0, import_core.info)("Version skip was added, skipping action.");
 		return;
 	}
 	if (labels.includes(ReleaseLabelName.VersionSkip)) {
