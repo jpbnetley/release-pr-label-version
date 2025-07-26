@@ -1,9 +1,4 @@
-import {
-  getInput,
-  setFailed,
-  debug,
-  info,
-} from '@actions/core'
+import { getInput, setFailed, debug, info } from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
@@ -40,12 +35,13 @@ async function run() {
 
   debug(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(', '))
 
-  if (
-    !labels ||
-    labels.length === 0 ||
-    labels.includes(ReleaseLabelName.VersionSkip)
-  ) {
+  if (!labels || labels.length === 0) {
     info('No relevant labels found')
+    return
+  }
+
+  if (labels.includes(ReleaseLabelName.VersionSkip)) {
+    info('Version skip was added, skipping action.')
     return
   }
 

@@ -20089,8 +20089,12 @@ async function run() {
 	}
 	const labels = await getMergedPullRequestLabels(octokit)(owner, repo, pullRequestNumber);
 	(0, import_core.debug)(`Labels on PR (#${pullRequestNumber}): ` + labels?.join(", "));
-	if (!labels || labels.length === 0 || labels.includes(ReleaseLabelName.VersionSkip)) {
+	if (!labels || labels.length === 0) {
 		(0, import_core.info)("No relevant labels found");
+		return;
+	}
+	if (labels.includes(ReleaseLabelName.VersionSkip)) {
+		(0, import_core.info)("Version skip was added, skipping action.");
 		return;
 	}
 	if (labels.includes(ReleaseLabelName.VersionSkip)) {
