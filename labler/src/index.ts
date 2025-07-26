@@ -1,10 +1,14 @@
 // create labels if they don't exist
 import { getOctokit, context } from '@actions/github'
-import { getInput } from '@actions/core'
+import { setFailed } from '@actions/core'
 import { createLabelIfNotExists } from './utils/create-label-if-not-exists.js'
 import { ReleaseLabel } from 'lib/types/models/release-label.js'
 
-const token = getInput('GITHUB_TOKEN', { required: true })
+const token = process.env.GITHUB_TOKEN
+if (!token) {
+  setFailed('GITHUB_TOKEN is not set')
+  process.exit(1)
+}
 const octokit = getOctokit(token)
 
 const executeLabelIfNotExists = createLabelIfNotExists(octokit)
@@ -24,4 +28,4 @@ async function run() {
   await Promise.all(labelCreation)
 }
 
-run();
+run()

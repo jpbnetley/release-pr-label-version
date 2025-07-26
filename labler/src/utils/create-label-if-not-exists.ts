@@ -1,4 +1,4 @@
-import { setFailed } from '@actions/core'
+import { setFailed, info, error as logError } from '@actions/core'
 import { Octokit } from 'lib/types/models/github/octokit.js'
 
 /**
@@ -35,11 +35,12 @@ export function createLabelIfNotExists(octokit: Octokit) {
           name: label.name,
           color: label.color,
         })
-        console.log(`Label created: ${label.name}`)
+        info(`Label created: ${label.name}`)
       } else {
-        console.log(`Label already exists: ${label.name}`)
+        info(`Label already exists: ${label.name}`)
       }
     } catch (error) {
+      logError(`Failed to create label: ${error}`)
       if (error instanceof Error) {
         setFailed(`Failed to create label: ${error.message}`)
       } else {

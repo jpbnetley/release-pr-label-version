@@ -14715,19 +14715,19 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			return __awaiter$10(this, void 0, void 0, function* () {
 				if (this._disposed) throw new Error("Client has already been disposed.");
 				const parsedUrl = new URL(requestUrl);
-				let info$1 = this._prepareRequest(verb, parsedUrl, headers);
+				let info$2 = this._prepareRequest(verb, parsedUrl, headers);
 				const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
 				let numTries = 0;
 				let response;
 				do {
-					response = yield this.requestRaw(info$1, data);
+					response = yield this.requestRaw(info$2, data);
 					if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
 						let authenticationHandler;
 						for (const handler$1 of this.handlers) if (handler$1.canHandleAuthentication(response)) {
 							authenticationHandler = handler$1;
 							break;
 						}
-						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$1, data);
+						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$2, data);
 						else return response;
 					}
 					let redirectsRemaining = this._maxRedirects;
@@ -14740,8 +14740,8 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 						if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
 							for (const header in headers) if (header.toLowerCase() === "authorization") delete headers[header];
 						}
-						info$1 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-						response = yield this.requestRaw(info$1, data);
+						info$2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+						response = yield this.requestRaw(info$2, data);
 						redirectsRemaining--;
 					}
 					if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) return response;
@@ -14766,7 +14766,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 		* @param info
 		* @param data
 		*/
-		requestRaw(info$1, data) {
+		requestRaw(info$2, data) {
 			return __awaiter$10(this, void 0, void 0, function* () {
 				return new Promise((resolve, reject) => {
 					function callbackForResult(err, res) {
@@ -14774,7 +14774,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 						else if (!res) reject(/* @__PURE__ */ new Error("Unknown error"));
 						else resolve(res);
 					}
-					this.requestRawWithCallback(info$1, data, callbackForResult);
+					this.requestRawWithCallback(info$2, data, callbackForResult);
 				});
 			});
 		}
@@ -14784,10 +14784,10 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 		* @param data
 		* @param onResult
 		*/
-		requestRawWithCallback(info$1, data, onResult) {
+		requestRawWithCallback(info$2, data, onResult) {
 			if (typeof data === "string") {
-				if (!info$1.options.headers) info$1.options.headers = {};
-				info$1.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+				if (!info$2.options.headers) info$2.options.headers = {};
+				info$2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
 			}
 			let callbackCalled = false;
 			function handleResult(err, res) {
@@ -14796,7 +14796,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 					onResult(err, res);
 				}
 			}
-			const req = info$1.httpModule.request(info$1.options, (msg) => {
+			const req = info$2.httpModule.request(info$2.options, (msg) => {
 				const res = new HttpClientResponse(msg);
 				handleResult(void 0, res);
 			});
@@ -14806,7 +14806,7 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			});
 			req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
 				if (socket) socket.end();
-				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$1.options.path}`));
+				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$2.options.path}`));
 			});
 			req.on("error", function(err) {
 				handleResult(err);
@@ -14836,21 +14836,21 @@ var require_lib = __commonJS({ "../node_modules/.pnpm/@actions+http-client@2.2.3
 			return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
 		}
 		_prepareRequest(method, requestUrl, headers) {
-			const info$1 = {};
-			info$1.parsedUrl = requestUrl;
-			const usingSsl = info$1.parsedUrl.protocol === "https:";
-			info$1.httpModule = usingSsl ? https : http;
+			const info$2 = {};
+			info$2.parsedUrl = requestUrl;
+			const usingSsl = info$2.parsedUrl.protocol === "https:";
+			info$2.httpModule = usingSsl ? https : http;
 			const defaultPort = usingSsl ? 443 : 80;
-			info$1.options = {};
-			info$1.options.host = info$1.parsedUrl.hostname;
-			info$1.options.port = info$1.parsedUrl.port ? parseInt(info$1.parsedUrl.port) : defaultPort;
-			info$1.options.path = (info$1.parsedUrl.pathname || "") + (info$1.parsedUrl.search || "");
-			info$1.options.method = method;
-			info$1.options.headers = this._mergeHeaders(headers);
-			if (this.userAgent != null) info$1.options.headers["user-agent"] = this.userAgent;
-			info$1.options.agent = this._getAgent(info$1.parsedUrl);
-			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$1.options);
-			return info$1;
+			info$2.options = {};
+			info$2.options.host = info$2.parsedUrl.hostname;
+			info$2.options.port = info$2.parsedUrl.port ? parseInt(info$2.parsedUrl.port) : defaultPort;
+			info$2.options.path = (info$2.parsedUrl.pathname || "") + (info$2.parsedUrl.search || "");
+			info$2.options.method = method;
+			info$2.options.headers = this._mergeHeaders(headers);
+			if (this.userAgent != null) info$2.options.headers["user-agent"] = this.userAgent;
+			info$2.options.agent = this._getAgent(info$2.parsedUrl);
+			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$2.options);
+			return info$2;
 		}
 		_mergeHeaders(headers) {
 			if (this.requestOptions && this.requestOptions.headers) return Object.assign({}, lowercaseKeys$1(this.requestOptions.headers), lowercaseKeys$1(headers || {}));
@@ -19749,13 +19749,13 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* @param     options  optional. See InputOptions.
 	* @returns   string
 	*/
-	function getInput$1(name, options) {
+	function getInput(name, options) {
 		const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
 		if (options && options.required && !val) throw new Error(`Input required and not supplied: ${name}`);
 		if (options && options.trimWhitespace === false) return val;
 		return val.trim();
 	}
-	exports.getInput = getInput$1;
+	exports.getInput = getInput;
 	/**
 	* Gets the values of an multiline input.  Each value is also trimmed.
 	*
@@ -19765,7 +19765,7 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	*
 	*/
 	function getMultilineInput(name, options) {
-		const inputs = getInput$1(name, options).split("\n").filter((x) => x !== "");
+		const inputs = getInput(name, options).split("\n").filter((x) => x !== "");
 		if (options && options.trimWhitespace === false) return inputs;
 		return inputs.map((input) => input.trim());
 	}
@@ -19791,7 +19791,7 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 			"False",
 			"FALSE"
 		];
-		const val = getInput$1(name, options);
+		const val = getInput(name, options);
 		if (trueValue.includes(val)) return true;
 		if (falseValue.includes(val)) return false;
 		throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\nSupport boolean input list: \`true | True | TRUE | false | False | FALSE\``);
@@ -19824,11 +19824,11 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$1(message) {
+	function setFailed$2(message) {
 		process.exitCode = ExitCode.Failure;
 		error(message);
 	}
-	exports.setFailed = setFailed$1;
+	exports.setFailed = setFailed$2;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -19875,10 +19875,10 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info(message) {
+	function info$1(message) {
 		process.stdout.write(message + os.EOL);
 	}
-	exports.info = info;
+	exports.info = info$1;
 	/**
 	* Begin an output group.
 	*
@@ -20024,9 +20024,10 @@ function createLabelIfNotExists(octokit$1) {
 					name: label.name,
 					color: label.color
 				});
-				console.log(`Label created: ${label.name}`);
-			} else console.log(`Label already exists: ${label.name}`);
+				(0, import_core$1.info)(`Label created: ${label.name}`);
+			} else (0, import_core$1.info)(`Label already exists: ${label.name}`);
 		} catch (error$1) {
+			(0, import_core$1.error)(`Failed to create label: ${error$1}`);
 			if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to create label: ${error$1.message}`);
 			else (0, import_core$1.setFailed)("Failed to create label: Unknown error");
 		}
@@ -20115,7 +20116,11 @@ const ReleaseLabel = {
 //#region src/index.ts
 var import_github = __toESM$1(require_github(), 1);
 var import_core = __toESM$1(require_core(), 1);
-const token = (0, import_core.getInput)("GITHUB_TOKEN", { required: true });
+const token = process.env.GITHUB_TOKEN;
+if (!token) {
+	(0, import_core.setFailed)("GITHUB_TOKEN is not set");
+	process.exit(1);
+}
 const octokit = (0, import_github.getOctokit)(token);
 const executeLabelIfNotExists = createLabelIfNotExists(octokit);
 async function run() {

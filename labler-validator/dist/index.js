@@ -16899,11 +16899,11 @@ var require_core = __commonJS({ "../node_modules/.pnpm/@actions+core@1.11.1/node
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$1(message) {
+	function setFailed$2(message) {
 		process.exitCode = ExitCode.Failure;
 		error(message);
 	}
-	exports.setFailed = setFailed$1;
+	exports.setFailed = setFailed$2;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -20007,12 +20007,12 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 
 //#endregion
 //#region src/utils/set-label-for-pull-request.ts
-var import_core = __toESM$1(require_core(), 1);
+var import_core$1 = __toESM$1(require_core(), 1);
 var import_github = __toESM$1(require_github(), 1);
 async function setLabelForPullRequest(token) {
 	try {
 		if (!token) {
-			(0, import_core.setFailed)("GITHUB_TOKEN is not set");
+			(0, import_core$1.setFailed)("GITHUB_TOKEN is not set");
 			return;
 		}
 		const octokit = (0, import_github.getOctokit)(token);
@@ -20020,7 +20020,7 @@ async function setLabelForPullRequest(token) {
 		const owner = import_github.context.repo.owner;
 		const repo = import_github.context.repo.repo;
 		if (!prNumber) {
-			(0, import_core.setFailed)("No pull request number found in context");
+			(0, import_core$1.setFailed)("No pull request number found in context");
 			return;
 		}
 		const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
@@ -20043,19 +20043,24 @@ async function setLabelForPullRequest(token) {
 				issue_number: prNumber,
 				labels: ["release:version-required"]
 			});
-			(0, import_core.info)(`Added 'release:version-required' label to PR #${prNumber}`);
-			(0, import_core.setFailed)(`PR #${prNumber} is missing a version label`);
-		} else (0, import_core.info)(`Version label already present in PR #${prNumber}`);
+			(0, import_core$1.info)(`Added 'release:version-required' label to PR #${prNumber}`);
+			(0, import_core$1.setFailed)(`PR #${prNumber} is missing a version label`);
+		} else (0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
 	} catch (error$1) {
-		if (error$1 instanceof Error) (0, import_core.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
-		else (0, import_core.setFailed)("Failed to set label for pull request: Unknown error");
+		if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
+		else (0, import_core$1.setFailed)("Failed to set label for pull request: Unknown error");
 	}
 }
 
 //#endregion
 //#region src/index.ts
+var import_core = __toESM$1(require_core(), 1);
 function run() {
-	const GITHUB_TOKEN = process.env.GITHUB_TOKEN ?? "";
+	const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+	if (!GITHUB_TOKEN) {
+		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
+		process.exit(1);
+	}
 	setLabelForPullRequest(GITHUB_TOKEN);
 }
 run();

@@ -20064,7 +20064,11 @@ function getLastMergedPullRequestNumber(token) {
 var import_core = __toESM$1(require_core(), 1);
 var import_github = __toESM$1(require_github(), 1);
 async function run() {
-	const token = (0, import_core.getInput)("GITHUB_TOKEN", { required: true });
+	const token = process.env.GITHUB_TOKEN;
+	if (!token) {
+		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
+		process.exit(1);
+	}
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
@@ -20073,7 +20077,7 @@ async function run() {
 	const repo = import_github.context.repo.repo;
 	const pullRequestNumber = await getLastMergedPullRequestNumber(token)(owner, repo);
 	if (!pullRequestNumber) {
-		console.error("No merged pull request found");
+		(0, import_core.error)("No merged pull request found");
 		(0, import_core.setFailed)("No merged pull request found");
 		return;
 	}

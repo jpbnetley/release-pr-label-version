@@ -16,25 +16,6 @@ inputs:
     required: true
 
 runs:
-  using: "composite"
-  steps:
-    - name: Semantic release
-      shell: bash
-      run: |
-          # Get all label names for the PR
-          PR_NUMBER=$(gh pr list --repo "$REPO" --base main --state merged --json number,mergedAt --jq 'sort_by(.mergedAt) | last.number')
-          labels=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json labels --jq '.labels[].name')
-
-          if echo "$labels" | grep -q "^release:version-patch$"; then
-            ${{ inputs.patch-release-script }}
-          elif echo "$labels" | grep -q "^release:version-minor$"; then
-            ${{ inputs.minor-release-script }}
-          elif echo "$labels" | grep -q "^release:version-major$"; then
-            ${{ inputs.major-release-script }}
-          elif echo "$labels" | grep -q "^release:version-skip$"; then
-            echo "release version skip"
-          else
-            echo "No release label found"
-          fi
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+  runs:
+  using: 'node20'
+  main: 'dist/index.js'
