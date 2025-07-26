@@ -41,7 +41,7 @@ async function run() {
     pullRequest.number
   )
 
-  debug(`Labels on PR (#${pullRequest}): ` + labels?.join(', '))
+  debug(`Labels on PR (#${pullRequest.number}): ` + labels?.join(', '))
 
   if (!labels || labels.length === 0) {
     info('No relevant labels found')
