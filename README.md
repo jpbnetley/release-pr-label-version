@@ -132,7 +132,7 @@ inputs:
       description: The release branch name
       required: false
 env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
 
 #### Example workflow
