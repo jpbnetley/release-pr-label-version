@@ -1,14 +1,14 @@
-name: Build est
+name: Build Test
 
 on:
   pull_request:
 
 concurrency:
-  group: 'test-${{ github.ref }}'
+  group: 'build-${{ github.ref }}'
   cancel-in-progress: true
 
 jobs:
-  test:
+  dist-diff-check:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
