@@ -74,6 +74,8 @@ permissions:
 github-token:
     description: 'GitHub token for authentication'
     required: true
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### Example workflow
@@ -102,8 +104,6 @@ jobs:
       
       - name: Labeler validation
         uses: jpbnetley/release-pr-label-version/labler@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### labeler-release
@@ -128,9 +128,11 @@ inputs:
   major-release-script:
     description: 'Script to run for major release'
     required: true
-release-branch-name: 
-    description: The release branch name
-    required: false
+  release-branch-name: 
+      description: The release branch name
+      required: false
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
 
 #### Example workflow
