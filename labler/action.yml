@@ -1,11 +1,6 @@
 name: 'labeler'
 description: 'Adds missing labels, and validates that the labels are added.'
 
-inputs:
-  github-token:
-    description: 'GitHub token for authentication'
-    required: true
-
 runs:
   using: 'node20'
   main: 'dist/index.js'
