@@ -1,0 +1,8 @@
+packages:
+  - lib
+  - labler
+  - labler-release
+  - labler-validator
+
+onlyBuiltDependencies:
+  - esbuild

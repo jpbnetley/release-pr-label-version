@@ -1,0 +1,42 @@
+{
+  "name": "release-pr-label-version",
+  "version": "1.0.0",
+  "description": "> release prs with labels",
+  "type": "module",
+  "private": true,
+  "engines": {
+    "node": "20"
+  },
+  "scripts": {
+    "tsc:check": "pnpm -r tsc:check",
+    "build": "pnpm -r build",
+    "lib:build": " pnpm --filter lib build",
+    "lib:tsc:check": "pnpm --filter lib tsc:check",
+    "labler:build": "pnpm --filter labler build",
+    "labler:tsc:check": "pnpm --filter labler tsc:check",
+    "labler-release:build": "pnpm --filter labler-release build",
+    "labler-release:tsc:check": "pnpm --filter labler-release tsc:check",
+    "labler-validator:build": "pnpm --filter labler-validator build",
+    "labler-validator:tsc:check": "pnpm --filter labler-validator tsc:check",
+    "test": "vitest run --pass-with-no-tests"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jpbnetley/release-pr-label-version.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpbnetley/release-pr-label-version/issues"
+  },
+  "homepage": "https://github.com/jpbnetley/release-pr-label-version#readme",
+  "packageManager": "pnpm@10.14.0-0+sha512.2cd47a0cbf5f1d1de7693a88307a0ede5be94e0d3b34853d800ee775efbea0650cb562b77605ec80bc8d925f5cd27c4dfe8bb04d3a0b76090784c664450d32d6",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
+    "@types/node": "^20.19.9",
+    "tsdown": "^0.13.0",
+    "typescript": "^5.8.3",
+    "vitest": "^3.2.4"
+  }
+}
