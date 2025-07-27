@@ -20134,9 +20134,5 @@ async function run() {
 	await Promise.all(labelCreation);
 }
 run();
-function test() {
-	console.warn("This is a test function");
-}
-test();
 
 //#endregion
