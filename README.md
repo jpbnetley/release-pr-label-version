@@ -23,9 +23,8 @@ permissions:
 
 #### Inputs
   ```yml
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
+env:
+  GITHUB_TOKEN
   ```
 
 #### Example workflow
@@ -54,8 +53,8 @@ jobs:
       
       - name: Labeler validation
         uses: jpbnetley/release-pr-label-version/labler-validator@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### labeler
