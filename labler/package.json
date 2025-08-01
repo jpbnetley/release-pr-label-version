@@ -1,0 +1,19 @@
+{
+  "name": "labler",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "module": "dist/index.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsdown",
+    "tsc:check": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "packageManager": "pnpm@10.13.1",
+  "devDependencies": {
+    "lib": "workspace:*"
+  }
+}

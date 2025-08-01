@@ -1,25 +1,6 @@
 name: 'labeler-validator'
 description: 'Validates that the required labels are present on a pull request.'
 
-inputs:
-  github-token:
-    description: 'GitHub token for authentication'
-    required: true
-
 runs:
-  using: "composite"
-  steps:
-    - name: Validate version labels
-      shell: bash
-      run: |
-        labels=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name')
-        if [[ ! "$labels" =~ "release:version-patch" ]] && [[ ! "$labels" =~ "release:version-minor" ]] && [[ ! "$labels" =~ "release:version-major" ]] && [[ ! "$labels" =~ "release:version-skip" ]] ; then
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "release:version-required"
-          echo "Added 'release:version-required' label to PR #${{ github.event.pull_request.number }}"
-          exit 1
-        else
-          echo "Version label already present in PR #${{ github.event.pull_request.number }}"
-          exit 0
-        fi
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+  using: 'node20'
+  main: 'dist/index.js'

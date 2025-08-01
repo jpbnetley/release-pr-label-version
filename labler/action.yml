@@ -1,64 +1,6 @@
 name: 'labeler'
 description: 'Adds missing labels, and validates that the labels are added.'
 
-inputs:
-  github-token:
-    description: 'GitHub token for authentication'
-    required: true
-
 runs:
-  using: "composite"
-  steps:
-    - name: Create labels if not exist
-      shell: bash
-      if: github.event.action == 'opened'
-      run: |
-        # Define your labels as name|description|color
-          labels=(
-            "release:version-required|This PR requires a version bump label|b60205"
-            "release:version-patch|Patch version release|0e8a16"
-            "release:version-minor|Minor version release|0052cc"
-            "release:version-major|Major version release|d93f0b"
-            "release:version-skip|Skip version release|bfd4f2"
-          )
-
-          for entry in "${labels[@]}"; do
-            IFS="|" read -r name desc color <<< "$entry"
-            if ! gh label list | grep -q "^$name\b"; then
-              echo command: gh label create "$name" --description "$desc" --color "$color"
-              gh label create "$name" --description "$desc" --color "$color"
-              echo "Created label: $name"
-            else
-              echo "Label already exists: $name"
-            fi
-          done
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-      
-
-    - name: Check for version labels
-      shell: bash
-      run: |
-        labels=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name')
-        if [[ ! "$labels" =~ "release:version-patch" ]] && [[ ! "$labels" =~ "release:version-minor" ]] && [[ ! "$labels" =~ "release:version-major" ]] && [[ ! "$labels" =~ "release:version-skip" ]]; then
-          gh pr edit ${{ github.event.pull_request.number }} --add-label "release:version-required"
-          echo "Added 'release:version-required' label to PR #${{ github.event.pull_request.number }}"
-        else
-          echo "Version label already present in PR #${{ github.event.pull_request.number }}"
-        fi
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
-
-    - name: Remove version-required label if version label is present
-      shell: bash
-      if: github.event.action == 'labeled' || github.event.action == 'unlabeled'
-      run: |
-        labels=$(gh pr view ${{ github.event.pull_request.number }} --json labels --jq '.labels[].name')
-        if [[ "$labels" =~ "release:version-required" ]] && ([[ "$labels" =~ "release:version-patch" ]] || [[ "$labels" =~ "release:version-minor" ]] || [[ "$labels" =~ "release:version-major" ]] || [[ ! "$labels" =~ "release:version-skip" ]]); then
-          gh pr edit ${{ github.event.pull_request.number }} --remove-label "release:version-required"
-          echo "Removed 'release:version-required' label from PR #${{ github.event.pull_request.number }}"
-        else
-          echo "'release:version-required' label not present or no version label found in PR #${{ github.event.pull_request.number }}"
-        fi
-      env:
-        GITHUB_TOKEN: ${{ inputs.github-token }}
+  using: 'node20'
+  main: 'dist/index.js'

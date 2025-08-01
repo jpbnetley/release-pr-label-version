@@ -23,9 +23,8 @@ permissions:
 
 #### Inputs
   ```yml
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
+env:
+  GITHUB_TOKEN
   ```
 
 #### Example workflow
@@ -54,8 +53,8 @@ jobs:
       
       - name: Labeler validation
         uses: jpbnetley/release-pr-label-version/labler-validator@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### labeler
@@ -75,6 +74,8 @@ permissions:
 github-token:
     description: 'GitHub token for authentication'
     required: true
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 #### Example workflow
@@ -103,8 +104,6 @@ jobs:
       
       - name: Labeler validation
         uses: jpbnetley/release-pr-label-version/labler@main
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### labeler-release
@@ -129,9 +128,11 @@ inputs:
   major-release-script:
     description: 'Script to run for major release'
     required: true
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
+  release-branch-name: 
+      description: The release branch name
+      required: false
+env:
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```
 
 #### Example workflow
@@ -156,7 +157,8 @@ jobs:
           major-release-script: echo 'major release script'
           minor-release-script: echo 'minor release script'
           patch-release-script: echo 'patch release script'
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Ref
