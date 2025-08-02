@@ -16819,13 +16819,13 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* @param     options  optional. See InputOptions.
 	* @returns   string
 	*/
-	function getInput(name, options) {
+	function getInput$1(name, options) {
 		const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
 		if (options && options.required && !val) throw new Error(`Input required and not supplied: ${name}`);
 		if (options && options.trimWhitespace === false) return val;
 		return val.trim();
 	}
-	exports.getInput = getInput;
+	exports.getInput = getInput$1;
 	/**
 	* Gets the values of an multiline input.  Each value is also trimmed.
 	*
@@ -16835,7 +16835,7 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	*
 	*/
 	function getMultilineInput(name, options) {
-		const inputs = getInput(name, options).split("\n").filter((x) => x !== "");
+		const inputs = getInput$1(name, options).split("\n").filter((x) => x !== "");
 		if (options && options.trimWhitespace === false) return inputs;
 		return inputs.map((input) => input.trim());
 	}
@@ -16861,7 +16861,7 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 			"False",
 			"FALSE"
 		];
-		const val = getInput(name, options);
+		const val = getInput$1(name, options);
 		if (trueValue.includes(val)) return true;
 		if (falseValue.includes(val)) return false;
 		throw new TypeError(`Input does not meet YAML 1.2 "Core Schema" specification: ${name}\nSupport boolean input list: \`true | True | TRUE | false | False | FALSE\``);
@@ -20082,14 +20082,15 @@ function setLabelForPullRequest(octokit) {
 //#region src/index.ts
 var import_core = /* @__PURE__ */ __toESM$1(require_core(), 1);
 var import_github = /* @__PURE__ */ __toESM$1(require_github(), 1);
-function run() {
+async function run() {
 	const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 	if (!GITHUB_TOKEN) {
 		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
 		process.exit(1);
 	}
+	const isPreRelease = (0, import_core.getInput)("isPreRelease") === "true";
 	const octokit = (0, import_github.getOctokit)(GITHUB_TOKEN);
-	setLabelForPullRequest(octokit);
+	await setLabelForPullRequest(octokit)(isPreRelease);
 }
 run();
 

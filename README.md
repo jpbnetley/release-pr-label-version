@@ -10,7 +10,11 @@ and check if any release labels have been added.
 
 ## Actions explained
 ### labeler-validator
-> checks that the required labels are added.  
+> Adds missing labels, and validates that the labels are added.
+  - Will add a `release:version-required` if no release label is added.
+  - If a release label is added, the `release:version-required` is removed
+  - Will add `release:version-pre` if it is a pre-release
+  Checks that the required labels are added.  
   This should be used with the branch protection rules so that a release pr cannot be merged if the correct label is not selected.
 
 #### Permissions
@@ -23,8 +27,12 @@ permissions:
 
 #### Inputs
   ```yml
+inputs:
+    isPreRelease:
+      description: 'Indicates if the release is a pre-release'
+      default: false
 env:
-  GITHUB_TOKEN
+    GITHUB_TOKEN
   ```
 
 #### Example workflow
@@ -36,6 +44,7 @@ on:
     types: [opened, labeled, unlabeled, synchronize]
     branches:
       - main
+      - dev
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -53,57 +62,10 @@ jobs:
       
       - name: Labeler validation
         uses: jpbnetley/release-pr-label-version/labler-validator@main
+        with:
+          isPreRelease: ${{ github.base_ref == 'dev' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-### labeler
-> adds missing labels, and validates that the labels are added.
-  - Wil add a `release:version-required` if no release label is added.
-  - If a release label is added, the `release:version-required` is removed
-
-#### Permissions
-```yml
-permissions:
-    pull-requests: write
-    contents: read
-```
-
-#### Inputs
-```yml
-github-token:
-    description: 'GitHub token for authentication'
-    required: true
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
-#### Example workflow
-```yml
-name: Ensure Release Version Label
-
-on:
-  pull_request:
-    types: [opened, labeled, unlabeled, synchronize]
-    branches:
-      - main
-
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-permissions:
-  pull-requests: write
-  contents: read
-
-jobs:
-  add-version-required-label:
-    name: Add Version Required Label
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      
-      - name: Labeler validation
-        uses: jpbnetley/release-pr-label-version/labler@main
 ```
 
 ### labeler-release
