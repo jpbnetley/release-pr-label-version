@@ -1,4 +1,3 @@
-import { setFailed } from '@actions/core'
 import { Octokit } from '../../types/models/github/octokit.js'
 
 export type CreatePullRequestParams = {
@@ -44,9 +43,9 @@ export function createPullRequest(octokit: Octokit) {
       return pullRequest
     } catch (error) {
       if (error instanceof Error) {
-        setFailed(`Failed to create pull request: ${error.message}`)
+        throw new Error(`Failed to create pull request: ${error.message}`)
       } else {
-        setFailed('Failed to create pull request: Unknown error')
+        throw new Error('Failed to create pull request: Unknown error')
       }
     }
   }

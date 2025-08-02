@@ -17099,7 +17099,7 @@ function executeBuildScript(script) {
 
 //#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
-var import_core$5 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
+var import_core$4 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 /**
 * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
 *
@@ -17119,8 +17119,8 @@ function getMergedPullRequestLabels(octokit) {
 			});
 			return pullRequest.labels.map((label) => label.name);
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$5.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
-			else (0, import_core$5.setFailed)("Failed to get merged pull request labels: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$4.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
+			else (0, import_core$4.setFailed)("Failed to get merged pull request labels: Unknown error");
 		}
 	};
 }
@@ -20102,6 +20102,40 @@ function getCurrentReleaseVersion(script) {
 			resolve(version);
 		});
 	});
+}
+
+//#endregion
+//#region ../lib/dist/utils/git/create-pull-request.js
+/**
+* Creates a function to open a new pull request on a GitHub repository using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that creates a pull request with the specified parameters.
+*
+* @example
+* const createPR = createPullRequest(octokit);
+* await createPR('owner', 'repo', 'My PR Title', 'feature-branch', 'main', 'PR description');
+*
+* @throws Will call `setFailed` if the pull request creation fails.
+*/
+function createPullRequest(octokit) {
+	return async function createPullRequest$1({ owner, repo, title, head, base = "main", body }) {
+		try {
+			const { data: pullRequest } = await octokit.rest.pulls.create({
+				owner,
+				repo,
+				title,
+				head,
+				base,
+				body,
+				labels: ["release-pr-label-version"]
+			});
+			return pullRequest;
+		} catch (error$1) {
+			if (error$1 instanceof Error) throw new Error(`Failed to create pull request: ${error$1.message}`);
+			else throw new Error("Failed to create pull request: Unknown error");
+		}
+	};
 }
 
 //#endregion
@@ -36840,41 +36874,6 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	*/
 	exports$1.platform = __importStar$13(require_platform());
 }) });
-
-//#endregion
-//#region ../lib/dist/utils/git/create-pull-request.js
-var import_core$4 = /* @__PURE__ */ __toESM(require_core(), 1);
-/**
-* Creates a function to open a new pull request on a GitHub repository using the provided Octokit instance.
-*
-* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
-* @returns An async function that creates a pull request with the specified parameters.
-*
-* @example
-* const createPR = createPullRequest(octokit);
-* await createPR('owner', 'repo', 'My PR Title', 'feature-branch', 'main', 'PR description');
-*
-* @throws Will call `setFailed` if the pull request creation fails.
-*/
-function createPullRequest(octokit) {
-	return async function createPullRequest$1({ owner, repo, title, head, base = "main", body }) {
-		try {
-			const { data: pullRequest } = await octokit.rest.pulls.create({
-				owner,
-				repo,
-				title,
-				head,
-				base,
-				body,
-				labels: ["release-pr-label-version"]
-			});
-			return pullRequest;
-		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$4.setFailed)(`Failed to create pull request: ${error$1.message}`);
-			else (0, import_core$4.setFailed)("Failed to create pull request: Unknown error");
-		}
-	};
-}
 
 //#endregion
 //#region ../lib/dist/utils/github/create-github-release.js

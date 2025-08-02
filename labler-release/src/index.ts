@@ -157,6 +157,7 @@ async function run() {
   debug('Adding files to git staging area.')
   await addFilesToGit()
   debug('Files added to git staging area.')
+  
   debug('Committing files to git.')
   await commitFilesToGit({
     commitMessage: 'Update version files',
