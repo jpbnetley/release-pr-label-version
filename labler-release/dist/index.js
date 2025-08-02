@@ -40175,8 +40175,8 @@ async function run() {
 	const gitStatusText = await gitStatus();
 	(0, import_core.info)("git status: " + gitStatusText);
 	const hasChangesAfterCommit = await hasGitChanges();
-	(0, import_core.debug)(`Has changes after commit: ${hasChangesAfterCommit}`);
-	if (!hasChangesAfterCommit) {
+	(0, import_core.info)(`Has changes after commit: ${hasChangesAfterCommit}`);
+	if (hasChangesAfterCommit) {
 		(0, import_core.setFailed)("Changes were not committed to git.");
 		return;
 	}
