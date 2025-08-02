@@ -157,7 +157,7 @@ async function run() {
   info('git status: ' + gitStatusText)
 
   const hasChangesAfterCommit = await hasGitChanges()
-  debug(`Has changes after commit: ${hasChangesAfterCommit}`)
+  info(`Has changes after commit: ${hasChangesAfterCommit}`)
   if (hasChangesAfterCommit) {
     setFailed('Changes were not committed to git.')
     return
