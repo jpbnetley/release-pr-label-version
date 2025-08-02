@@ -1,6 +1,6 @@
 import { setFailed } from '@actions/core'
 import { context } from '@actions/github'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from '../../types/models/github/octokit.js'
 
 export type CreateNewGitBranchParams = {
   owner: string

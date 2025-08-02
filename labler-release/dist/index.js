@@ -39896,11 +39896,23 @@ function commitFilesToGit({ commitMessage, authorEmail, authorName }) {
 
 //#endregion
 //#region ../lib/dist/utils/git/has-changes-git.js
+/**
+* Checks if there are any uncommitted changes in the current Git repository.
+*
+* Executes `git status --porcelain` to determine if the working directory is clean.
+*
+* @returns A promise that resolves to `true` if there are uncommitted changes, or `false` if the working directory is clean.
+* @throws If there is an error executing the Git command.
+*/
 function hasGitChanges() {
 	return new Promise((resolve, reject) => {
-		exec("git diff --exit-code", (error$1) => {
-			if (error$1) resolve(false);
-			else resolve(true);
+		exec("git status --porcelain", { encoding: "utf-8" }, (error$1, stdout) => {
+			if (error$1) {
+				reject(`Error executing git status: ${error$1}`);
+				return;
+			}
+			if (stdout) resolve(true);
+			else resolve(false);
 		});
 	});
 }

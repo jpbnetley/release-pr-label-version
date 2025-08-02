@@ -1,5 +1,5 @@
 import { setFailed } from '@actions/core'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from '../../types/models/github/octokit.js'
 
 export type GitPushParams = {
   owner: string
