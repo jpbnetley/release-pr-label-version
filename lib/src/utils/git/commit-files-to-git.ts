@@ -1,3 +1,4 @@
+import { info } from '@actions/core'
 import { exec } from 'node:child_process'
 
 export type CommitFilesToGitParams = {
@@ -13,17 +14,21 @@ export type CommitFilesToGitParams = {
  * @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
  */
 export function commitFilesToGit({
-  commitMessage
+  commitMessage,
 }: CommitFilesToGitParams): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    exec(
-      `git commit -m "${commitMessage}"`,
-      (error) => {
-        if (error) {
-          return reject(`Error committing files: ${error.message}`)
+    exec(`git commit -m "${commitMessage}"`, (error, stdout, stderr) => {
+      if (error) {
+        // If nothing to commit, don't treat as fatal error
+        if (stderr.includes('nothing to commit')) {
+          info('No changes to commit.')
+          resolve()
+          return
         }
-        resolve()
+        return reject(`Error committing files: ${stderr || error.message}`)
       }
-    )
+      info(stdout)
+      resolve()
+    })
   })
 }

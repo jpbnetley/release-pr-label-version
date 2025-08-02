@@ -17080,7 +17080,7 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 
 //#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
-var import_core$6 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
+var import_core$7 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 /**
 * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
 *
@@ -17100,8 +17100,8 @@ function getMergedPullRequestLabels(octokit) {
 			});
 			return pullRequest.labels.map((label) => label.name);
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$6.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
-			else (0, import_core$6.setFailed)("Failed to get merged pull request labels: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$7.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
+			else (0, import_core$7.setFailed)("Failed to get merged pull request labels: Unknown error");
 		}
 	};
 }
@@ -36824,7 +36824,7 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 
 //#endregion
 //#region ../lib/dist/utils/git/create-pull-request.js
-var import_core$5 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$6 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Creates a function to open a new pull request on a GitHub repository using the provided Octokit instance.
 *
@@ -36851,15 +36851,15 @@ function createPullRequest(octokit) {
 			});
 			return pullRequest;
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$5.setFailed)(`Failed to create pull request: ${error$1.message}`);
-			else (0, import_core$5.setFailed)("Failed to create pull request: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$6.setFailed)(`Failed to create pull request: ${error$1.message}`);
+			else (0, import_core$6.setFailed)("Failed to create pull request: Unknown error");
 		}
 	};
 }
 
 //#endregion
 //#region ../lib/dist/utils/github/create-github-release.js
-var import_core$4 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$5 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Creates a function to publish a new GitHub release using the provided Octokit instance.
 *
@@ -36893,10 +36893,10 @@ function createGitHubRelease(octokit) {
 					prerelease: isPreRelease,
 					generate_release_notes
 				});
-				(0, import_core$4.info)(`Created GitHub release: ${releaseName} (${tagName})`);
+				(0, import_core$5.info)(`Created GitHub release: ${releaseName} (${tagName})`);
 				resolve();
 			} catch (err) {
-				(0, import_core$4.error)(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
+				(0, import_core$5.error)(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
 				reject(err);
 			}
 		});
@@ -39770,7 +39770,7 @@ var require_github = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@action
 	}
 	exports$1.getOctokit = getOctokit$2;
 }) });
-var import_core$3 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$4 = /* @__PURE__ */ __toESM(require_core(), 1);
 var import_github$1 = /* @__PURE__ */ __toESM(require_github(), 1);
 /**
 * Factory function that returns an async function to create a new Git branch in a GitHub repository using Octokit.
@@ -39804,8 +39804,8 @@ function createNewGitBranch(octokit) {
 			});
 			return newBranch;
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$3.setFailed)(`Failed to create new git branch: ${error$1.message}`);
-			else (0, import_core$3.setFailed)("Failed to create new git branch: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$4.setFailed)(`Failed to create new git branch: ${error$1.message}`);
+			else (0, import_core$4.setFailed)("Failed to create new git branch: Unknown error");
 		}
 	};
 }
@@ -39830,7 +39830,7 @@ function checkoutBranch(baseBranch) {
 
 //#endregion
 //#region ../lib/dist/utils/git/add-files-to-git.js
-var import_core$2 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$3 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Adds the specified files to the current Git staging area using the `git add` command.
 *
@@ -39842,16 +39842,16 @@ var import_core$2 = /* @__PURE__ */ __toESM(require_core(), 1);
 function addFilesToGit(files = ["."]) {
 	return new Promise((resolve, reject) => {
 		if (!files || files.length === 0) {
-			(0, import_core$2.info)("No files to add to git.");
+			(0, import_core$3.info)("No files to add to git.");
 			resolve();
 			return;
 		}
 		try {
 			execSync(`git add ${files.join(" ")}`, { stdio: "inherit" });
-			(0, import_core$2.info)(`Added files to git: ${files.join(", ")}`);
+			(0, import_core$3.info)(`Added files to git: ${files.join(", ")}`);
 			resolve();
 		} catch (err) {
-			(0, import_core$2.error)(err instanceof Error ? err : `Error adding files to git: ${err}`);
+			(0, import_core$3.error)(err instanceof Error ? err : `Error adding files to git: ${err}`);
 			reject(err);
 		}
 	});
@@ -39859,6 +39859,7 @@ function addFilesToGit(files = ["."]) {
 
 //#endregion
 //#region ../lib/dist/utils/git/commit-files-to-git.js
+var import_core$2 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Stages the specified files and creates a Git commit with the provided commit message and author information.
 *
@@ -39869,8 +39870,16 @@ function addFilesToGit(files = ["."]) {
 */
 function commitFilesToGit({ commitMessage }) {
 	return new Promise((resolve, reject) => {
-		exec(`git commit -m "${commitMessage}"`, (error$1) => {
-			if (error$1) return reject(`Error committing files: ${error$1.message}`);
+		exec(`git commit -m "${commitMessage}"`, (error$1, stdout, stderr) => {
+			if (error$1) {
+				if (stderr.includes("nothing to commit")) {
+					(0, import_core$2.info)("No changes to commit.");
+					resolve();
+					return;
+				}
+				return reject(`Error committing files: ${stderr || error$1.message}`);
+			}
+			(0, import_core$2.info)(stdout);
 			resolve();
 		});
 	});
