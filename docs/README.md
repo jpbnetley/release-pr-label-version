@@ -24,6 +24,8 @@ permissions:
     contents: read
 
   ```
+Under workflow permissions, grant `Allow GitHub Actions to create and approve pull requests`
+<image src='./assets/images/pr-permission.png'>
 
 #### Inputs
   ```yml
