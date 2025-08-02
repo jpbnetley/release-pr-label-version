@@ -36846,8 +36846,7 @@ function createPullRequest(octokit) {
 				title,
 				head,
 				base,
-				body,
-				labels: ["release-pr-label-version"]
+				body
 			});
 			return pullRequest;
 		} catch (error$1) {
@@ -40216,7 +40215,7 @@ async function run() {
 	}
 	await gitPush(RELEASE_VERSION_BRANCH_NAME);
 	(0, import_core.debug)(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
-	await createPullRequest(octokit)({
+	const newVersionPr = await createPullRequest(octokit)({
 		owner,
 		repo,
 		title: `Release PR for #${pullRequest.number}`,
@@ -40225,13 +40224,18 @@ async function run() {
 		body: `This PR was automatically created by the labler-release action for pull request #${pullRequest.number}.\n\nLabels: ${labels.join(", ")}`
 	});
 	(0, import_core.debug)(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	if (!newVersionPr) {
+		(0, import_core.setFailed)("Failed to create pull request for new version branch.");
+		return;
+	}
 	await addLabelToPullRequest(octokit)({
 		owner,
 		repo,
-		pullNumber: pullRequest.number,
+		pullNumber: newVersionPr.number,
 		labels: [ReleaseLabelName.VersionBump]
 	});
-	(0, import_core.info)(`Added label '${ReleaseLabelName.VersionBump}' to pull request #${pullRequest.number}`);
+	(0, import_core.info)(`Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`);
+	await import_core.summary.addHeading("Release version pull request").addRaw(`New version pull request: ${newVersionPr.html_url}`).write();
 	(0, import_core.info)("Release process completed successfully.");
 }
 run().catch((error$1) => (0, import_core.setFailed)(`Action failed with error: ${error$1?.message ?? error$1}`));
