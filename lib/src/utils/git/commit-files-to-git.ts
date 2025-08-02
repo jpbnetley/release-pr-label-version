@@ -2,8 +2,6 @@ import { exec } from 'node:child_process'
 
 export type CommitFilesToGitParams = {
   commitMessage: string
-  authorName: string
-  authorEmail: string
 }
 
 /**
@@ -15,13 +13,11 @@ export type CommitFilesToGitParams = {
  * @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
  */
 export function commitFilesToGit({
-  commitMessage,
-  authorEmail,
-  authorName,
+  commitMessage
 }: CommitFilesToGitParams): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     exec(
-      `git commit -m "${commitMessage}" --author="${authorName} <${authorEmail}>"`,
+      `git commit -m "${commitMessage}"`,
       (error) => {
         if (error) {
           return reject(`Error committing files: ${error.message}`)

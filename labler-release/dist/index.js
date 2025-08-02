@@ -14839,19 +14839,19 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 			return __awaiter$10(this, void 0, void 0, function* () {
 				if (this._disposed) throw new Error("Client has already been disposed.");
 				const parsedUrl = new URL(requestUrl);
-				let info$2 = this._prepareRequest(verb, parsedUrl, headers);
+				let info$3 = this._prepareRequest(verb, parsedUrl, headers);
 				const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
 				let numTries = 0;
 				let response;
 				do {
-					response = yield this.requestRaw(info$2, data);
+					response = yield this.requestRaw(info$3, data);
 					if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
 						let authenticationHandler;
 						for (const handler$1 of this.handlers) if (handler$1.canHandleAuthentication(response)) {
 							authenticationHandler = handler$1;
 							break;
 						}
-						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$2, data);
+						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$3, data);
 						else return response;
 					}
 					let redirectsRemaining = this._maxRedirects;
@@ -14864,8 +14864,8 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 						if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
 							for (const header in headers) if (header.toLowerCase() === "authorization") delete headers[header];
 						}
-						info$2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-						response = yield this.requestRaw(info$2, data);
+						info$3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+						response = yield this.requestRaw(info$3, data);
 						redirectsRemaining--;
 					}
 					if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) return response;
@@ -14890,7 +14890,7 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 		* @param info
 		* @param data
 		*/
-		requestRaw(info$2, data) {
+		requestRaw(info$3, data) {
 			return __awaiter$10(this, void 0, void 0, function* () {
 				return new Promise((resolve, reject) => {
 					function callbackForResult(err, res) {
@@ -14898,7 +14898,7 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 						else if (!res) reject(/* @__PURE__ */ new Error("Unknown error"));
 						else resolve(res);
 					}
-					this.requestRawWithCallback(info$2, data, callbackForResult);
+					this.requestRawWithCallback(info$3, data, callbackForResult);
 				});
 			});
 		}
@@ -14908,10 +14908,10 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 		* @param data
 		* @param onResult
 		*/
-		requestRawWithCallback(info$2, data, onResult) {
+		requestRawWithCallback(info$3, data, onResult) {
 			if (typeof data === "string") {
-				if (!info$2.options.headers) info$2.options.headers = {};
-				info$2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+				if (!info$3.options.headers) info$3.options.headers = {};
+				info$3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
 			}
 			let callbackCalled = false;
 			function handleResult(err, res) {
@@ -14920,7 +14920,7 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 					onResult(err, res);
 				}
 			}
-			const req = info$2.httpModule.request(info$2.options, (msg) => {
+			const req = info$3.httpModule.request(info$3.options, (msg) => {
 				const res = new HttpClientResponse(msg);
 				handleResult(void 0, res);
 			});
@@ -14930,7 +14930,7 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 			});
 			req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
 				if (socket) socket.end();
-				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$2.options.path}`));
+				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$3.options.path}`));
 			});
 			req.on("error", function(err) {
 				handleResult(err);
@@ -14960,21 +14960,21 @@ var require_lib$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@actio
 			return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
 		}
 		_prepareRequest(method, requestUrl, headers) {
-			const info$2 = {};
-			info$2.parsedUrl = requestUrl;
-			const usingSsl = info$2.parsedUrl.protocol === "https:";
-			info$2.httpModule = usingSsl ? https : http;
+			const info$3 = {};
+			info$3.parsedUrl = requestUrl;
+			const usingSsl = info$3.parsedUrl.protocol === "https:";
+			info$3.httpModule = usingSsl ? https : http;
 			const defaultPort = usingSsl ? 443 : 80;
-			info$2.options = {};
-			info$2.options.host = info$2.parsedUrl.hostname;
-			info$2.options.port = info$2.parsedUrl.port ? parseInt(info$2.parsedUrl.port) : defaultPort;
-			info$2.options.path = (info$2.parsedUrl.pathname || "") + (info$2.parsedUrl.search || "");
-			info$2.options.method = method;
-			info$2.options.headers = this._mergeHeaders(headers);
-			if (this.userAgent != null) info$2.options.headers["user-agent"] = this.userAgent;
-			info$2.options.agent = this._getAgent(info$2.parsedUrl);
-			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$2.options);
-			return info$2;
+			info$3.options = {};
+			info$3.options.host = info$3.parsedUrl.hostname;
+			info$3.options.port = info$3.parsedUrl.port ? parseInt(info$3.parsedUrl.port) : defaultPort;
+			info$3.options.path = (info$3.parsedUrl.pathname || "") + (info$3.parsedUrl.search || "");
+			info$3.options.method = method;
+			info$3.options.headers = this._mergeHeaders(headers);
+			if (this.userAgent != null) info$3.options.headers["user-agent"] = this.userAgent;
+			info$3.options.agent = this._getAgent(info$3.parsedUrl);
+			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$3.options);
+			return info$3;
 		}
 		_mergeHeaders(headers) {
 			if (this.requestOptions && this.requestOptions.headers) return Object.assign({}, lowercaseKeys$1(this.requestOptions.headers), lowercaseKeys$1(headers || {}));
@@ -16895,11 +16895,11 @@ var require_core$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@acti
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$2(message) {
+	function setFailed$3(message) {
 		process.exitCode = ExitCode.Failure;
 		error(message);
 	}
-	exports.setFailed = setFailed$2;
+	exports.setFailed = setFailed$3;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -16946,10 +16946,10 @@ var require_core$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@acti
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info$1(message) {
+	function info$2(message) {
 		process.stdout.write(message + os.EOL);
 	}
-	exports.info = info$1;
+	exports.info = info$2;
 	/**
 	* Begin an output group.
 	*
@@ -17079,27 +17079,8 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 }({});
 
 //#endregion
-//#region src/utils/execute-build-script.ts
-/**
-* Executes a given shell script asynchronously and returns a promise that resolves when the script completes.
-*
-* @param script - The shell command to execute.
-* @returns A promise that resolves when the script finishes successfully, or rejects with an error message if the script fails.
-*
-* @throws Will reject the promise with an error message if the script execution fails.
-*/
-function executeBuildScript(script) {
-	return new Promise((resolve, reject) => {
-		exec(script, (error$1, stdout, stderr) => {
-			if (error$1) reject(`Error executing script: ${error$1.message}\n${stderr}`);
-			else resolve(stdout);
-		});
-	});
-}
-
-//#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
-var import_core$5 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
+var import_core$6 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 /**
 * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
 *
@@ -17119,8 +17100,8 @@ function getMergedPullRequestLabels(octokit) {
 			});
 			return pullRequest.labels.map((label) => label.name);
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$5.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
-			else (0, import_core$5.setFailed)("Failed to get merged pull request labels: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$6.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
+			else (0, import_core$6.setFailed)("Failed to get merged pull request labels: Unknown error");
 		}
 	};
 }
@@ -36671,11 +36652,11 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$3(message) {
+	function setFailed$4(message) {
 		process.exitCode = ExitCode$1.Failure;
 		error$1(message);
 	}
-	exports$1.setFailed = setFailed$3;
+	exports$1.setFailed = setFailed$4;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -36722,10 +36703,10 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info$2(message) {
+	function info$3(message) {
 		process.stdout.write(message + os$4.EOL);
 	}
-	exports$1.info = info$2;
+	exports$1.info = info$3;
 	/**
 	* Begin an output group.
 	*
@@ -36843,7 +36824,7 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 
 //#endregion
 //#region ../lib/dist/utils/git/create-pull-request.js
-var import_core$4 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$5 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Creates a function to open a new pull request on a GitHub repository using the provided Octokit instance.
 *
@@ -36870,15 +36851,15 @@ function createPullRequest(octokit) {
 			});
 			return pullRequest;
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$4.setFailed)(`Failed to create pull request: ${error$1.message}`);
-			else (0, import_core$4.setFailed)("Failed to create pull request: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$5.setFailed)(`Failed to create pull request: ${error$1.message}`);
+			else (0, import_core$5.setFailed)("Failed to create pull request: Unknown error");
 		}
 	};
 }
 
 //#endregion
 //#region ../lib/dist/utils/github/create-github-release.js
-var import_core$3 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$4 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Creates a function to publish a new GitHub release using the provided Octokit instance.
 *
@@ -36912,10 +36893,10 @@ function createGitHubRelease(octokit) {
 					prerelease: isPreRelease,
 					generate_release_notes
 				});
-				(0, import_core$3.info)(`Created GitHub release: ${releaseName} (${tagName})`);
+				(0, import_core$4.info)(`Created GitHub release: ${releaseName} (${tagName})`);
 				resolve();
 			} catch (err) {
-				(0, import_core$3.error)(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
+				(0, import_core$4.error)(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
 				reject(err);
 			}
 		});
@@ -39789,7 +39770,7 @@ var require_github = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@action
 	}
 	exports$1.getOctokit = getOctokit$2;
 }) });
-var import_core$2 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$3 = /* @__PURE__ */ __toESM(require_core(), 1);
 var import_github$1 = /* @__PURE__ */ __toESM(require_github(), 1);
 /**
 * Factory function that returns an async function to create a new Git branch in a GitHub repository using Octokit.
@@ -39823,8 +39804,8 @@ function createNewGitBranch(octokit) {
 			});
 			return newBranch;
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$2.setFailed)(`Failed to create new git branch: ${error$1.message}`);
-			else (0, import_core$2.setFailed)("Failed to create new git branch: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$3.setFailed)(`Failed to create new git branch: ${error$1.message}`);
+			else (0, import_core$3.setFailed)("Failed to create new git branch: Unknown error");
 		}
 	};
 }
@@ -39849,7 +39830,7 @@ function checkoutBranch(baseBranch) {
 
 //#endregion
 //#region ../lib/dist/utils/git/add-files-to-git.js
-var import_core$1 = /* @__PURE__ */ __toESM(require_core(), 1);
+var import_core$2 = /* @__PURE__ */ __toESM(require_core(), 1);
 /**
 * Adds the specified files to the current Git staging area using the `git add` command.
 *
@@ -39861,16 +39842,16 @@ var import_core$1 = /* @__PURE__ */ __toESM(require_core(), 1);
 function addFilesToGit(files = ["."]) {
 	return new Promise((resolve, reject) => {
 		if (!files || files.length === 0) {
-			(0, import_core$1.info)("No files to add to git.");
+			(0, import_core$2.info)("No files to add to git.");
 			resolve();
 			return;
 		}
 		try {
 			execSync(`git add ${files.join(" ")}`, { stdio: "inherit" });
-			(0, import_core$1.info)(`Added files to git: ${files.join(", ")}`);
+			(0, import_core$2.info)(`Added files to git: ${files.join(", ")}`);
 			resolve();
 		} catch (err) {
-			(0, import_core$1.error)(err instanceof Error ? err : `Error adding files to git: ${err}`);
+			(0, import_core$2.error)(err instanceof Error ? err : `Error adding files to git: ${err}`);
 			reject(err);
 		}
 	});
@@ -39886,9 +39867,9 @@ function addFilesToGit(files = ["."]) {
 * @param authorEmail - The email address of the commit author.
 * @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
 */
-function commitFilesToGit({ commitMessage, authorEmail, authorName }) {
+function commitFilesToGit({ commitMessage }) {
 	return new Promise((resolve, reject) => {
-		exec(`git commit -m "${commitMessage}" --author="${authorName} <${authorEmail}>"`, (error$1) => {
+		exec(`git commit -m "${commitMessage}"`, (error$1) => {
 			if (error$1) return reject(`Error committing files: ${error$1.message}`);
 			resolve();
 		});
@@ -39979,6 +39960,69 @@ function addLabelToPullRequest(octokit) {
 }
 
 //#endregion
+//#region src/utils/execute-build-script.ts
+/**
+* Executes a given shell script asynchronously and returns a promise that resolves when the script completes.
+*
+* @param script - The shell command to execute.
+* @returns A promise that resolves when the script finishes successfully, or rejects with an error message if the script fails.
+*
+* @throws Will reject the promise with an error message if the script execution fails.
+*/
+function executeBuildScript(script) {
+	return new Promise((resolve, reject) => {
+		exec(script, (error$1, stdout, stderr) => {
+			if (error$1) reject(`Error executing script: ${error$1.message}\n${stderr}`);
+			else resolve(stdout);
+		});
+	});
+}
+
+//#endregion
+//#region src/utils/execute-release-script.ts
+var import_core$1 = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
+/**
+* Executes the appropriate release script based on the provided release labels.
+*
+* The function checks the `labels` array for specific release label names
+* (pre-release, patch, minor, major) and executes the corresponding script if provided.
+* If a pre-release label is present but no pre-release script is provided, the function
+* will mark the operation as failed.
+*
+* @param params - An object containing:
+*   - `labels`: An array of release label names to determine which script to execute.
+*   - `majorReleaseScript`: The script to execute for a major release.
+*   - `minorReleaseScript`: The script to execute for a minor release.
+*   - `patchReleaseScript`: The script to execute for a patch release.
+*   - `preReleaseScript`: The script to execute for a pre-release.
+*
+* @remarks
+* The function executes only one script per invocation, prioritizing pre-release,
+* then patch, minor, and finally major, based on the order of checks.
+*
+* @returns A promise that resolves when the appropriate script has been executed.
+*/
+async function executeReleaseScript({ labels, majorReleaseScript, minorReleaseScript, patchReleaseScript, preReleaseScript }) {
+	if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
+		if (!preReleaseScript) {
+			(0, import_core$1.setFailed)("Pre-release script is not provided");
+			return;
+		}
+		const response = await executeBuildScript(preReleaseScript);
+		(0, import_core$1.info)(`Pre-release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
+		const response = await executeBuildScript(patchReleaseScript);
+		(0, import_core$1.info)(`Patch release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionMinor) && minorReleaseScript) {
+		const response = await executeBuildScript(minorReleaseScript);
+		(0, import_core$1.info)(`Minor release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionMajor) && majorReleaseScript) {
+		const response = await executeBuildScript(majorReleaseScript);
+		(0, import_core$1.info)(`Major release script executed with response: ${response}`);
+	}
+}
+
+//#endregion
 //#region src/index.ts
 var import_core = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 var import_github = /* @__PURE__ */ __toESM$2(require_github$1(), 1);
@@ -40015,23 +40059,23 @@ async function run() {
 		return;
 	}
 	if (labels.includes(ReleaseLabelName.VersionBump)) {
-		const currentVersion = await getCurrentReleaseVersion(currentVersionScript);
-		(0, import_core.debug)(`Current version: ${currentVersion}`);
-		if (!currentVersion) {
+		const currentVersion$1 = await getCurrentReleaseVersion(currentVersionScript);
+		(0, import_core.debug)(`Current version: ${currentVersion$1}`);
+		if (!currentVersion$1) {
 			(0, import_core.setFailed)("Current version could not be determined");
 			return;
 		}
 		await createGitHubRelease(octokit)({
 			owner,
 			repo,
-			tagName: `${currentVersion}`,
-			releaseName: `Release for version: ${currentVersion}`,
-			body: `Release ${currentVersion}`,
+			tagName: `${currentVersion$1}`,
+			releaseName: `Release for version: ${currentVersion$1}`,
+			body: `Release ${currentVersion$1}`,
 			isPreRelease: pullRequest.base.ref !== releaseBranchName
 		});
 		(0, import_core.info)("Release created successfully.");
 		(0, import_core.debug)("Creating summary");
-		await import_core.summary.addHeading("Release version").addRaw(`Created for: ${currentVersion}`).write();
+		await import_core.summary.addHeading("Release version").addRaw(`Created for: ${currentVersion$1}`).write();
 		(0, import_core.debug)("Created summary");
 		return;
 	}
@@ -40055,23 +40099,13 @@ async function run() {
 	(0, import_core.debug)(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await checkoutBranch(RELEASE_VERSION_BRANCH_NAME);
 	(0, import_core.debug)(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
-	if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
-		if (!preReleaseScript) {
-			(0, import_core.setFailed)("Pre-release script is not provided");
-			return;
-		}
-		const response = await executeBuildScript(preReleaseScript);
-		(0, import_core.info)(`Pre-release script executed with response: ${response}`);
-	} else if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
-		const response = await executeBuildScript(patchReleaseScript);
-		(0, import_core.info)(`Patch release script executed with response: ${response}`);
-	} else if (labels.includes(ReleaseLabelName.VersionMinor) && minorReleaseScript) {
-		const response = await executeBuildScript(minorReleaseScript);
-		(0, import_core.info)(`Minor release script executed with response: ${response}`);
-	} else if (labels.includes(ReleaseLabelName.VersionMajor) && majorReleaseScript) {
-		const response = await executeBuildScript(majorReleaseScript);
-		(0, import_core.info)(`Major release script executed with response: ${response}`);
-	}
+	await executeReleaseScript({
+		labels,
+		majorReleaseScript,
+		minorReleaseScript,
+		patchReleaseScript,
+		preReleaseScript
+	});
 	const hasChanges = await hasGitChanges();
 	(0, import_core.debug)(`Has changes after script execution: ${hasChanges}`);
 	if (!hasChanges) {
@@ -40083,12 +40117,10 @@ async function run() {
 	(0, import_core.debug)("Adding files to git staging area.");
 	await addFilesToGit();
 	(0, import_core.debug)("Files added to git staging area.");
+	const currentVersion = await getCurrentReleaseVersion(currentVersionScript);
+	(0, import_core.debug)(`Current version for commit: ${currentVersion}`);
 	(0, import_core.debug)("Committing files to git.");
-	await commitFilesToGit({
-		commitMessage: "Update version files",
-		authorName: "GitHub Action",
-		authorEmail: "action@github.com"
-	});
+	await commitFilesToGit({ commitMessage: `Update release version to ${currentVersion}` });
 	(0, import_core.debug)("Files committed to git.");
 	(0, import_core.debug)(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await createPullRequest(octokit)({

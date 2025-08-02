@@ -15,6 +15,8 @@ import { commitFilesToGit } from 'lib/utils/git/commit-files-to-git.js'
 import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
 import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
 import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
+import { exec } from 'child_process'
+import { executeReleaseScript } from './utils/execute-release-script.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -117,32 +119,13 @@ async function run() {
   await checkoutBranch(RELEASE_VERSION_BRANCH_NAME)
   debug(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
 
-  if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
-    if (!preReleaseScript) {
-      setFailed('Pre-release script is not provided')
-      return
-    }
-    const response = await executeBuildScript(preReleaseScript)
-    info(`Pre-release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionPatch) &&
-    patchReleaseScript
-  ) {
-    const response = await executeBuildScript(patchReleaseScript)
-    info(`Patch release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionMinor) &&
-    minorReleaseScript
-  ) {
-    const response = await executeBuildScript(minorReleaseScript)
-    info(`Minor release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionMajor) &&
-    majorReleaseScript
-  ) {
-    const response = await executeBuildScript(majorReleaseScript)
-    info(`Major release script executed with response: ${response}`)
-  }
+  await executeReleaseScript({
+    labels,
+    majorReleaseScript,
+    minorReleaseScript,
+    patchReleaseScript,
+    preReleaseScript,
+  })
 
   const hasChanges = await hasGitChanges()
   debug(`Has changes after script execution: ${hasChanges}`)
@@ -157,12 +140,13 @@ async function run() {
   debug('Adding files to git staging area.')
   await addFilesToGit()
   debug('Files added to git staging area.')
-  
+
+  const currentVersion = await getCurrentReleaseVersion(currentVersionScript)
+  debug(`Current version for commit: ${currentVersion}`)
+
   debug('Committing files to git.')
   await commitFilesToGit({
-    commitMessage: 'Update version files',
-    authorName: 'GitHub Action',
-    authorEmail: 'action@github.com',
+    commitMessage: `Update release version to ${currentVersion}`
   })
   debug('Files committed to git.')
 
