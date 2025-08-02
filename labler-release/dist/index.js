@@ -40023,6 +40023,23 @@ async function executeReleaseScript({ labels, majorReleaseScript, minorReleaseSc
 }
 
 //#endregion
+//#region ../lib/dist/utils/git/status-git.js
+/**
+* Retrieves the current Git working directory status using the `git status --porcelain` command.
+*
+* @returns A promise that resolves with the trimmed output of the Git status command,
+*          or rejects with an error message if the command fails.
+*/
+function getGitStatus() {
+	return new Promise((resolve, reject) => {
+		exec("git status --porcelain", (error$1, stdout, stderr) => {
+			if (error$1) reject(`Error getting git status: ${stderr}`);
+			else resolve(stdout.trim());
+		});
+	});
+}
+
+//#endregion
 //#region src/index.ts
 var import_core = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 var import_github = /* @__PURE__ */ __toESM$2(require_github$1(), 1);
@@ -40122,6 +40139,8 @@ async function run() {
 	(0, import_core.debug)("Committing files to git.");
 	await commitFilesToGit({ commitMessage: `Update release version to ${currentVersion}` });
 	(0, import_core.debug)("Files committed to git.");
+	const gitStatus = await getGitStatus();
+	(0, import_core.info)("git status: " + gitStatus);
 	(0, import_core.debug)(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await createPullRequest(octokit)({
 		owner,

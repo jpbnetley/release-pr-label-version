@@ -15,8 +15,8 @@ import { commitFilesToGit } from 'lib/utils/git/commit-files-to-git.js'
 import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
 import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
 import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
-import { exec } from 'child_process'
 import { executeReleaseScript } from './utils/execute-release-script.js'
+import { getGitStatus } from 'lib/utils/git/status-git.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -149,6 +149,9 @@ async function run() {
     commitMessage: `Update release version to ${currentVersion}`
   })
   debug('Files committed to git.')
+
+  const gitStatus = await getGitStatus()
+  info('git status: ' + gitStatus)
 
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   await createPullRequest(octokit)({
