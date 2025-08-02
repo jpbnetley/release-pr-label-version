@@ -1,2 +1,2 @@
-import { ReleaseLabelColors } from "../../release-label-colors-Cyzd9E_j.js";
+import { ReleaseLabelColors } from "../../release-label-colors-BPbNLS_Y.js";
 export { ReleaseLabelColors };

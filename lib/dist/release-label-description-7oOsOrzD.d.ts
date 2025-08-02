@@ -1,0 +1,13 @@
+//#region src/types/enums/release-label-description.d.ts
+declare enum ReleaseLabelDescription {
+  VersionRequired = "This PR requires a version bump label",
+  VersionPatch = "Patch version release",
+  VersionMinor = "Minor version release",
+  VersionMajor = "Major version release",
+  VersionSkip = "Skip version release",
+  VersionBump = "Bump version: Used when a pr contains the new version to be merged into the release branch",
+  VersionPreRelease = "Pre-release version release",
+}
+//#endregion
+export { ReleaseLabelDescription };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVsZWFzZS1sYWJlbC1kZXNjcmlwdGlvbi03b09zT3J6RC5kLnRzIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIi4uL3NyYy90eXBlcy9lbnVtcy9yZWxlYXNlLWxhYmVsLWRlc2NyaXB0aW9uLmQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlY2xhcmUgZW51bSBSZWxlYXNlTGFiZWxEZXNjcmlwdGlvbiB7XG4gICAgVmVyc2lvblJlcXVpcmVkID0gXCJUaGlzIFBSIHJlcXVpcmVzIGEgdmVyc2lvbiBidW1wIGxhYmVsXCIsXG4gICAgVmVyc2lvblBhdGNoID0gXCJQYXRjaCB2ZXJzaW9uIHJlbGVhc2VcIixcbiAgICBWZXJzaW9uTWlub3IgPSBcIk1pbm9yIHZlcnNpb24gcmVsZWFzZVwiLFxuICAgIFZlcnNpb25NYWpvciA9IFwiTWFqb3IgdmVyc2lvbiByZWxlYXNlXCIsXG4gICAgVmVyc2lvblNraXAgPSBcIlNraXAgdmVyc2lvbiByZWxlYXNlXCIsXG4gICAgVmVyc2lvbkJ1bXAgPSBcIkJ1bXAgdmVyc2lvbjogVXNlZCB3aGVuIGEgcHIgY29udGFpbnMgdGhlIG5ldyB2ZXJzaW9uIHRvIGJlIG1lcmdlZCBpbnRvIHRoZSByZWxlYXNlIGJyYW5jaFwiLFxuICAgIFZlcnNpb25QcmVSZWxlYXNlID0gXCJQcmUtcmVsZWFzZSB2ZXJzaW9uIHJlbGVhc2VcIlxufVxuIl0sIm1hcHBpbmdzIjoiO0FBQUEsSUFBVywwQkFBMEIsQ0FBQyxDQUFFIn0=

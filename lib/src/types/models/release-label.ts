@@ -1,3 +1,4 @@
+import { describe } from 'node:test'
 import { ReleaseLabelColors } from '../enums/release-label-colors.js'
 import { ReleaseLabelDescription } from '../enums/release-label-description.js'
 import { ReleaseLabelName } from '../enums/release-label-name.js'
@@ -33,6 +34,11 @@ export const ReleaseLabel = {
     description: ReleaseLabelDescription.VersionBump,
     color: ReleaseLabelColors.VersionBump,
   },
+  VersionPreRelease: {
+    name: ReleaseLabelName.VersionPreRelease,
+    describe: ReleaseLabelDescription.VersionPreRelease,
+    color: ReleaseLabelColors.VersionPreRelease
+  }
 } as const
 
 export type ReleaseLabel = (typeof ReleaseLabel)[keyof typeof ReleaseLabel]

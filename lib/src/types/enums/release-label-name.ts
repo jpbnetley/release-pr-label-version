@@ -5,4 +5,5 @@ export enum ReleaseLabelName {
   VersionMajor = 'release:version-major',
   VersionSkip = 'release:version-skip',
   VersionBump = 'release:version-bump',
+  VersionPreRelease = 'release:version-pre'
 }

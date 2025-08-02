@@ -1,0 +1,12 @@
+//#region src/utils/git/checkout-branch-git.d.ts
+/**
+ * Creates and checks out a new Git branch from the specified base branch.
+ *
+ * @param branchName - The name of the new branch to create and check out.
+ * @param baseBranch - The name of the base branch to branch off from. Defaults to 'main'.
+ * @returns A promise that resolves when the branch has been successfully checked out, or rejects with an error message if the operation fails.
+ */
+declare function checkoutBranch(baseBranch: string): Promise<void>;
+//#endregion
+export { checkoutBranch };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY2hlY2tvdXQtYnJhbmNoLWdpdC5kLnRzIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9naXQvY2hlY2tvdXQtYnJhbmNoLWdpdC5kLnRzIl0sInNvdXJjZXNDb250ZW50IjpbIi8qKlxuICogQ3JlYXRlcyBhbmQgY2hlY2tzIG91dCBhIG5ldyBHaXQgYnJhbmNoIGZyb20gdGhlIHNwZWNpZmllZCBiYXNlIGJyYW5jaC5cbiAqXG4gKiBAcGFyYW0gYnJhbmNoTmFtZSAtIFRoZSBuYW1lIG9mIHRoZSBuZXcgYnJhbmNoIHRvIGNyZWF0ZSBhbmQgY2hlY2sgb3V0LlxuICogQHBhcmFtIGJhc2VCcmFuY2ggLSBUaGUgbmFtZSBvZiB0aGUgYmFzZSBicmFuY2ggdG8gYnJhbmNoIG9mZiBmcm9tLiBEZWZhdWx0cyB0byAnbWFpbicuXG4gKiBAcmV0dXJucyBBIHByb21pc2UgdGhhdCByZXNvbHZlcyB3aGVuIHRoZSBicmFuY2ggaGFzIGJlZW4gc3VjY2Vzc2Z1bGx5IGNoZWNrZWQgb3V0LCBvciByZWplY3RzIHdpdGggYW4gZXJyb3IgbWVzc2FnZSBpZiB0aGUgb3BlcmF0aW9uIGZhaWxzLlxuICovXG5leHBvcnQgZGVjbGFyZSBmdW5jdGlvbiBjaGVja291dEJyYW5jaChiYXNlQnJhbmNoOiBzdHJpbmcpOiBQcm9taXNlPHZvaWQ+O1xuIl0sIm1hcHBpbmdzIjoiO0FBQUEsSUFBRSxpQkFBQSxDQUFBLElBQUEsTUFBQSxPQUFBIn0=

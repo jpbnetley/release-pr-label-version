@@ -19990,7 +19990,7 @@ var require_github = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@action
 }) });
 
 //#endregion
-//#region ../lib/dist/release-label-name-DUcaO1Rw.js
+//#region ../lib/dist/release-label-name-BCtlmcDc.js
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
@@ -19998,6 +19998,7 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionMajor"] = "release:version-major";
 	ReleaseLabelName$1["VersionSkip"] = "release:version-skip";
 	ReleaseLabelName$1["VersionBump"] = "release:version-bump";
+	ReleaseLabelName$1["VersionPreRelease"] = "release:version-pre";
 	return ReleaseLabelName$1;
 }({});
 
@@ -20023,54 +20024,58 @@ var import_github$1 = /* @__PURE__ */ __toESM$1(require_github(), 1);
 *
 * @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
 */
-async function setLabelForPullRequest(octokit) {
-	try {
-		const prNumber = import_github$1.context.payload.pull_request?.number;
-		const owner = import_github$1.context.repo.owner;
-		const repo = import_github$1.context.repo.repo;
-		if (!prNumber) {
-			(0, import_core$1.setFailed)("No pull request number found in context");
-			return;
-		}
-		const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
-			owner,
-			repo,
-			issue_number: prNumber
-		});
-		const labelNames = labels.map((label) => label.name);
-		const versionLabels = [
-			ReleaseLabelName.VersionPatch,
-			ReleaseLabelName.VersionMinor,
-			ReleaseLabelName.VersionMajor,
-			ReleaseLabelName.VersionSkip
-		];
-		const hasVersionLabel = versionLabels.some((label) => labelNames.includes(label));
-		if (!hasVersionLabel) {
-			await octokit.rest.issues.addLabels({
+function setLabelForPullRequest(octokit) {
+	return async function setLabel(isPreRelease) {
+		try {
+			const prNumber = import_github$1.context.payload.pull_request?.number;
+			const owner = import_github$1.context.repo.owner;
+			const repo = import_github$1.context.repo.repo;
+			if (!prNumber) {
+				(0, import_core$1.setFailed)("No pull request number found in context");
+				return;
+			}
+			const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
 				owner,
 				repo,
-				issue_number: prNumber,
-				labels: ["release:version-required"]
+				issue_number: prNumber
 			});
-			(0, import_core$1.info)(`Added 'release:version-required' label to PR #${prNumber}`);
-			(0, import_core$1.setFailed)(`PR #${prNumber} is missing a version label`);
-		} else {
-			(0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
-			if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
-				(0, import_core$1.info)(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
-				await octokit.rest.issues.removeLabel({
+			const labelNames = labels.map((label) => label.name);
+			const versionLabels = [
+				ReleaseLabelName.VersionPatch,
+				ReleaseLabelName.VersionMinor,
+				ReleaseLabelName.VersionMajor,
+				ReleaseLabelName.VersionSkip,
+				ReleaseLabelName.VersionPreRelease
+			];
+			const hasVersionLabel = versionLabels.some((label) => labelNames.includes(label));
+			if (!hasVersionLabel) {
+				const label = isPreRelease ? ReleaseLabelName.VersionPreRelease : ReleaseLabelName.VersionRequired;
+				await octokit.rest.issues.addLabels({
 					owner,
 					repo,
 					issue_number: prNumber,
-					name: ReleaseLabelName.VersionRequired
+					labels: [label]
 				});
-				(0, import_core$1.info)(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
+				(0, import_core$1.info)(`Added '${label}' label to PR #${prNumber}`);
+				if (!isPreRelease) (0, import_core$1.setFailed)(`PR #${prNumber} is missing a version label`);
+			} else {
+				(0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
+				if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
+					(0, import_core$1.info)(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
+					await octokit.rest.issues.removeLabel({
+						owner,
+						repo,
+						issue_number: prNumber,
+						name: ReleaseLabelName.VersionRequired
+					});
+					(0, import_core$1.info)(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
+				}
 			}
+		} catch (error$1) {
+			if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
+			else (0, import_core$1.setFailed)("Failed to set label for pull request: Unknown error");
 		}
-	} catch (error$1) {
-		if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
-		else (0, import_core$1.setFailed)("Failed to set label for pull request: Unknown error");
-	}
+	};
 }
 
 //#endregion

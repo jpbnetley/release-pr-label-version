@@ -1,0 +1,22 @@
+//#region src/utils/git/commit-files-to-git.d.ts
+type CommitFilesToGitParams = {
+  commitMessage: string;
+  authorName: string;
+  authorEmail: string;
+};
+/**
+ * Stages the specified files and creates a Git commit with the provided commit message and author information.
+ *
+ * @param commitMessage - The commit message to use for the Git commit.
+ * @param authorName - The name of the commit author.
+ * @param authorEmail - The email address of the commit author.
+ * @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
+ */
+declare function commitFilesToGit({
+  commitMessage,
+  authorEmail,
+  authorName
+}: CommitFilesToGitParams): Promise<void>;
+//#endregion
+export { CommitFilesToGitParams, commitFilesToGit };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29tbWl0LWZpbGVzLXRvLWdpdC5kLnRzIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9naXQvY29tbWl0LWZpbGVzLXRvLWdpdC5kLnRzIl0sInNvdXJjZXNDb250ZW50IjpbImV4cG9ydCB0eXBlIENvbW1pdEZpbGVzVG9HaXRQYXJhbXMgPSB7XG4gICAgY29tbWl0TWVzc2FnZTogc3RyaW5nO1xuICAgIGF1dGhvck5hbWU6IHN0cmluZztcbiAgICBhdXRob3JFbWFpbDogc3RyaW5nO1xufTtcbi8qKlxuICogU3RhZ2VzIHRoZSBzcGVjaWZpZWQgZmlsZXMgYW5kIGNyZWF0ZXMgYSBHaXQgY29tbWl0IHdpdGggdGhlIHByb3ZpZGVkIGNvbW1pdCBtZXNzYWdlIGFuZCBhdXRob3IgaW5mb3JtYXRpb24uXG4gKlxuICogQHBhcmFtIGNvbW1pdE1lc3NhZ2UgLSBUaGUgY29tbWl0IG1lc3NhZ2UgdG8gdXNlIGZvciB0aGUgR2l0IGNvbW1pdC5cbiAqIEBwYXJhbSBhdXRob3JOYW1lIC0gVGhlIG5hbWUgb2YgdGhlIGNvbW1pdCBhdXRob3IuXG4gKiBAcGFyYW0gYXV0aG9yRW1haWwgLSBUaGUgZW1haWwgYWRkcmVzcyBvZiB0aGUgY29tbWl0IGF1dGhvci5cbiAqIEByZXR1cm5zIEEgUHJvbWlzZSB0aGF0IHJlc29sdmVzIHdoZW4gdGhlIGZpbGVzIGhhdmUgYmVlbiBjb21taXR0ZWQsIG9yIHJlamVjdHMgd2l0aCBhbiBlcnJvciBtZXNzYWdlIGlmIHRoZSBvcGVyYXRpb24gZmFpbHMuXG4gKi9cbmV4cG9ydCBkZWNsYXJlIGZ1bmN0aW9uIGNvbW1pdEZpbGVzVG9HaXQoeyBjb21taXRNZXNzYWdlLCBhdXRob3JFbWFpbCwgYXV0aG9yTmFtZSwgfTogQ29tbWl0RmlsZXNUb0dpdFBhcmFtcyk6IFByb21pc2U8dm9pZD47XG4iXSwibWFwcGluZ3MiOiI7QUFBQSxJQUFXLHlCQUF5QixDQUFDLEVBQUE7QUFDckMsSUFBVyxtQkFBYztDQUFBO0NBQUEsTUFBQTtDQUFBLE1BQUE7Q0FBQSxNQUFBO0NBQUEsTUFBQTtDQUFBLE1BQUE7QUFBQSJ9

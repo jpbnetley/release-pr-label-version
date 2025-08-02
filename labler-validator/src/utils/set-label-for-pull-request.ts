@@ -1,7 +1,7 @@
 import { setFailed, info } from '@actions/core'
 import { context } from '@actions/github'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
-import { Octokit } from "lib/types/models/github/octokit.js"
+import { Octokit } from 'lib/types/models/github/octokit.js'
 
 /**
  * Sets or updates version-related labels on a pull request.
@@ -21,63 +21,79 @@ import { Octokit } from "lib/types/models/github/octokit.js"
  *
  * @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
  */
-export async function setLabelForPullRequest(octokit: Octokit) {
-  try {
-    const prNumber = context.payload.pull_request?.number
-    const owner = context.repo.owner
-    const repo = context.repo.repo
+export function setLabelForPullRequest(octokit: Octokit) {
+  return async function setLabel(isPreRelease: boolean) {
+    try {
+      const prNumber = context.payload.pull_request?.number
+      const owner = context.repo.owner
+      const repo = context.repo.repo
 
-    if (!prNumber) {
-      setFailed('No pull request number found in context')
-      return
-    }
+      if (!prNumber) {
+        setFailed('No pull request number found in context')
+        return
+      }
 
-    // Get labels on the PR
-    const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
-      owner,
-      repo,
-      issue_number: prNumber,
-    })
-
-    const labelNames = labels.map((label) => label.name)
-    const versionLabels = [
-      ReleaseLabelName.VersionPatch,
-      ReleaseLabelName.VersionMinor,
-      ReleaseLabelName.VersionMajor,
-      ReleaseLabelName.VersionSkip,
-    ]
-
-    const hasVersionLabel = versionLabels.some((label) =>
-      labelNames.includes(label)
-    )
-
-    if (!hasVersionLabel) {
-      await octokit.rest.issues.addLabels({
+      // Get labels on the PR
+      const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
         owner,
         repo,
         issue_number: prNumber,
-        labels: ['release:version-required'],
       })
-      info(`Added 'release:version-required' label to PR #${prNumber}`)
-      setFailed(`PR #${prNumber} is missing a version label`)
-    } else {
-      info(`Version label already present in PR #${prNumber}`)
-      if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
-        info(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`)
-        await octokit.rest.issues.removeLabel({
+
+      const labelNames = labels.map((label) => label.name)
+      const versionLabels = [
+        ReleaseLabelName.VersionPatch,
+        ReleaseLabelName.VersionMinor,
+        ReleaseLabelName.VersionMajor,
+        ReleaseLabelName.VersionSkip,
+        ReleaseLabelName.VersionPreRelease,
+      ]
+
+      const hasVersionLabel = versionLabels.some((label) =>
+        labelNames.includes(label)
+      )
+
+      if (!hasVersionLabel) {
+        const label = isPreRelease
+          ? ReleaseLabelName.VersionPreRelease
+          : ReleaseLabelName.VersionRequired
+
+        await octokit.rest.issues.addLabels({
           owner,
           repo,
           issue_number: prNumber,
-          name: ReleaseLabelName.VersionRequired
+          labels: [label],
         })
-        info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`)
+        info(`Added '${label}' label to PR #${prNumber}`)
+        if (!isPreRelease) {
+          setFailed(`PR #${prNumber} is missing a version label`)
+        }
+      } else {
+        info(`Version label already present in PR #${prNumber}`)
+        if (
+          hasVersionLabel &&
+          labelNames.includes(ReleaseLabelName.VersionRequired)
+        ) {
+          info(
+            `Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`
+          )
+          await octokit.rest.issues.removeLabel({
+            owner,
+            repo,
+            issue_number: prNumber,
+            name: ReleaseLabelName.VersionRequired,
+          })
+          info(
+            `Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`
+          )
+        }
       }
-    }
-  } catch (error) {
-    if (error instanceof Error) {
-      setFailed(`Failed to set label for pull request: ${error.message}`)
-    } else {
-      setFailed('Failed to set label for pull request: Unknown error')
+    } catch (error) {
+      if (error instanceof Error) {
+        setFailed(`Failed to set label for pull request: ${error.message}`)
+      } else {
+        setFailed('Failed to set label for pull request: Unknown error')
+      }
     }
   }
 }

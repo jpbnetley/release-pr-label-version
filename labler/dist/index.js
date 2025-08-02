@@ -20029,7 +20029,7 @@ function createLabelIfNotExists(octokit$1) {
 }
 
 //#endregion
-//#region ../lib/dist/release-label-colors-95TO_8mW.js
+//#region ../lib/dist/release-label-colors-DVKBoOEo.js
 let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors$1) {
 	/**
 	* Red
@@ -20055,11 +20055,15 @@ let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors$1) {
 	* Purple
 	*/
 	ReleaseLabelColors$1["VersionBump"] = "A020F0";
+	/**
+	* Yellow
+	*/
+	ReleaseLabelColors$1["VersionPreRelease"] = "fbca04";
 	return ReleaseLabelColors$1;
 }({});
 
 //#endregion
-//#region ../lib/dist/release-label-description-DhyVTKpU.js
+//#region ../lib/dist/release-label-description-BdwNfaWk.js
 let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription$1) {
 	ReleaseLabelDescription$1["VersionRequired"] = "This PR requires a version bump label";
 	ReleaseLabelDescription$1["VersionPatch"] = "Patch version release";
@@ -20067,11 +20071,12 @@ let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription$1
 	ReleaseLabelDescription$1["VersionMajor"] = "Major version release";
 	ReleaseLabelDescription$1["VersionSkip"] = "Skip version release";
 	ReleaseLabelDescription$1["VersionBump"] = "Bump version: Used when a pr contains the new version to be merged into the release branch";
+	ReleaseLabelDescription$1["VersionPreRelease"] = "Pre-release version release";
 	return ReleaseLabelDescription$1;
 }({});
 
 //#endregion
-//#region ../lib/dist/release-label-name-DUcaO1Rw.js
+//#region ../lib/dist/release-label-name-BCtlmcDc.js
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
@@ -20079,6 +20084,7 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionMajor"] = "release:version-major";
 	ReleaseLabelName$1["VersionSkip"] = "release:version-skip";
 	ReleaseLabelName$1["VersionBump"] = "release:version-bump";
+	ReleaseLabelName$1["VersionPreRelease"] = "release:version-pre";
 	return ReleaseLabelName$1;
 }({});
 
@@ -20114,6 +20120,11 @@ const ReleaseLabel = {
 		name: ReleaseLabelName.VersionBump,
 		description: ReleaseLabelDescription.VersionBump,
 		color: ReleaseLabelColors.VersionBump
+	},
+	VersionPreRelease: {
+		name: ReleaseLabelName.VersionPreRelease,
+		describe: ReleaseLabelDescription.VersionPreRelease,
+		color: ReleaseLabelColors.VersionPreRelease
 	}
 };
 

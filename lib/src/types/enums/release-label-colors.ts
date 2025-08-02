@@ -24,4 +24,9 @@ export enum ReleaseLabelColors {
    * Purple
    */
   VersionBump = 'A020F0',
+
+  /**
+   * Yellow
+   */
+  VersionPreRelease = 'fbca04',
 }

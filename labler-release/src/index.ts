@@ -1,19 +1,20 @@
-import { getInput, setFailed, debug, info } from '@actions/core'
+import { getInput, setFailed, debug, info, summary } from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
 import { context, getOctokit } from '@actions/github'
 import { getLastMergedPullRequest } from './utils/get-last-merged-pull-request.js'
-import { addFilesToGit } from './utils/git/add-files-to-git.js'
-import { commitFilesToGit } from './utils/git/commit-files-to-git.js'
-import { createNewGitBranch } from './utils/git/create-new-git-branch.js'
-import { checkoutBranch } from './utils/git/checkout-branch-git.js'
-import { createPullRequest } from './utils/git/create-pull-request.js'
-import { hasGitChanges } from './utils/git/has-changes-git.js'
-import { deleteGitBranch } from './utils/git/delete-branch-git.js'
 import { RELEASE_BRANCH_NAME } from './constants/release-branch-name.js'
-import { createGitHubRelease } from './utils/github/create-github-release.js'
 import { getCurrentReleaseVersion } from './utils/version/get-current-release-version.js'
+import { createPullRequest } from 'lib/utils/git/create-pull-request.js'
+import { createGitHubRelease } from 'lib/utils/github/create-github-release.js'
+import { createNewGitBranch } from 'lib/utils/git/create-new-git-branch.js'
+import { checkoutBranch } from 'lib/utils/git/checkout-branch-git.js'
+import { addFilesToGit } from 'lib/utils/git/add-files-to-git.js'
+import { commitFilesToGit } from 'lib/utils/git/commit-files-to-git.js'
+import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
+import { deleteGitBranch } from 'lib/utils/git/delete-branch-git.js'
+import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -78,6 +79,15 @@ async function run() {
       isPreRelease: pullRequest.base.ref !== releaseBranchName,
     })
     info('Release created successfully.')
+
+    debug('Creating summary')
+    await summary
+      .addHeading('Release version')
+      .addRaw(`Created for: ${currentVersion}`)
+      .write()
+
+      debug('Created summary')
+
     return
   }
 
@@ -142,6 +152,7 @@ async function run() {
     authorEmail: 'action@github.com',
   })
   debug('Files committed to git.')
+
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   await createPullRequest(octokit)({
     owner,
@@ -154,6 +165,16 @@ async function run() {
     }.\n\nLabels: ${labels.join(', ')}`,
   })
   debug(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+
+  await addLabelToPullRequest(octokit)({
+    owner,
+    repo,
+    pullNumber: pullRequest.number,
+    labels: [ReleaseLabelName.VersionBump],
+  })
+  info(
+    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${pullRequest.number}`
+  )
 
   info('Release process completed successfully.')
 }
