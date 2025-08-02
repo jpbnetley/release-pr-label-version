@@ -147,10 +147,7 @@ async function run() {
   const hasChanges = await hasGitChanges()
   debug(`Has changes after script execution: ${hasChanges}`)
   if (!hasChanges) {
-    info('No changes to commit, skipping commit step.')
-    await deleteGitBranch(RELEASE_VERSION_BRANCH_NAME)
-    info(`Deleted branch: ${RELEASE_VERSION_BRANCH_NAME}`)
-    info('No changes to commit, exiting action.')
+    setFailed('No changes to commit found to commit to git.')
     return
   }
 

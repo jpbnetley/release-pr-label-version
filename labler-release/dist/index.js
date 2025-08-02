@@ -39906,17 +39906,6 @@ function hasGitChanges() {
 }
 
 //#endregion
-//#region ../lib/dist/utils/git/delete-branch-git.js
-function deleteGitBranch(branchName) {
-	return new Promise((resolve, reject) => {
-		exec(`git branch -d ${branchName}`, (error$1) => {
-			if (error$1) return reject(`Error deleting branch: ${error$1.message}`);
-			resolve();
-		});
-	});
-}
-
-//#endregion
 //#region ../lib/dist/utils/github/add-label-to-pullrequest.js
 /**
 * Returns a function that adds a label to a specified pull request using the provided Octokit instance.
@@ -40041,10 +40030,7 @@ async function run() {
 	const hasChanges = await hasGitChanges();
 	(0, import_core.debug)(`Has changes after script execution: ${hasChanges}`);
 	if (!hasChanges) {
-		(0, import_core.info)("No changes to commit, skipping commit step.");
-		await deleteGitBranch(RELEASE_VERSION_BRANCH_NAME);
-		(0, import_core.info)(`Deleted branch: ${RELEASE_VERSION_BRANCH_NAME}`);
-		(0, import_core.info)("No changes to commit, exiting action.");
+		(0, import_core.setFailed)("No changes to commit found to commit to git.");
 		return;
 	}
 	(0, import_core.debug)("Adding files to git staging area.");
