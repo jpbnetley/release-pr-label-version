@@ -40030,7 +40030,7 @@ async function run() {
 	const hasChanges = await hasGitChanges();
 	(0, import_core.debug)(`Has changes after script execution: ${hasChanges}`);
 	if (!hasChanges) {
-		(0, import_core.setFailed)("No changes to commit found to commit to git.");
+		(0, import_core.setFailed)("No changes found to commit to git.");
 		return;
 	}
 	(0, import_core.debug)("Adding files to git staging area.");

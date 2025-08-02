@@ -147,7 +147,7 @@ async function run() {
   const hasChanges = await hasGitChanges()
   debug(`Has changes after script execution: ${hasChanges}`)
   if (!hasChanges) {
-    setFailed('No changes to commit found to commit to git.')
+    setFailed('No changes found to commit to git.')
     return
   }
 
