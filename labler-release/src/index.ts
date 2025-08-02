@@ -150,8 +150,12 @@ async function run() {
   })
   debug('Files committed to git.')
 
-  const gitStatus = await getGitStatus()
-  info('git status: ' + gitStatus)
+  const hasChangesAfterCommit = await hasGitChanges()
+  debug(`Has changes after commit: ${hasChangesAfterCommit}`)
+  if (!hasChangesAfterCommit) {
+    setFailed('Changes were not committed to git.')
+    return
+  }
 
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   await createPullRequest(octokit)({
