@@ -40032,6 +40032,26 @@ async function executeReleaseScript({ labels, majorReleaseScript, minorReleaseSc
 }
 
 //#endregion
+//#region ../lib/dist/utils/git/git-status.js
+/**
+* Executes the `git status --porcelain` command and returns its output as a trimmed string.
+*
+* @returns A promise that resolves with the output of `git status --porcelain`.
+* @throws If the git command fails, the promise is rejected with an error message.
+*/
+function gitStatus() {
+	return new Promise((resolve, reject) => {
+		exec("git status --porcelain", (error$1, stdout, stderr) => {
+			if (error$1) {
+				if (stderr) return reject(`Error getting git status: ${stderr}`);
+				return reject(`Error getting git status: ${error$1.message}`);
+			}
+			resolve(stdout.trim());
+		});
+	});
+}
+
+//#endregion
 //#region src/index.ts
 var import_core = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
 var import_github = /* @__PURE__ */ __toESM$2(require_github$1(), 1);
@@ -40131,6 +40151,8 @@ async function run() {
 	(0, import_core.debug)("Committing files to git.");
 	await commitFilesToGit({ commitMessage: `Update release version to ${currentVersion}` });
 	(0, import_core.debug)("Files committed to git.");
+	const gitStatusText = await gitStatus();
+	(0, import_core.info)("git status: " + gitStatusText);
 	const hasChangesAfterCommit = await hasGitChanges();
 	(0, import_core.debug)(`Has changes after commit: ${hasChangesAfterCommit}`);
 	if (!hasChangesAfterCommit) {
