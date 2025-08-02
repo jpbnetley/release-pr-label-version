@@ -1,5 +1,5 @@
 import { error, info } from '@actions/core'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from '../../types/models/github/octokit.js'
 
 export type CreateGitHubReleaseParam = {
   owner: string
@@ -9,6 +9,7 @@ export type CreateGitHubReleaseParam = {
   body: string
   isDraft?: boolean
   isPreRelease?: boolean
+  generate_release_notes?: boolean
 }
 
 /**
@@ -39,6 +40,7 @@ export function createGitHubRelease(octokit: Octokit) {
     releaseName,
     repo,
     tagName,
+    generate_release_notes = true
   }: CreateGitHubReleaseParam): Promise<void> {
     return new Promise(async (resolve, reject) => {
       try {
@@ -49,7 +51,8 @@ export function createGitHubRelease(octokit: Octokit) {
           name: releaseName,
           body,
           draft: isDraft,
-          prerelease: isPreRelease
+          prerelease: isPreRelease,
+          generate_release_notes,
         })
 
         info(`Created GitHub release: ${releaseName} (${tagName})`)
