@@ -39918,6 +39918,38 @@ function hasGitChanges() {
 }
 
 //#endregion
+//#region ../lib/dist/utils/git/set-git-identity.js
+/**
+* Sets the Git user identity (name and email) for the current repository.
+*
+* This function executes `git config user.name` and `git config user.email`
+* commands to configure the Git user identity. It returns a Promise that resolves
+* when both commands complete successfully, or rejects with an error message if
+* either command fails.
+*
+* @param name - The Git user name to set.
+* @param email - The Git user email to set.
+* @returns A Promise that resolves when the Git identity is set, or rejects with an error message.
+*/
+function setGitIdentity({ name = "GitHub Action", email = "action@github.com" } = {}) {
+	return new Promise((resolve, reject) => {
+		exec(`git config user.name "${name}"`, (error$1) => {
+			if (error$1) {
+				reject(`Error setting Git user name: ${error$1}`);
+				return;
+			}
+			exec(`git config user.email "${email}"`, (error$1$1) => {
+				if (error$1$1) {
+					reject(`Error setting Git user email: ${error$1$1}`);
+					return;
+				}
+				resolve();
+			});
+		});
+	});
+}
+
+//#endregion
 //#region ../lib/dist/utils/github/add-label-to-pullrequest.js
 /**
 * Returns a function that adds a label to a specified pull request using the provided Octokit instance.
@@ -40045,6 +40077,8 @@ async function run() {
 		(0, import_core.setFailed)("No changes found to commit to git.");
 		return;
 	}
+	(0, import_core.debug)("Set git identity");
+	await setGitIdentity();
 	(0, import_core.debug)("Adding files to git staging area.");
 	await addFilesToGit();
 	(0, import_core.debug)("Files added to git staging area.");

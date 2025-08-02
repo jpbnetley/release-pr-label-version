@@ -13,7 +13,7 @@ import { checkoutBranch } from 'lib/utils/git/checkout-branch-git.js'
 import { addFilesToGit } from 'lib/utils/git/add-files-to-git.js'
 import { commitFilesToGit } from 'lib/utils/git/commit-files-to-git.js'
 import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
-import { deleteGitBranch } from 'lib/utils/git/delete-branch-git.js'
+import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
 import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
 
 async function run() {
@@ -150,6 +150,9 @@ async function run() {
     setFailed('No changes found to commit to git.')
     return
   }
+
+  debug('Set git identity')
+  await setGitIdentity()
 
   debug('Adding files to git staging area.')
   await addFilesToGit()
