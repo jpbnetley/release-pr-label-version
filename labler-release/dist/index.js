@@ -1,5 +1,5 @@
 import { createRequire } from "node:module";
-import { exec } from "node:child_process";
+import { exec, execSync } from "node:child_process";
 
 //#region rolldown:runtime
 var __create$1 = Object.create;
@@ -385,18 +385,18 @@ var require_tunnel$1 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/tunne
 			if (res.statusCode !== 200) {
 				debug$2("tunneling socket could not be established, statusCode=%d", res.statusCode);
 				socket.destroy();
-				var error$1 = /* @__PURE__ */ new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
-				error$1.code = "ECONNRESET";
-				options.request.emit("error", error$1);
+				var error$3 = /* @__PURE__ */ new Error("tunneling socket could not be established, statusCode=" + res.statusCode);
+				error$3.code = "ECONNRESET";
+				options.request.emit("error", error$3);
 				self.removeSocket(placeholder);
 				return;
 			}
 			if (head.length > 0) {
 				debug$2("got illegal response body from proxy");
 				socket.destroy();
-				var error$1 = /* @__PURE__ */ new Error("got illegal response body from proxy");
-				error$1.code = "ECONNRESET";
-				options.request.emit("error", error$1);
+				var error$3 = /* @__PURE__ */ new Error("got illegal response body from proxy");
+				error$3.code = "ECONNRESET";
+				options.request.emit("error", error$3);
 				self.removeSocket(placeholder);
 				return;
 			}
@@ -407,9 +407,9 @@ var require_tunnel$1 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/tunne
 		function onError$1(cause) {
 			connectReq.removeAllListeners();
 			debug$2("tunneling socket could not be established, cause=%s\n", cause.message, cause.stack);
-			var error$1 = /* @__PURE__ */ new Error("tunneling socket could not be established, cause=" + cause.message);
-			error$1.code = "ECONNRESET";
-			options.request.emit("error", error$1);
+			var error$3 = /* @__PURE__ */ new Error("tunneling socket could not be established, cause=" + cause.message);
+			error$3.code = "ECONNRESET";
+			options.request.emit("error", error$3);
 			self.removeSocket(placeholder);
 		}
 	};
@@ -3770,18 +3770,18 @@ var require_webidl = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@
 	webidl$14.errors.exception = function(message) {
 		return /* @__PURE__ */ new TypeError(`${message.header}: ${message.message}`);
 	};
-	webidl$14.errors.conversionFailed = function(context$1) {
-		const plural = context$1.types.length === 1 ? "" : " one of";
-		const message = `${context$1.argument} could not be converted to${plural}: ${context$1.types.join(", ")}.`;
+	webidl$14.errors.conversionFailed = function(context$2) {
+		const plural = context$2.types.length === 1 ? "" : " one of";
+		const message = `${context$2.argument} could not be converted to${plural}: ${context$2.types.join(", ")}.`;
 		return webidl$14.errors.exception({
-			header: context$1.prefix,
+			header: context$2.prefix,
 			message
 		});
 	};
-	webidl$14.errors.invalidArgument = function(context$1) {
+	webidl$14.errors.invalidArgument = function(context$2) {
 		return webidl$14.errors.exception({
-			header: context$1.prefix,
-			message: `"${context$1.value}" is an invalid ${context$1.type}.`
+			header: context$2.prefix,
+			message: `"${context$2.value}" is an invalid ${context$2.type}.`
 		});
 	};
 	webidl$14.brandCheck = function(V, I, opts = void 0) {
@@ -4875,7 +4875,7 @@ Content-Type: ${value.type || "application/octet-stream"}\r\n\r\n`);
 		throwIfAborted(object[kState$7]);
 		if (bodyUnusable(object[kState$7].body)) throw new TypeError("Body is unusable");
 		const promise = createDeferredPromise$2();
-		const errorSteps = (error$1) => promise.reject(error$1);
+		const errorSteps = (error$3) => promise.reject(error$3);
 		const successSteps = (data) => {
 			try {
 				promise.resolve(convertBytesToJSValue(data));
@@ -5116,15 +5116,15 @@ var require_request$1 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undi
 				this.onError(err);
 			}
 		}
-		onError(error$1) {
+		onError(error$3) {
 			this.onFinally();
 			if (channels$3.error.hasSubscribers) channels$3.error.publish({
 				request: this,
-				error: error$1
+				error: error$3
 			});
 			if (this.aborted) return;
 			this.aborted = true;
-			return this[kHandler].onError(error$1);
+			return this[kHandler].onError(error$3);
 		}
 		onFinally() {
 			if (this.errorHandler) {
@@ -5897,8 +5897,8 @@ var require_RedirectHandler = /* @__PURE__ */ __commonJS({ "../node_modules/.pnp
 		onUpgrade(statusCode, headers, socket) {
 			this.handler.onUpgrade(statusCode, headers, socket);
 		}
-		onError(error$1) {
-			this.handler.onError(error$1);
+		onError(error$3) {
+			this.handler.onError(error$3);
 		}
 		onHeaders(statusCode, headers, resume$1, statusText) {
 			this.location = this.history.length >= this.maxRedirections || util$13.isDisturbed(this.opts.body) ? null : parseLocation(statusCode, headers);
@@ -7585,7 +7585,7 @@ var require_pool = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@5.
 			};
 			this[kOptions$3].interceptors = options.interceptors ? { ...options.interceptors } : void 0;
 			this[kFactory$3] = factory;
-			this.on("connectionError", (origin$1, targets, error$1) => {
+			this.on("connectionError", (origin$1, targets, error$3) => {
 				for (const target of targets) {
 					const idx = this[kClients$3].indexOf(target);
 					if (idx !== -1) this[kClients$3].splice(idx, 1);
@@ -8150,13 +8150,13 @@ var require_api_request = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			});
 			addSignal$4(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$5();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1, statusMessage) {
-			const { callback, opaque, abort: abort$1, context: context$1, responseHeaders, highWaterMark } = this;
+			const { callback, opaque, abort: abort$1, context: context$2, responseHeaders, highWaterMark } = this;
 			const headers = responseHeaders === "raw" ? util$8.parseRawHeaders(rawHeaders) : util$8.parseHeaders(rawHeaders);
 			if (statusCode < 200) {
 				if (this.onInfo) this.onInfo({
@@ -8189,7 +8189,7 @@ var require_api_request = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				trailers: this.trailers,
 				opaque,
 				body,
-				context: context$1
+				context: context$2
 			});
 		}
 		onData(chunk) {
@@ -8281,13 +8281,13 @@ var require_api_stream = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 			});
 			addSignal$3(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$4();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1, statusMessage) {
-			const { factory, opaque, context: context$1, callback, responseHeaders } = this;
+			const { factory, opaque, context: context$2, callback, responseHeaders } = this;
 			const headers = responseHeaders === "raw" ? util$7.parseRawHeaders(rawHeaders) : util$7.parseHeaders(rawHeaders);
 			if (statusCode < 200) {
 				if (this.onInfo) this.onInfo({
@@ -8317,7 +8317,7 @@ var require_api_stream = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 					statusCode,
 					headers,
 					opaque,
-					context: context$1
+					context: context$2
 				});
 				if (!res || typeof res.write !== "function" || typeof res.end !== "function" || typeof res.on !== "function") throw new InvalidReturnValueError$1("expected Writable");
 				finished(res, { readable: false }, (err) => {
@@ -8469,15 +8469,15 @@ var require_api_pipeline = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/u
 			this.res = null;
 			addSignal$2(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			const { ret, res } = this;
 			assert$9(!res, "pipeline cannot be retried");
 			if (ret.destroyed) throw new RequestAbortedError$3();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1) {
-			const { opaque, handler: handler$1, context: context$1 } = this;
+			const { opaque, handler: handler$1, context: context$2 } = this;
 			if (statusCode < 200) {
 				if (this.onInfo) {
 					const headers = this.responseHeaders === "raw" ? util$6.parseRawHeaders(rawHeaders) : util$6.parseHeaders(rawHeaders);
@@ -8498,7 +8498,7 @@ var require_api_pipeline = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/u
 					headers,
 					opaque,
 					body: this.res,
-					context: context$1
+					context: context$2
 				});
 			} catch (err) {
 				this.res.on("error", util$6.nop);
@@ -8571,7 +8571,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			this.context = null;
 			addSignal$1(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$2();
 			this.abort = abort$1;
 			this.context = null;
@@ -8580,7 +8580,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			throw new SocketError$1("bad upgrade", null);
 		}
 		onUpgrade(statusCode, rawHeaders, socket) {
-			const { callback, opaque, context: context$1 } = this;
+			const { callback, opaque, context: context$2 } = this;
 			assert$8.strictEqual(statusCode, 101);
 			removeSignal$1(this);
 			this.callback = null;
@@ -8589,7 +8589,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				headers,
 				socket,
 				opaque,
-				context: context$1
+				context: context$2
 			});
 		}
 		onError(err) {
@@ -8645,16 +8645,16 @@ var require_api_connect = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			this.abort = null;
 			addSignal(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$1();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders() {
 			throw new SocketError("bad connect", null);
 		}
 		onUpgrade(statusCode, rawHeaders, socket) {
-			const { callback, opaque, context: context$1 } = this;
+			const { callback, opaque, context: context$2 } = this;
 			removeSignal(this);
 			this.callback = null;
 			let headers = rawHeaders;
@@ -8664,7 +8664,7 @@ var require_api_connect = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				headers,
 				socket,
 				opaque,
-				context: context$1
+				context: context$2
 			});
 		}
 		onError(err) {
@@ -8901,13 +8901,13 @@ var require_mock_utils = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 			...mockDispatch$1.data,
 			...mockDispatch$1.data.callback(opts)
 		};
-		const { data: { statusCode, data, headers, trailers, error: error$1 }, delay, persist } = mockDispatch$1;
+		const { data: { statusCode, data, headers, trailers, error: error$3 }, delay, persist } = mockDispatch$1;
 		const { timesInvoked, times } = mockDispatch$1;
 		mockDispatch$1.consumed = !persist && timesInvoked >= times;
 		mockDispatch$1.pending = timesInvoked < times;
-		if (error$1 !== null) {
+		if (error$3 !== null) {
 			deleteMockDispatch(this[kDispatches$4], key);
-			handler$1.onError(error$1);
+			handler$1.onError(error$3);
 			return true;
 		}
 		if (typeof delay === "number" && delay > 0) setTimeout(() => {
@@ -8943,13 +8943,13 @@ var require_mock_utils = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 		return function dispatch(opts, handler$1) {
 			if (agent.isMockActive) try {
 				mockDispatch.call(this, opts, handler$1);
-			} catch (error$1) {
-				if (error$1 instanceof MockNotMatchedError) {
+			} catch (error$3) {
+				if (error$3 instanceof MockNotMatchedError) {
 					const netConnect = agent[kGetNetConnect$1]();
-					if (netConnect === false) throw new MockNotMatchedError(`${error$1.message}: subsequent request to origin ${origin} was not allowed (net.connect disabled)`);
+					if (netConnect === false) throw new MockNotMatchedError(`${error$3.message}: subsequent request to origin ${origin} was not allowed (net.connect disabled)`);
 					if (checkNetConnect(netConnect, origin)) originalDispatch.call(this, opts, handler$1);
-					else throw new MockNotMatchedError(`${error$1.message}: subsequent request to origin ${origin} was not allowed (net.connect is not enabled for this origin)`);
-				} else throw error$1;
+					else throw new MockNotMatchedError(`${error$3.message}: subsequent request to origin ${origin} was not allowed (net.connect is not enabled for this origin)`);
+				} else throw error$3;
 			}
 			else originalDispatch.call(this, opts, handler$1);
 		};
@@ -9090,9 +9090,9 @@ var require_mock_interceptor = /* @__PURE__ */ __commonJS({ "../node_modules/.pn
 		/**
 		* Mock an undici request with a defined error.
 		*/
-		replyWithError(error$1) {
-			if (typeof error$1 === "undefined") throw new InvalidArgumentError$6("error must be defined");
-			const newMockDispatch = addMockDispatch(this[kDispatches$3], this[kDispatchKey], { error: error$1 });
+		replyWithError(error$3) {
+			if (typeof error$3 === "undefined") throw new InvalidArgumentError$6("error must be defined");
+			const newMockDispatch = addMockDispatch(this[kDispatches$3], this[kDispatchKey], { error: error$3 });
 			return new MockScope(newMockDispatch);
 		}
 		/**
@@ -10896,13 +10896,13 @@ var require_fetch = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@5
 			this.connection?.destroy(reason);
 			this.emit("terminated", reason);
 		}
-		abort(error$1) {
+		abort(error$3) {
 			if (this.state !== "ongoing") return;
 			this.state = "aborted";
-			if (!error$1) error$1 = new DOMException$3("The operation was aborted.", "AbortError");
-			this.serializedAbortReason = error$1;
-			this.connection?.destroy(error$1);
-			this.emit("terminated", error$1);
+			if (!error$3) error$3 = new DOMException$3("The operation was aborted.", "AbortError");
+			this.serializedAbortReason = error$3;
+			this.connection?.destroy(error$3);
+			this.emit("terminated", error$3);
 		}
 	};
 	function fetch(input, init = {}) {
@@ -10978,16 +10978,16 @@ var require_fetch = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@5
 	function markResourceTiming(timingInfo, originalURL, initiatorType, globalThis$1, cacheState) {
 		if (nodeMajor > 18 || nodeMajor === 18 && nodeMinor >= 2) performance.markResourceTiming(timingInfo, originalURL.href, initiatorType, globalThis$1, cacheState);
 	}
-	function abortFetch(p, request$2, responseObject, error$1) {
-		if (!error$1) error$1 = new DOMException$3("The operation was aborted.", "AbortError");
-		p.reject(error$1);
-		if (request$2.body != null && isReadable(request$2.body?.stream)) request$2.body.stream.cancel(error$1).catch((err) => {
+	function abortFetch(p, request$2, responseObject, error$3) {
+		if (!error$3) error$3 = new DOMException$3("The operation was aborted.", "AbortError");
+		p.reject(error$3);
+		if (request$2.body != null && isReadable(request$2.body?.stream)) request$2.body.stream.cancel(error$3).catch((err) => {
 			if (err.code === "ERR_INVALID_STATE") return;
 			throw err;
 		});
 		if (responseObject == null) return;
 		const response = responseObject[kState$4];
-		if (response.body != null && isReadable(response.body?.stream)) response.body.stream.cancel(error$1).catch((err) => {
+		if (response.body != null && isReadable(response.body?.stream)) response.body.stream.cancel(error$3).catch((err) => {
 			if (err.code === "ERR_INVALID_STATE") return;
 			throw err;
 		});
@@ -11506,11 +11506,11 @@ var require_fetch = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@5
 					fetchParams.controller.ended = true;
 					this.body.push(null);
 				},
-				onError(error$1) {
+				onError(error$3) {
 					if (this.abort) fetchParams.controller.off("terminated", this.abort);
-					this.body?.destroy(error$1);
-					fetchParams.controller.terminate(error$1);
-					reject(error$1);
+					this.body?.destroy(error$3);
+					fetchParams.controller.terminate(error$3);
+					reject(error$3);
 				},
 				onUpgrade(status, headersList, socket) {
 					if (status !== 101) return;
@@ -11922,19 +11922,19 @@ var require_util$3 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@
 							if (fr[kAborted$1]) return;
 							fr[kResult$1] = result;
 							fireAProgressEvent$1("load", fr);
-						} catch (error$1) {
-							fr[kError$1] = error$1;
+						} catch (error$3) {
+							fr[kError$1] = error$3;
 							fireAProgressEvent$1("error", fr);
 						}
 						if (fr[kState$2] !== "loading") fireAProgressEvent$1("loadend", fr);
 					});
 					break;
 				}
-			} catch (error$1) {
+			} catch (error$3) {
 				if (fr[kAborted$1]) return;
 				queueMicrotask(() => {
 					fr[kState$2] = "done";
-					fr[kError$1] = error$1;
+					fr[kError$1] = error$3;
 					fireAProgressEvent$1("error", fr);
 					if (fr[kState$2] !== "loading") fireAProgressEvent$1("loadend", fr);
 				});
@@ -13848,10 +13848,10 @@ var require_connection = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 			reason
 		});
 	}
-	function onSocketError(error$1) {
+	function onSocketError(error$3) {
 		const { ws } = this;
 		ws[kReadyState$2] = states$2.CLOSING;
-		if (channels$1.socketError.hasSubscribers) channels$1.socketError.publish(error$1);
+		if (channels$1.socketError.hasSubscribers) channels$1.socketError.publish(error$3);
 		this.destroy();
 	}
 	module.exports = { establishWebSocketConnection: establishWebSocketConnection$1 };
@@ -14839,19 +14839,19 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			return __awaiter$10(this, void 0, void 0, function* () {
 				if (this._disposed) throw new Error("Client has already been disposed.");
 				const parsedUrl = new URL(requestUrl);
-				let info$2 = this._prepareRequest(verb, parsedUrl, headers);
+				let info$4 = this._prepareRequest(verb, parsedUrl, headers);
 				const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
 				let numTries = 0;
 				let response;
 				do {
-					response = yield this.requestRaw(info$2, data);
+					response = yield this.requestRaw(info$4, data);
 					if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
 						let authenticationHandler;
 						for (const handler$1 of this.handlers) if (handler$1.canHandleAuthentication(response)) {
 							authenticationHandler = handler$1;
 							break;
 						}
-						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$2, data);
+						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$4, data);
 						else return response;
 					}
 					let redirectsRemaining = this._maxRedirects;
@@ -14864,8 +14864,8 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 						if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
 							for (const header in headers) if (header.toLowerCase() === "authorization") delete headers[header];
 						}
-						info$2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-						response = yield this.requestRaw(info$2, data);
+						info$4 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+						response = yield this.requestRaw(info$4, data);
 						redirectsRemaining--;
 					}
 					if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) return response;
@@ -14890,7 +14890,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 		* @param info
 		* @param data
 		*/
-		requestRaw(info$2, data) {
+		requestRaw(info$4, data) {
 			return __awaiter$10(this, void 0, void 0, function* () {
 				return new Promise((resolve, reject) => {
 					function callbackForResult(err, res) {
@@ -14898,7 +14898,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 						else if (!res) reject(/* @__PURE__ */ new Error("Unknown error"));
 						else resolve(res);
 					}
-					this.requestRawWithCallback(info$2, data, callbackForResult);
+					this.requestRawWithCallback(info$4, data, callbackForResult);
 				});
 			});
 		}
@@ -14908,10 +14908,10 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 		* @param data
 		* @param onResult
 		*/
-		requestRawWithCallback(info$2, data, onResult) {
+		requestRawWithCallback(info$4, data, onResult) {
 			if (typeof data === "string") {
-				if (!info$2.options.headers) info$2.options.headers = {};
-				info$2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+				if (!info$4.options.headers) info$4.options.headers = {};
+				info$4.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
 			}
 			let callbackCalled = false;
 			function handleResult(err, res) {
@@ -14920,7 +14920,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 					onResult(err, res);
 				}
 			}
-			const req = info$2.httpModule.request(info$2.options, (msg) => {
+			const req = info$4.httpModule.request(info$4.options, (msg) => {
 				const res = new HttpClientResponse(msg);
 				handleResult(void 0, res);
 			});
@@ -14930,7 +14930,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			});
 			req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
 				if (socket) socket.end();
-				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$2.options.path}`));
+				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$4.options.path}`));
 			});
 			req.on("error", function(err) {
 				handleResult(err);
@@ -14960,21 +14960,21 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
 		}
 		_prepareRequest(method, requestUrl, headers) {
-			const info$2 = {};
-			info$2.parsedUrl = requestUrl;
-			const usingSsl = info$2.parsedUrl.protocol === "https:";
-			info$2.httpModule = usingSsl ? https : http;
+			const info$4 = {};
+			info$4.parsedUrl = requestUrl;
+			const usingSsl = info$4.parsedUrl.protocol === "https:";
+			info$4.httpModule = usingSsl ? https : http;
 			const defaultPort = usingSsl ? 443 : 80;
-			info$2.options = {};
-			info$2.options.host = info$2.parsedUrl.hostname;
-			info$2.options.port = info$2.parsedUrl.port ? parseInt(info$2.parsedUrl.port) : defaultPort;
-			info$2.options.path = (info$2.parsedUrl.pathname || "") + (info$2.parsedUrl.search || "");
-			info$2.options.method = method;
-			info$2.options.headers = this._mergeHeaders(headers);
-			if (this.userAgent != null) info$2.options.headers["user-agent"] = this.userAgent;
-			info$2.options.agent = this._getAgent(info$2.parsedUrl);
-			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$2.options);
-			return info$2;
+			info$4.options = {};
+			info$4.options.host = info$4.parsedUrl.hostname;
+			info$4.options.port = info$4.parsedUrl.port ? parseInt(info$4.parsedUrl.port) : defaultPort;
+			info$4.options.path = (info$4.parsedUrl.pathname || "") + (info$4.parsedUrl.search || "");
+			info$4.options.method = method;
+			info$4.options.headers = this._mergeHeaders(headers);
+			if (this.userAgent != null) info$4.options.headers["user-agent"] = this.userAgent;
+			info$4.options.agent = this._getAgent(info$4.parsedUrl);
+			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$4.options);
+			return info$4;
 		}
 		_mergeHeaders(headers) {
 			if (this.requestOptions && this.requestOptions.headers) return Object.assign({}, lowercaseKeys$1(this.requestOptions.headers), lowercaseKeys$1(headers || {}));
@@ -15233,10 +15233,10 @@ var require_oidc_utils = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@ac
 			var _a$1;
 			return __awaiter$8(this, void 0, void 0, function* () {
 				const httpclient = OidcClient.createHttpClient();
-				const res = yield httpclient.getJson(id_token_url).catch((error$1) => {
+				const res = yield httpclient.getJson(id_token_url).catch((error$3) => {
 					throw new Error(`Failed to get ID Token. \n 
-        Error Code : ${error$1.statusCode}\n 
-        Error Message: ${error$1.message}`);
+        Error Code : ${error$3.statusCode}\n 
+        Error Message: ${error$3.message}`);
 				});
 				const id_token = (_a$1 = res.result) === null || _a$1 === void 0 ? void 0 : _a$1.value;
 				if (!id_token) throw new Error("Response json body do not have ID Token field");
@@ -15255,8 +15255,8 @@ var require_oidc_utils = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@ac
 					const id_token = yield OidcClient.getCall(id_token_url);
 					(0, core_1$1.setSecret)(id_token);
 					return id_token;
-				} catch (error$1) {
-					throw new Error(`Error message: ${error$1.message}`);
+				} catch (error$3) {
+					throw new Error(`Error message: ${error$3.message}`);
 				}
 			});
 		}
@@ -16342,11 +16342,11 @@ var require_toolrunner = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@ac
 						this._debug(`STDIO streams have closed for tool '${this.toolPath}'`);
 						state.CheckComplete();
 					});
-					state.on("done", (error$1, exitCode) => {
+					state.on("done", (error$3, exitCode) => {
 						if (stdbuffer.length > 0) this.emit("stdline", stdbuffer);
 						if (errbuffer.length > 0) this.emit("errline", errbuffer);
 						cp$1.removeAllListeners();
-						if (error$1) reject(error$1);
+						if (error$3) reject(error$3);
 						else resolve(exitCode);
 					});
 					if (this.options.input) {
@@ -16427,18 +16427,18 @@ var require_toolrunner = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@ac
 			this.emit("debug", message);
 		}
 		_setResult() {
-			let error$1;
+			let error$3;
 			if (this.processExited) {
-				if (this.processError) error$1 = /* @__PURE__ */ new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
-				else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) error$1 = /* @__PURE__ */ new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
-				else if (this.processStderr && this.options.failOnStdErr) error$1 = /* @__PURE__ */ new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
+				if (this.processError) error$3 = /* @__PURE__ */ new Error(`There was an error when attempting to execute the process '${this.toolPath}'. This may indicate the process failed to start. Error: ${this.processError}`);
+				else if (this.processExitCode !== 0 && !this.options.ignoreReturnCode) error$3 = /* @__PURE__ */ new Error(`The process '${this.toolPath}' failed with exit code ${this.processExitCode}`);
+				else if (this.processStderr && this.options.failOnStdErr) error$3 = /* @__PURE__ */ new Error(`The process '${this.toolPath}' failed because one or more lines were written to the STDERR stream`);
 			}
 			if (this.timeout) {
 				clearTimeout(this.timeout);
 				this.timeout = null;
 			}
 			this.done = true;
-			this.emit("done", error$1, this.processExitCode);
+			this.emit("done", error$3, this.processExitCode);
 		}
 		static HandleTimeout(state) {
 			if (state.done) return;
@@ -16895,11 +16895,11 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$2(message) {
+	function setFailed$4(message) {
 		process.exitCode = ExitCode.Failure;
-		error(message);
+		error$2(message);
 	}
-	exports.setFailed = setFailed$2;
+	exports.setFailed = setFailed$4;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -16920,10 +16920,10 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* @param message error issue message. Errors will be converted to string via toString()
 	* @param properties optional properties to add to the annotation.
 	*/
-	function error(message, properties = {}) {
+	function error$2(message, properties = {}) {
 		(0, command_1.issueCommand)("error", (0, utils_1$1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
 	}
-	exports.error = error;
+	exports.error = error$2;
 	/**
 	* Adds a warning issue
 	* @param message warning issue message. Errors will be converted to string via toString()
@@ -16946,10 +16946,10 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info$1(message) {
+	function info$3(message) {
 		process.stdout.write(message + os.EOL);
 	}
-	exports.info = info$1;
+	exports.info = info$3;
 	/**
 	* Begin an output group.
 	*
@@ -17066,13 +17066,14 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 }) });
 
 //#endregion
-//#region ../lib/dist/release-label-name-TvFhOOYG.js
+//#region ../lib/dist/release-label-name-DUcaO1Rw.js
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
 	ReleaseLabelName$1["VersionMinor"] = "release:version-minor";
 	ReleaseLabelName$1["VersionMajor"] = "release:version-major";
 	ReleaseLabelName$1["VersionSkip"] = "release:version-skip";
+	ReleaseLabelName$1["VersionBump"] = "release:version-bump";
 	return ReleaseLabelName$1;
 }({});
 
@@ -17088,8 +17089,8 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 */
 function executeBuildScript(script) {
 	return new Promise((resolve, reject) => {
-		exec(script, (error$1, stdout, stderr) => {
-			if (error$1) reject(`Error executing script: ${error$1.message}\n${stderr}`);
+		exec(script, (error$3, stdout, stderr) => {
+			if (error$3) reject(`Error executing script: ${error$3.message}\n${stderr}`);
 			else resolve(stdout);
 		});
 	});
@@ -17097,7 +17098,7 @@ function executeBuildScript(script) {
 
 //#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
-var import_core$1 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+var import_core$5 = /* @__PURE__ */ __toESM$1(require_core(), 1);
 /**
 * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
 *
@@ -17116,9 +17117,9 @@ function getMergedPullRequestLabels(octokit) {
 				pull_number: pullNumber
 			});
 			return pullRequest.labels.map((label) => label.name);
-		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to get merged pull request labels: ${error$1.message}`);
-			else (0, import_core$1.setFailed)("Failed to get merged pull request labels: Unknown error");
+		} catch (error$3) {
+			if (error$3 instanceof Error) (0, import_core$5.setFailed)(`Failed to get merged pull request labels: ${error$3.message}`);
+			else (0, import_core$5.setFailed)("Failed to get merged pull request labels: Unknown error");
 		}
 	};
 }
@@ -17324,8 +17325,8 @@ var require_add = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/before-aft
 			});
 		};
 		if (kind === "error") hook$1 = function(method, options) {
-			return Promise.resolve().then(method.bind(null, options)).catch(function(error$1) {
-				return orig(error$1, options);
+			return Promise.resolve().then(method.bind(null, options)).catch(function(error$3) {
+				return orig(error$3, options);
 			});
 		};
 		state.registry[name].push({
@@ -17533,8 +17534,8 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 	function isKeyOperator(operator) {
 		return operator === ";" || operator === "&" || operator === "?";
 	}
-	function getValues(context$1, operator, key, modifier) {
-		var value = context$1[key], result = [];
+	function getValues(context$2, operator, key, modifier) {
+		var value = context$2[key], result = [];
 		if (isDefined(value) && value !== "") if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
 			value = value.toString();
 			if (modifier && modifier !== "*") value = value.substring(0, parseInt(modifier, 10));
@@ -17568,7 +17569,7 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 	function parseUrl(template) {
 		return { expand: expand.bind(null, template) };
 	}
-	function expand(template, context$1) {
+	function expand(template, context$2) {
 		var operators = [
 			"+",
 			"#",
@@ -17588,7 +17589,7 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 				}
 				expression.split(/,/g).forEach(function(variable) {
 					var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-					values.push(getValues(context$1, operator, tmp[1], tmp[2] || tmp[3]));
+					values.push(getValues(context$2, operator, tmp[1], tmp[2] || tmp[3]));
 				});
 				if (operator && operator !== "+") {
 					var separator = ",";
@@ -17896,7 +17897,7 @@ var require_dist_node$5 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 			});
 			if (status >= 400) {
 				const data = await getResponseData(response);
-				const error$1 = new import_request_error.RequestError(toErrorMessage(data), status, {
+				const error$3 = new import_request_error.RequestError(toErrorMessage(data), status, {
 					response: {
 						url,
 						status,
@@ -17905,7 +17906,7 @@ var require_dist_node$5 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 					},
 					request: requestOptions
 				});
-				throw error$1;
+				throw error$3;
 			}
 			return parseSuccessResponseBody ? await getResponseData(response) : response.body;
 		}).then((data) => {
@@ -17915,13 +17916,13 @@ var require_dist_node$5 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 				headers,
 				data
 			};
-		}).catch((error$1) => {
-			if (error$1 instanceof import_request_error.RequestError) throw error$1;
-			else if (error$1.name === "AbortError") throw error$1;
-			let message = error$1.message;
-			if (error$1.name === "TypeError" && "cause" in error$1) {
-				if (error$1.cause instanceof Error) message = error$1.cause.message;
-				else if (typeof error$1.cause === "string") message = error$1.cause;
+		}).catch((error$3) => {
+			if (error$3 instanceof import_request_error.RequestError) throw error$3;
+			else if (error$3.name === "AbortError") throw error$3;
+			let message = error$3.message;
+			if (error$3.name === "TypeError" && "cause" in error$3) {
+				if (error$3.cause instanceof Error) message = error$3.cause.message;
+				else if (typeof error$3.cause === "string") message = error$3.cause;
 			}
 			throw new import_request_error.RequestError(message, 500, { request: requestOptions });
 		});
@@ -19653,8 +19654,8 @@ var require_dist_node = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@oct
 				const normalizedResponse = normalizePaginatedListResponse(response);
 				url = ((normalizedResponse.headers.link || "").match(/<([^<>]+)>;\s*rel="next"/) || [])[1];
 				return { value: normalizedResponse };
-			} catch (error$1) {
-				if (error$1.status !== 409) throw error$1;
+			} catch (error$3) {
+				if (error$3.status !== 409) throw error$3;
 				url = "";
 				return { value: {
 					status: 200,
@@ -20072,11 +20073,243 @@ function getLastMergedPullRequest(octokit) {
 			});
 			const mergedPullRequest = pullRequests.find((pr) => pr.base.ref === branchName && pr.merged_at);
 			return mergedPullRequest;
-		} catch (error$1) {
-			const errorMessage = error$1 instanceof Error ? error$1.message : String(error$1);
+		} catch (error$3) {
+			const errorMessage = error$3 instanceof Error ? error$3.message : String(error$3);
 			throw new Error(`Failed to get last merged pull request number: ${errorMessage}`);
 		}
 	};
+}
+
+//#endregion
+//#region src/utils/git/add-files-to-git.ts
+var import_core$4 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+/**
+* Adds the specified files to the current Git staging area using the `git add` command.
+*
+* @param files - An array of file paths to add to Git.
+* @remarks
+* - If the `files` array is empty, the function logs a message and returns without performing any action.
+* - If an error occurs during the execution of the `git add` command, the error is logged and the process exits with code 1.
+*/
+function addFilesToGit(files = ["."]) {
+	return new Promise((resolve, reject) => {
+		if (!files || files.length === 0) {
+			(0, import_core$4.info)("No files to add to git.");
+			resolve();
+			return;
+		}
+		try {
+			execSync(`git add ${files.join(" ")}`, { stdio: "inherit" });
+			(0, import_core$4.info)(`Added files to git: ${files.join(", ")}`);
+			resolve();
+		} catch (err) {
+			(0, import_core$4.error)(err instanceof Error ? err : `Error adding files to git: ${err}`);
+			reject(err);
+		}
+	});
+}
+
+//#endregion
+//#region src/utils/git/commit-files-to-git.ts
+/**
+* Stages the specified files and creates a Git commit with the provided commit message and author information.
+*
+* @param commitMessage - The commit message to use for the Git commit.
+* @param authorName - The name of the commit author.
+* @param authorEmail - The email address of the commit author.
+* @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
+*/
+function commitFilesToGit({ commitMessage, authorEmail, authorName }) {
+	return new Promise((resolve, reject) => {
+		exec(`git commit -m "${commitMessage}" --author="${authorName} <${authorEmail}>"`, (error$3) => {
+			if (error$3) return reject(`Error committing files: ${error$3.message}`);
+			resolve();
+		});
+	});
+}
+
+//#endregion
+//#region src/utils/git/create-new-git-branch.ts
+var import_core$3 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+var import_github$1 = /* @__PURE__ */ __toESM$1(require_github(), 1);
+/**
+* Factory function that returns an async function to create a new Git branch in a GitHub repository using Octokit.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that creates a new branch from a specified base branch.
+*
+* @function
+* @async
+* @param owner - The owner of the repository.
+* @param repo - The name of the repository.
+* @param branchName - The name of the new branch to create.
+* @param baseBranch - (Optional) The name of the base branch to branch from. Defaults to the current context ref or 'main'.
+* @returns The newly created branch data if successful; otherwise, handles errors and sets the failure state.
+*
+* @throws Will call `setFailed` if the branch creation fails.
+*/
+function createNewGitBranch(octokit) {
+	return async function createNewGitBranch$1({ baseBranch = import_github$1.context.ref.split("/").pop() || "main", branchName, owner, repo }) {
+		try {
+			const { data: refData } = await octokit.rest.git.getRef({
+				owner,
+				repo,
+				ref: `heads/${baseBranch}`
+			});
+			const { data: newBranch } = await octokit.rest.git.createRef({
+				owner,
+				repo,
+				ref: `refs/heads/${branchName}`,
+				sha: refData.object.sha
+			});
+			return newBranch;
+		} catch (error$3) {
+			if (error$3 instanceof Error) (0, import_core$3.setFailed)(`Failed to create new git branch: ${error$3.message}`);
+			else (0, import_core$3.setFailed)("Failed to create new git branch: Unknown error");
+		}
+	};
+}
+
+//#endregion
+//#region src/utils/git/checkout-branch-git.ts
+/**
+* Creates and checks out a new Git branch from the specified base branch.
+*
+* @param branchName - The name of the new branch to create and check out.
+* @param baseBranch - The name of the base branch to branch off from. Defaults to 'main'.
+* @returns A promise that resolves when the branch has been successfully checked out, or rejects with an error message if the operation fails.
+*/
+function checkoutBranch(baseBranch) {
+	return new Promise((resolve, reject) => {
+		exec(`git checkout -b ${baseBranch}`, (error$3) => {
+			if (error$3) return reject(`Error checking out branch: ${error$3.message}`);
+			resolve();
+		});
+	});
+}
+
+//#endregion
+//#region src/utils/git/create-pull-request.ts
+var import_core$2 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+/**
+* Creates a function to open a new pull request on a GitHub repository using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that creates a pull request with the specified parameters.
+*
+* @example
+* const createPR = createPullRequest(octokit);
+* await createPR('owner', 'repo', 'My PR Title', 'feature-branch', 'main', 'PR description');
+*
+* @throws Will call `setFailed` if the pull request creation fails.
+*/
+function createPullRequest(octokit) {
+	return async function createPullRequest$1({ owner, repo, title, head, base = "main", body }) {
+		try {
+			const { data: pullRequest } = await octokit.rest.pulls.create({
+				owner,
+				repo,
+				title,
+				head,
+				base,
+				body
+			});
+			return pullRequest;
+		} catch (error$3) {
+			if (error$3 instanceof Error) (0, import_core$2.setFailed)(`Failed to create pull request: ${error$3.message}`);
+			else (0, import_core$2.setFailed)("Failed to create pull request: Unknown error");
+		}
+	};
+}
+
+//#endregion
+//#region src/utils/git/has-changes-git.ts
+function hasGitChanges() {
+	return new Promise((resolve, reject) => {
+		exec("git diff --exit-code", (error$3) => {
+			if (error$3) resolve(false);
+			else resolve(true);
+		});
+	});
+}
+
+//#endregion
+//#region src/utils/git/delete-branch-git.ts
+function deleteGitBranch(branchName) {
+	return new Promise((resolve, reject) => {
+		exec(`git branch -d ${branchName}`, (error$3) => {
+			if (error$3) return reject(`Error deleting branch: ${error$3.message}`);
+			resolve();
+		});
+	});
+}
+
+//#endregion
+//#region src/constants/release-branch-name.ts
+const RELEASE_BRANCH_NAME = "release/version";
+
+//#endregion
+//#region src/utils/github/create-github-release.ts
+var import_core$1 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+/**
+* Creates a function to publish a new GitHub release using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns A function that creates a GitHub release when called.
+*
+* @remarks
+* The returned function requires the following parameters:
+* - `tagName`: The tag name for the release (e.g., "v1.0.0").
+* - `releaseName`: The name/title of the release.
+* - `body`: The release notes or description.
+* - `isDraft`: Optional. Whether the release is a draft. Defaults to `false`.
+* - `isPreRelease`: Optional. Whether the release is a pre-release. Defaults to `false`.
+*
+* The function reads the repository owner and name from the environment variables
+* `GITHUB_REPOSITORY_OWNER` and `GITHUB_REPOSITORY_NAME`.
+*
+* @throws Will reject the promise if the GitHub release creation fails.
+*/
+function createGitHubRelease(octokit) {
+	return function release({ body, isDraft = false, isPreRelease = false, owner, releaseName, repo, tagName }) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				await octokit.rest.repos.createRelease({
+					owner,
+					repo,
+					tag_name: tagName,
+					name: releaseName,
+					body,
+					draft: isDraft,
+					prerelease: isPreRelease
+				});
+				(0, import_core$1.info)(`Created GitHub release: ${releaseName} (${tagName})`);
+				resolve();
+			} catch (err) {
+				(0, import_core$1.error)(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
+				reject(err);
+			}
+		});
+	};
+}
+
+//#endregion
+//#region src/utils/version/get-current-release-version.ts
+/**
+* Executes the provided shell script to retrieve the current release version.
+*
+* @param script - The shell command to execute for obtaining the release version.
+* @returns A promise that resolves with the release version as a string, or rejects with an error message if the command fails or no version is found.
+*/
+function getCurrentReleaseVersion(script) {
+	return new Promise((resolve, reject) => {
+		exec(script, (error$3, stdout) => {
+			if (error$3) return reject(`Error getting current release version: ${error$3.message}`);
+			const version = stdout.trim();
+			if (!version) return reject("No release version found");
+			resolve(version);
+		});
+	});
 }
 
 //#endregion
@@ -20093,10 +20326,12 @@ async function run() {
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
 	const releaseBranchName = (0, import_core.getInput)("release-branch-name") || "main";
+	const currentVersionScript = (0, import_core.getInput)("get-current-version-script");
 	(0, import_core.debug)("patchScript: " + patchReleaseScript);
 	(0, import_core.debug)("minorScript: " + minorReleaseScript);
 	(0, import_core.debug)("majorScript: " + majorReleaseScript);
 	(0, import_core.debug)("releaseBranchName: " + releaseBranchName);
+	(0, import_core.debug)("currentVersionScript: " + currentVersionScript);
 	const octokit = (0, import_github.getOctokit)(token);
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;
@@ -20111,23 +20346,85 @@ async function run() {
 		(0, import_core.info)("No relevant labels found");
 		return;
 	}
+	if (labels.includes(ReleaseLabelName.VersionBump)) {
+		const currentVersion = await getCurrentReleaseVersion(currentVersionScript);
+		(0, import_core.debug)(`Current version: ${currentVersion}`);
+		if (!currentVersion) {
+			(0, import_core.setFailed)("Current version could not be determined");
+			return;
+		}
+		await createGitHubRelease(octokit)({
+			owner,
+			repo,
+			tagName: `${currentVersion}`,
+			releaseName: `Release for version: ${currentVersion}`,
+			body: `Release ${currentVersion}`,
+			isPreRelease: pullRequest.base.ref !== releaseBranchName
+		});
+		(0, import_core.info)("Release created successfully.");
+		return;
+	}
 	if (labels.includes(ReleaseLabelName.VersionSkip)) {
 		(0, import_core.info)("Version skip was added, skipping action.");
 		return;
 	}
-	if (labels.includes(ReleaseLabelName.VersionRequired)) (0, import_core.setFailed)("Version required is invalid label for a release.");
-	else if (labels.includes(ReleaseLabelName.VersionPatch)) {
+	if (labels.includes(ReleaseLabelName.VersionRequired)) {
+		(0, import_core.setFailed)("Version required is invalid label for a release.");
+		return;
+	}
+	const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`;
+	(0, import_core.debug)(`Release version branch name: ${RELEASE_VERSION_BRANCH_NAME}`);
+	await createNewGitBranch(octokit)({
+		owner,
+		repo,
+		branchName: RELEASE_VERSION_BRANCH_NAME,
+		baseBranch: pullRequest.base.ref
+	});
+	(0, import_core.debug)(`Created new branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	(0, import_core.debug)(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	await checkoutBranch(RELEASE_VERSION_BRANCH_NAME);
+	(0, import_core.debug)(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
 		const response = await executeBuildScript(patchReleaseScript);
 		(0, import_core.info)(`Patch release script executed with response: ${response}`);
-	} else if (labels.includes(ReleaseLabelName.VersionMinor)) {
+	} else if (labels.includes(ReleaseLabelName.VersionMinor) && minorReleaseScript) {
 		const response = await executeBuildScript(minorReleaseScript);
 		(0, import_core.info)(`Minor release script executed with response: ${response}`);
-	} else if (labels.includes(ReleaseLabelName.VersionMajor)) {
+	} else if (labels.includes(ReleaseLabelName.VersionMajor) && majorReleaseScript) {
 		const response = await executeBuildScript(majorReleaseScript);
 		(0, import_core.info)(`Major release script executed with response: ${response}`);
 	}
+	const hasChanges = await hasGitChanges();
+	(0, import_core.debug)(`Has changes after script execution: ${hasChanges}`);
+	if (!hasChanges) {
+		(0, import_core.info)("No changes to commit, skipping commit step.");
+		await deleteGitBranch(RELEASE_VERSION_BRANCH_NAME);
+		(0, import_core.info)(`Deleted branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+		(0, import_core.info)("No changes to commit, exiting action.");
+		return;
+	}
+	(0, import_core.debug)("Adding files to git staging area.");
+	await addFilesToGit();
+	(0, import_core.debug)("Files added to git staging area.");
+	(0, import_core.debug)("Committing files to git.");
+	await commitFilesToGit({
+		commitMessage: "Update version files",
+		authorName: "GitHub Action",
+		authorEmail: "action@github.com"
+	});
+	(0, import_core.debug)("Files committed to git.");
+	(0, import_core.debug)(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	await createPullRequest(octokit)({
+		owner,
+		repo,
+		title: `Release PR for #${pullRequest.number}`,
+		head: RELEASE_VERSION_BRANCH_NAME,
+		base: pullRequest.base.ref,
+		body: `This PR was automatically created by the labler-release action for pull request #${pullRequest.number}.\n\nLabels: ${labels.join(", ")}`
+	});
+	(0, import_core.debug)(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	(0, import_core.info)("Release process completed successfully.");
 }
-run().catch((error$1) => (0, import_core.setFailed)(`Action failed with error: ${error$1?.message ?? error$1}`));
+run().catch((error$3) => (0, import_core.setFailed)(`Action failed with error: ${error$3?.message ?? error$3}`));
 
 //#endregion

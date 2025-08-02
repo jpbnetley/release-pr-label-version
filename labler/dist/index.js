@@ -20029,7 +20029,7 @@ function createLabelIfNotExists(octokit$1) {
 }
 
 //#endregion
-//#region ../lib/dist/release-label-colors-CKkBz3bC.js
+//#region ../lib/dist/release-label-colors-95TO_8mW.js
 let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors$1) {
 	/**
 	* Red
@@ -20051,28 +20051,34 @@ let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors$1) {
 	* Light Gray
 	*/
 	ReleaseLabelColors$1["VersionSkip"] = "bfd4f2";
+	/**
+	* Purple
+	*/
+	ReleaseLabelColors$1["VersionBump"] = "A020F0";
 	return ReleaseLabelColors$1;
 }({});
 
 //#endregion
-//#region ../lib/dist/release-label-description-DVeO77ht.js
+//#region ../lib/dist/release-label-description-DhyVTKpU.js
 let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription$1) {
 	ReleaseLabelDescription$1["VersionRequired"] = "This PR requires a version bump label";
 	ReleaseLabelDescription$1["VersionPatch"] = "Patch version release";
 	ReleaseLabelDescription$1["VersionMinor"] = "Minor version release";
 	ReleaseLabelDescription$1["VersionMajor"] = "Major version release";
 	ReleaseLabelDescription$1["VersionSkip"] = "Skip version release";
+	ReleaseLabelDescription$1["VersionBump"] = "Bump version: Used when a pr contains the new version to be merged into the release branch";
 	return ReleaseLabelDescription$1;
 }({});
 
 //#endregion
-//#region ../lib/dist/release-label-name-TvFhOOYG.js
+//#region ../lib/dist/release-label-name-DUcaO1Rw.js
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
 	ReleaseLabelName$1["VersionMinor"] = "release:version-minor";
 	ReleaseLabelName$1["VersionMajor"] = "release:version-major";
 	ReleaseLabelName$1["VersionSkip"] = "release:version-skip";
+	ReleaseLabelName$1["VersionBump"] = "release:version-bump";
 	return ReleaseLabelName$1;
 }({});
 
@@ -20103,6 +20109,11 @@ const ReleaseLabel = {
 		name: ReleaseLabelName.VersionSkip,
 		description: ReleaseLabelDescription.VersionSkip,
 		color: ReleaseLabelColors.VersionSkip
+	},
+	VersionBump: {
+		name: ReleaseLabelName.VersionBump,
+		description: ReleaseLabelDescription.VersionBump,
+		color: ReleaseLabelColors.VersionBump
 	}
 };
 

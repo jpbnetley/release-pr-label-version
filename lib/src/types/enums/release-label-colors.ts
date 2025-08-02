@@ -19,4 +19,9 @@ export enum ReleaseLabelColors {
    * Light Gray
    */
   VersionSkip = 'bfd4f2',
+
+  /**
+   * Purple
+   */
+  VersionBump = 'A020F0',
 }

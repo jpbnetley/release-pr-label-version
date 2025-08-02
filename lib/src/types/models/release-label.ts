@@ -28,6 +28,11 @@ export const ReleaseLabel = {
     description: ReleaseLabelDescription.VersionSkip,
     color: ReleaseLabelColors.VersionSkip,
   },
+  VersionBump: {
+    name: ReleaseLabelName.VersionBump,
+    description: ReleaseLabelDescription.VersionBump,
+    color: ReleaseLabelColors.VersionBump,
+  },
 } as const
 
 export type ReleaseLabel = (typeof ReleaseLabel)[keyof typeof ReleaseLabel]

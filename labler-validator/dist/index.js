@@ -19990,13 +19990,14 @@ var require_github = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@action
 }) });
 
 //#endregion
-//#region ../lib/dist/release-label-name-TvFhOOYG.js
+//#region ../lib/dist/release-label-name-DUcaO1Rw.js
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
 	ReleaseLabelName$1["VersionMinor"] = "release:version-minor";
 	ReleaseLabelName$1["VersionMajor"] = "release:version-major";
 	ReleaseLabelName$1["VersionSkip"] = "release:version-skip";
+	ReleaseLabelName$1["VersionBump"] = "release:version-bump";
 	return ReleaseLabelName$1;
 }({});
 

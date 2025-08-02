@@ -131,6 +131,9 @@ inputs:
   release-branch-name: 
       description: The release branch name
       required: false
+  get-current-version-script:
+      description: 'Script to get the current version'
+      required: true
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```

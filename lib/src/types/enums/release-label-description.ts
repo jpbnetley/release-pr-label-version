@@ -4,4 +4,5 @@ export enum ReleaseLabelDescription {
   VersionMinor = 'Minor version release',
   VersionMajor = 'Major version release',
   VersionSkip = 'Skip version release',
+  VersionBump = 'Bump version: Used when a pr contains the new version to be merged into the release branch',
 }
