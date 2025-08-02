@@ -39815,7 +39815,6 @@ function createNewGitBranch(octokit) {
 /**
 * Creates and checks out a new Git branch from the specified base branch.
 *
-* @param branchName - The name of the new branch to create and check out.
 * @param baseBranch - The name of the base branch to branch off from. Defaults to 'main'.
 * @returns A promise that resolves when the branch has been successfully checked out, or rejects with an error message if the operation fails.
 */
@@ -40041,10 +40040,30 @@ async function executeReleaseScript({ labels, majorReleaseScript, minorReleaseSc
 */
 function gitStatus() {
 	return new Promise((resolve, reject) => {
-		exec("git status --porcelain", (error$1, stdout, stderr) => {
+		exec("git status --porcelain", { encoding: "utf-8" }, (error$1, stdout, stderr) => {
 			if (error$1) {
 				if (stderr) return reject(`Error getting git status: ${stderr}`);
 				return reject(`Error getting git status: ${error$1.message}`);
+			}
+			resolve(stdout.trim());
+		});
+	});
+}
+
+//#endregion
+//#region ../lib/dist/utils/git/git-branch-name.js
+/**
+* Retrieves the current Git branch name by executing the appropriate Git command.
+*
+* @returns A promise that resolves to the name of the current Git branch as a string.
+* @throws Will reject the promise with an error message if the Git command fails.
+*/
+function gitBranchName() {
+	return new Promise((resolve, reject) => {
+		exec("git rev-parse --abbrev-ref HEAD", { encoding: "utf-8" }, (error$1, stdout) => {
+			if (error$1) {
+				reject(`Error getting git branch name: ${error$1.message}`);
+				return;
 			}
 			resolve(stdout.trim());
 		});
@@ -40128,6 +40147,8 @@ async function run() {
 	(0, import_core.debug)(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await checkoutBranch(RELEASE_VERSION_BRANCH_NAME);
 	(0, import_core.debug)(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
+	const currentBranchName = await gitBranchName();
+	(0, import_core.info)(`Now on branch: ${currentBranchName}`);
 	await executeReleaseScript({
 		labels,
 		majorReleaseScript,

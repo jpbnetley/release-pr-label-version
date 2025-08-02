@@ -16,6 +16,7 @@ import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
 import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
 import { executeReleaseScript } from './utils/execute-release-script.js'
 import { gitStatus } from 'lib/utils/git/git-status.js'
+import { gitBranchName } from 'lib/utils/git/git-branch-name.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -117,6 +118,9 @@ async function run() {
   debug(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   await checkoutBranch(RELEASE_VERSION_BRANCH_NAME)
   debug(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+
+  const currentBranchName = await gitBranchName()
+  info(`Now on branch: ${currentBranchName}`)
 
   await executeReleaseScript({
     labels,
