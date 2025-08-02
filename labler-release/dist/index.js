@@ -40139,6 +40139,7 @@ async function run() {
 		(0, import_core.info)("No relevant labels found");
 		return;
 	}
+	const isPreRelease = labels.includes(ReleaseLabelName.VersionPreRelease);
 	if (labels.includes(ReleaseLabelName.VersionBump)) {
 		const currentVersion$1 = await getCurrentReleaseVersion(currentVersionScript);
 		(0, import_core.debug)(`Current version: ${currentVersion$1}`);
@@ -40152,7 +40153,7 @@ async function run() {
 			tagName: `${currentVersion$1}`,
 			releaseName: `Release for version: ${currentVersion$1}`,
 			body: `Release ${currentVersion$1}`,
-			isPreRelease: pullRequest.base.ref !== releaseBranchName
+			isPreRelease
 		});
 		(0, import_core.info)("Release created successfully.");
 		(0, import_core.debug)("Creating summary");
@@ -40232,7 +40233,7 @@ async function run() {
 		owner,
 		repo,
 		pullNumber: newVersionPr.number,
-		labels: [ReleaseLabelName.VersionBump]
+		labels: [ReleaseLabelName.VersionBump, isPreRelease && ReleaseLabelName.VersionPreRelease].filter(Boolean)
 	});
 	(0, import_core.info)(`Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`);
 	await import_core.summary.addHeading("Release version pull request").addRaw(`New version pull request: ${newVersionPr.html_url}`).write();

@@ -67,6 +67,8 @@ async function run() {
     return
   }
 
+  const isPreRelease = labels.includes(ReleaseLabelName.VersionPreRelease)
+
   if (labels.includes(ReleaseLabelName.VersionBump)) {
     const currentVersion = await getCurrentReleaseVersion(currentVersionScript)
     debug(`Current version: ${currentVersion}`)
@@ -81,7 +83,7 @@ async function run() {
       tagName: `${currentVersion}`,
       releaseName: `Release for version: ${currentVersion}`,
       body: `Release ${currentVersion}`,
-      isPreRelease: pullRequest.base.ref !== releaseBranchName,
+      isPreRelease: isPreRelease,
     })
     info('Release created successfully.')
 
@@ -188,16 +190,19 @@ async function run() {
     owner,
     repo,
     pullNumber: newVersionPr.number,
-    labels: [ReleaseLabelName.VersionBump],
+    labels: [
+      ReleaseLabelName.VersionBump,
+      isPreRelease && ReleaseLabelName.VersionPreRelease,
+    ].filter(Boolean) as string[],
   })
   info(
     `Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`
   )
 
   await summary
-      .addHeading('Release version pull request')
-      .addRaw(`New version pull request: ${newVersionPr.html_url}`)
-      .write()
+    .addHeading('Release version pull request')
+    .addRaw(`New version pull request: ${newVersionPr.html_url}`)
+    .write()
 
   info('Release process completed successfully.')
 }
