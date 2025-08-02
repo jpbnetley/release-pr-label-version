@@ -2,6 +2,9 @@ name: 'labler-release'
 description: 'Handles semantic versioning based on labels applied to pull requests.'
 
 inputs:
+  pre-release-script:
+      description: 'Script to run for pre-release'
+      required: false
   patch-release-script:
     description: 'Script to run for patch release'
     required: true

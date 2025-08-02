@@ -26,9 +26,11 @@ async function run() {
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
+  const preReleaseScript = getInput('pre-release-script')
   const releaseBranchName = getInput('release-branch-name') || 'main'
   const currentVersionScript = getInput('get-current-version-script')
 
+  debug('preReleaseScript: ' + preReleaseScript)
   debug('patchScript: ' + patchReleaseScript)
   debug('minorScript: ' + minorReleaseScript)
   debug('majorScript: ' + majorReleaseScript)
@@ -86,7 +88,7 @@ async function run() {
       .addRaw(`Created for: ${currentVersion}`)
       .write()
 
-      debug('Created summary')
+    debug('Created summary')
 
     return
   }
@@ -115,7 +117,17 @@ async function run() {
   await checkoutBranch(RELEASE_VERSION_BRANCH_NAME)
   debug(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
 
-  if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
+  if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
+    if (!preReleaseScript) {
+      setFailed('Pre-release script is not provided')
+      return
+    }
+    const response = await executeBuildScript(preReleaseScript)
+    info(`Pre-release script executed with response: ${response}`)
+  } else if (
+    labels.includes(ReleaseLabelName.VersionPatch) &&
+    patchReleaseScript
+  ) {
     const response = await executeBuildScript(patchReleaseScript)
     info(`Patch release script executed with response: ${response}`)
   } else if (

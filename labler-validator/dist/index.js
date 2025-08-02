@@ -3769,18 +3769,18 @@ var require_webidl = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@
 	webidl$14.errors.exception = function(message) {
 		return /* @__PURE__ */ new TypeError(`${message.header}: ${message.message}`);
 	};
-	webidl$14.errors.conversionFailed = function(context$1) {
-		const plural = context$1.types.length === 1 ? "" : " one of";
-		const message = `${context$1.argument} could not be converted to${plural}: ${context$1.types.join(", ")}.`;
+	webidl$14.errors.conversionFailed = function(context$2) {
+		const plural = context$2.types.length === 1 ? "" : " one of";
+		const message = `${context$2.argument} could not be converted to${plural}: ${context$2.types.join(", ")}.`;
 		return webidl$14.errors.exception({
-			header: context$1.prefix,
+			header: context$2.prefix,
 			message
 		});
 	};
-	webidl$14.errors.invalidArgument = function(context$1) {
+	webidl$14.errors.invalidArgument = function(context$2) {
 		return webidl$14.errors.exception({
-			header: context$1.prefix,
-			message: `"${context$1.value}" is an invalid ${context$1.type}.`
+			header: context$2.prefix,
+			message: `"${context$2.value}" is an invalid ${context$2.type}.`
 		});
 	};
 	webidl$14.brandCheck = function(V, I, opts = void 0) {
@@ -8149,13 +8149,13 @@ var require_api_request = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			});
 			addSignal$4(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$5();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1, statusMessage) {
-			const { callback, opaque, abort: abort$1, context: context$1, responseHeaders, highWaterMark } = this;
+			const { callback, opaque, abort: abort$1, context: context$2, responseHeaders, highWaterMark } = this;
 			const headers = responseHeaders === "raw" ? util$8.parseRawHeaders(rawHeaders) : util$8.parseHeaders(rawHeaders);
 			if (statusCode < 200) {
 				if (this.onInfo) this.onInfo({
@@ -8188,7 +8188,7 @@ var require_api_request = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				trailers: this.trailers,
 				opaque,
 				body,
-				context: context$1
+				context: context$2
 			});
 		}
 		onData(chunk) {
@@ -8280,13 +8280,13 @@ var require_api_stream = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 			});
 			addSignal$3(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$4();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1, statusMessage) {
-			const { factory, opaque, context: context$1, callback, responseHeaders } = this;
+			const { factory, opaque, context: context$2, callback, responseHeaders } = this;
 			const headers = responseHeaders === "raw" ? util$7.parseRawHeaders(rawHeaders) : util$7.parseHeaders(rawHeaders);
 			if (statusCode < 200) {
 				if (this.onInfo) this.onInfo({
@@ -8316,7 +8316,7 @@ var require_api_stream = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/und
 					statusCode,
 					headers,
 					opaque,
-					context: context$1
+					context: context$2
 				});
 				if (!res || typeof res.write !== "function" || typeof res.end !== "function" || typeof res.on !== "function") throw new InvalidReturnValueError$1("expected Writable");
 				finished(res, { readable: false }, (err) => {
@@ -8468,15 +8468,15 @@ var require_api_pipeline = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/u
 			this.res = null;
 			addSignal$2(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			const { ret, res } = this;
 			assert$9(!res, "pipeline cannot be retried");
 			if (ret.destroyed) throw new RequestAbortedError$3();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders(statusCode, rawHeaders, resume$1) {
-			const { opaque, handler: handler$1, context: context$1 } = this;
+			const { opaque, handler: handler$1, context: context$2 } = this;
 			if (statusCode < 200) {
 				if (this.onInfo) {
 					const headers = this.responseHeaders === "raw" ? util$6.parseRawHeaders(rawHeaders) : util$6.parseHeaders(rawHeaders);
@@ -8497,7 +8497,7 @@ var require_api_pipeline = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/u
 					headers,
 					opaque,
 					body: this.res,
-					context: context$1
+					context: context$2
 				});
 			} catch (err) {
 				this.res.on("error", util$6.nop);
@@ -8570,7 +8570,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			this.context = null;
 			addSignal$1(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$2();
 			this.abort = abort$1;
 			this.context = null;
@@ -8579,7 +8579,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			throw new SocketError$1("bad upgrade", null);
 		}
 		onUpgrade(statusCode, rawHeaders, socket) {
-			const { callback, opaque, context: context$1 } = this;
+			const { callback, opaque, context: context$2 } = this;
 			assert$8.strictEqual(statusCode, 101);
 			removeSignal$1(this);
 			this.callback = null;
@@ -8588,7 +8588,7 @@ var require_api_upgrade = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				headers,
 				socket,
 				opaque,
-				context: context$1
+				context: context$2
 			});
 		}
 		onError(err) {
@@ -8644,16 +8644,16 @@ var require_api_connect = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 			this.abort = null;
 			addSignal(this, signal);
 		}
-		onConnect(abort$1, context$1) {
+		onConnect(abort$1, context$2) {
 			if (!this.callback) throw new RequestAbortedError$1();
 			this.abort = abort$1;
-			this.context = context$1;
+			this.context = context$2;
 		}
 		onHeaders() {
 			throw new SocketError("bad connect", null);
 		}
 		onUpgrade(statusCode, rawHeaders, socket) {
-			const { callback, opaque, context: context$1 } = this;
+			const { callback, opaque, context: context$2 } = this;
 			removeSignal(this);
 			this.callback = null;
 			let headers = rawHeaders;
@@ -8663,7 +8663,7 @@ var require_api_connect = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/un
 				headers,
 				socket,
 				opaque,
-				context: context$1
+				context: context$2
 			});
 		}
 		onError(err) {
@@ -14838,19 +14838,19 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			return __awaiter$10(this, void 0, void 0, function* () {
 				if (this._disposed) throw new Error("Client has already been disposed.");
 				const parsedUrl = new URL(requestUrl);
-				let info$2 = this._prepareRequest(verb, parsedUrl, headers);
+				let info$3 = this._prepareRequest(verb, parsedUrl, headers);
 				const maxTries = this._allowRetries && RetryableHttpVerbs.includes(verb) ? this._maxRetries + 1 : 1;
 				let numTries = 0;
 				let response;
 				do {
-					response = yield this.requestRaw(info$2, data);
+					response = yield this.requestRaw(info$3, data);
 					if (response && response.message && response.message.statusCode === HttpCodes.Unauthorized) {
 						let authenticationHandler;
 						for (const handler$1 of this.handlers) if (handler$1.canHandleAuthentication(response)) {
 							authenticationHandler = handler$1;
 							break;
 						}
-						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$2, data);
+						if (authenticationHandler) return authenticationHandler.handleAuthentication(this, info$3, data);
 						else return response;
 					}
 					let redirectsRemaining = this._maxRedirects;
@@ -14863,8 +14863,8 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 						if (parsedRedirectUrl.hostname !== parsedUrl.hostname) {
 							for (const header in headers) if (header.toLowerCase() === "authorization") delete headers[header];
 						}
-						info$2 = this._prepareRequest(verb, parsedRedirectUrl, headers);
-						response = yield this.requestRaw(info$2, data);
+						info$3 = this._prepareRequest(verb, parsedRedirectUrl, headers);
+						response = yield this.requestRaw(info$3, data);
 						redirectsRemaining--;
 					}
 					if (!response.message.statusCode || !HttpResponseRetryCodes.includes(response.message.statusCode)) return response;
@@ -14889,7 +14889,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 		* @param info
 		* @param data
 		*/
-		requestRaw(info$2, data) {
+		requestRaw(info$3, data) {
 			return __awaiter$10(this, void 0, void 0, function* () {
 				return new Promise((resolve, reject) => {
 					function callbackForResult(err, res) {
@@ -14897,7 +14897,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 						else if (!res) reject(/* @__PURE__ */ new Error("Unknown error"));
 						else resolve(res);
 					}
-					this.requestRawWithCallback(info$2, data, callbackForResult);
+					this.requestRawWithCallback(info$3, data, callbackForResult);
 				});
 			});
 		}
@@ -14907,10 +14907,10 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 		* @param data
 		* @param onResult
 		*/
-		requestRawWithCallback(info$2, data, onResult) {
+		requestRawWithCallback(info$3, data, onResult) {
 			if (typeof data === "string") {
-				if (!info$2.options.headers) info$2.options.headers = {};
-				info$2.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
+				if (!info$3.options.headers) info$3.options.headers = {};
+				info$3.options.headers["Content-Length"] = Buffer.byteLength(data, "utf8");
 			}
 			let callbackCalled = false;
 			function handleResult(err, res) {
@@ -14919,7 +14919,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 					onResult(err, res);
 				}
 			}
-			const req = info$2.httpModule.request(info$2.options, (msg) => {
+			const req = info$3.httpModule.request(info$3.options, (msg) => {
 				const res = new HttpClientResponse(msg);
 				handleResult(void 0, res);
 			});
@@ -14929,7 +14929,7 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			});
 			req.setTimeout(this._socketTimeout || 3 * 6e4, () => {
 				if (socket) socket.end();
-				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$2.options.path}`));
+				handleResult(/* @__PURE__ */ new Error(`Request timeout: ${info$3.options.path}`));
 			});
 			req.on("error", function(err) {
 				handleResult(err);
@@ -14959,21 +14959,21 @@ var require_lib = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+h
 			return this._getProxyAgentDispatcher(parsedUrl, proxyUrl);
 		}
 		_prepareRequest(method, requestUrl, headers) {
-			const info$2 = {};
-			info$2.parsedUrl = requestUrl;
-			const usingSsl = info$2.parsedUrl.protocol === "https:";
-			info$2.httpModule = usingSsl ? https : http;
+			const info$3 = {};
+			info$3.parsedUrl = requestUrl;
+			const usingSsl = info$3.parsedUrl.protocol === "https:";
+			info$3.httpModule = usingSsl ? https : http;
 			const defaultPort = usingSsl ? 443 : 80;
-			info$2.options = {};
-			info$2.options.host = info$2.parsedUrl.hostname;
-			info$2.options.port = info$2.parsedUrl.port ? parseInt(info$2.parsedUrl.port) : defaultPort;
-			info$2.options.path = (info$2.parsedUrl.pathname || "") + (info$2.parsedUrl.search || "");
-			info$2.options.method = method;
-			info$2.options.headers = this._mergeHeaders(headers);
-			if (this.userAgent != null) info$2.options.headers["user-agent"] = this.userAgent;
-			info$2.options.agent = this._getAgent(info$2.parsedUrl);
-			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$2.options);
-			return info$2;
+			info$3.options = {};
+			info$3.options.host = info$3.parsedUrl.hostname;
+			info$3.options.port = info$3.parsedUrl.port ? parseInt(info$3.parsedUrl.port) : defaultPort;
+			info$3.options.path = (info$3.parsedUrl.pathname || "") + (info$3.parsedUrl.search || "");
+			info$3.options.method = method;
+			info$3.options.headers = this._mergeHeaders(headers);
+			if (this.userAgent != null) info$3.options.headers["user-agent"] = this.userAgent;
+			info$3.options.agent = this._getAgent(info$3.parsedUrl);
+			if (this.handlers) for (const handler$1 of this.handlers) handler$1.prepareRequest(info$3.options);
+			return info$3;
 		}
 		_mergeHeaders(headers) {
 			if (this.requestOptions && this.requestOptions.headers) return Object.assign({}, lowercaseKeys$1(this.requestOptions.headers), lowercaseKeys$1(headers || {}));
@@ -16894,11 +16894,11 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* When the action exits it will be with an exit code of 1
 	* @param message add error issue message
 	*/
-	function setFailed$2(message) {
+	function setFailed$3(message) {
 		process.exitCode = ExitCode.Failure;
 		error(message);
 	}
-	exports.setFailed = setFailed$2;
+	exports.setFailed = setFailed$3;
 	/**
 	* Gets whether Actions Step Debug is on or not
 	*/
@@ -16945,10 +16945,10 @@ var require_core = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@actions+
 	* Writes info to log with console.log.
 	* @param message info message
 	*/
-	function info$1(message) {
+	function info$2(message) {
 		process.stdout.write(message + os.EOL);
 	}
-	exports.info = info$1;
+	exports.info = info$2;
 	/**
 	* Begin an output group.
 	*
@@ -17474,8 +17474,8 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 	function isKeyOperator(operator) {
 		return operator === ";" || operator === "&" || operator === "?";
 	}
-	function getValues(context$1, operator, key, modifier) {
-		var value = context$1[key], result = [];
+	function getValues(context$2, operator, key, modifier) {
+		var value = context$2[key], result = [];
 		if (isDefined(value) && value !== "") if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
 			value = value.toString();
 			if (modifier && modifier !== "*") value = value.substring(0, parseInt(modifier, 10));
@@ -17509,7 +17509,7 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 	function parseUrl(template) {
 		return { expand: expand.bind(null, template) };
 	}
-	function expand(template, context$1) {
+	function expand(template, context$2) {
 		var operators = [
 			"+",
 			"#",
@@ -17529,7 +17529,7 @@ var require_dist_node$8 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 				}
 				expression.split(/,/g).forEach(function(variable) {
 					var tmp = /([^:\*]*)(?::(\d+)|(\*))?/.exec(variable);
-					values.push(getValues(context$1, operator, tmp[1], tmp[2] || tmp[3]));
+					values.push(getValues(context$2, operator, tmp[1], tmp[2] || tmp[3]));
 				});
 				if (operator && operator !== "+") {
 					var separator = ",";
@@ -20003,8 +20003,8 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 }({});
 
 //#endregion
-//#region src/utils/set-label-for-pull-request.ts
-var import_core$1 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+//#region src/utils/github/set-label-for-pull-request.ts
+var import_core$2 = /* @__PURE__ */ __toESM$1(require_core(), 1);
 var import_github$1 = /* @__PURE__ */ __toESM$1(require_github(), 1);
 /**
 * Sets or updates version-related labels on a pull request.
@@ -20031,7 +20031,7 @@ function setLabelForPullRequest(octokit) {
 			const owner = import_github$1.context.repo.owner;
 			const repo = import_github$1.context.repo.repo;
 			if (!prNumber) {
-				(0, import_core$1.setFailed)("No pull request number found in context");
+				(0, import_core$2.setFailed)("No pull request number found in context");
 				return;
 			}
 			const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
@@ -20056,25 +20056,176 @@ function setLabelForPullRequest(octokit) {
 					issue_number: prNumber,
 					labels: [label]
 				});
-				(0, import_core$1.info)(`Added '${label}' label to PR #${prNumber}`);
-				if (!isPreRelease) (0, import_core$1.setFailed)(`PR #${prNumber} is missing a version label`);
+				(0, import_core$2.info)(`Added '${label}' label to PR #${prNumber}`);
+				if (!isPreRelease) (0, import_core$2.setFailed)(`PR #${prNumber} is missing a version label`);
 			} else {
-				(0, import_core$1.info)(`Version label already present in PR #${prNumber}`);
+				(0, import_core$2.info)(`Version label already present in PR #${prNumber}`);
 				if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
-					(0, import_core$1.info)(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
+					(0, import_core$2.info)(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
 					await octokit.rest.issues.removeLabel({
 						owner,
 						repo,
 						issue_number: prNumber,
 						name: ReleaseLabelName.VersionRequired
 					});
-					(0, import_core$1.info)(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
+					(0, import_core$2.info)(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
 				}
 			}
 		} catch (error$1) {
-			if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
-			else (0, import_core$1.setFailed)("Failed to set label for pull request: Unknown error");
+			if (error$1 instanceof Error) (0, import_core$2.setFailed)(`Failed to set label for pull request: ${error$1.message}`);
+			else (0, import_core$2.setFailed)("Failed to set label for pull request: Unknown error");
 		}
+	};
+}
+
+//#endregion
+//#region ../lib/dist/release-label-colors-DVKBoOEo.js
+let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors$1) {
+	/**
+	* Red
+	*/
+	ReleaseLabelColors$1["VersionRequired"] = "b60205";
+	/**
+	* Green
+	*/
+	ReleaseLabelColors$1["VersionPatch"] = "0e8a16";
+	/**
+	* Blue
+	*/
+	ReleaseLabelColors$1["VersionMinor"] = "0052cc";
+	/**
+	* Orange
+	*/
+	ReleaseLabelColors$1["VersionMajor"] = "d93f0b";
+	/**
+	* Light Gray
+	*/
+	ReleaseLabelColors$1["VersionSkip"] = "bfd4f2";
+	/**
+	* Purple
+	*/
+	ReleaseLabelColors$1["VersionBump"] = "A020F0";
+	/**
+	* Yellow
+	*/
+	ReleaseLabelColors$1["VersionPreRelease"] = "fbca04";
+	return ReleaseLabelColors$1;
+}({});
+
+//#endregion
+//#region ../lib/dist/release-label-description-BdwNfaWk.js
+let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription$1) {
+	ReleaseLabelDescription$1["VersionRequired"] = "This PR requires a version bump label";
+	ReleaseLabelDescription$1["VersionPatch"] = "Patch version release";
+	ReleaseLabelDescription$1["VersionMinor"] = "Minor version release";
+	ReleaseLabelDescription$1["VersionMajor"] = "Major version release";
+	ReleaseLabelDescription$1["VersionSkip"] = "Skip version release";
+	ReleaseLabelDescription$1["VersionBump"] = "Bump version: Used when a pr contains the new version to be merged into the release branch";
+	ReleaseLabelDescription$1["VersionPreRelease"] = "Pre-release version release";
+	return ReleaseLabelDescription$1;
+}({});
+
+//#endregion
+//#region ../lib/dist/types/models/release-label.js
+const ReleaseLabel = {
+	VersionRequired: {
+		name: ReleaseLabelName.VersionRequired,
+		description: ReleaseLabelDescription.VersionRequired,
+		color: ReleaseLabelColors.VersionRequired
+	},
+	VersionPatch: {
+		name: ReleaseLabelName.VersionPatch,
+		description: ReleaseLabelDescription.VersionPatch,
+		color: ReleaseLabelColors.VersionPatch
+	},
+	VersionMinor: {
+		name: ReleaseLabelName.VersionMinor,
+		description: ReleaseLabelDescription.VersionMinor,
+		color: ReleaseLabelColors.VersionMinor
+	},
+	VersionMajor: {
+		name: ReleaseLabelName.VersionMajor,
+		description: ReleaseLabelDescription.VersionMajor,
+		color: ReleaseLabelColors.VersionMajor
+	},
+	VersionSkip: {
+		name: ReleaseLabelName.VersionSkip,
+		description: ReleaseLabelDescription.VersionSkip,
+		color: ReleaseLabelColors.VersionSkip
+	},
+	VersionBump: {
+		name: ReleaseLabelName.VersionBump,
+		description: ReleaseLabelDescription.VersionBump,
+		color: ReleaseLabelColors.VersionBump
+	},
+	VersionPreRelease: {
+		name: ReleaseLabelName.VersionPreRelease,
+		describe: ReleaseLabelDescription.VersionPreRelease,
+		color: ReleaseLabelColors.VersionPreRelease
+	}
+};
+
+//#endregion
+//#region src/utils/github/create-label-if-not-exists.ts
+var import_core$1 = /* @__PURE__ */ __toESM$1(require_core(), 1);
+/**
+* Returns a function that ensures a GitHub label exists in the specified repository.
+* If the label does not exist, it will be created using the provided Octokit instance.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that takes the repository owner, repository name, and label details (name and color),
+*          and creates the label if it does not already exist.
+*
+* @example
+* const ensureLabel = createLabelIfNotExists(octokit);
+* await ensureLabel('owner', 'repo', { name: 'bug', color: 'f29513' });
+*/
+function createLabelIfNotExists(octokit) {
+	return async function createLabelIfNotExists$1(owner, repo, label) {
+		try {
+			const { data: labels } = await octokit.rest.issues.listLabelsForRepo({
+				owner,
+				repo
+			});
+			if (!labels.some((labelCheck) => labelCheck.name === label.name)) {
+				await octokit.rest.issues.createLabel({
+					owner,
+					repo,
+					name: label.name,
+					color: label.color
+				});
+				(0, import_core$1.info)(`Label created: ${label.name}`);
+			} else (0, import_core$1.info)(`Label already exists: ${label.name}`);
+		} catch (error$1) {
+			(0, import_core$1.error)(`Failed to create label: ${error$1}`);
+			if (error$1 instanceof Error) (0, import_core$1.setFailed)(`Failed to create label: ${error$1.message}`);
+			else (0, import_core$1.setFailed)("Failed to create label: Unknown error");
+		}
+	};
+}
+
+//#endregion
+//#region src/utils/create-release-labels.ts
+/**
+* Factory function that creates a function to ensure all release labels exist in a GitHub repository.
+*
+* @param octokit - An authenticated Octokit instance for interacting with the GitHub API.
+* @returns An async function that, when called with repository owner and name, creates all required release labels if they do not already exist.
+*
+* @example
+* const createLabels = createReleaseLabels(octokit);
+* await createLabels({ owner: 'my-org', repo: 'my-repo' });
+*/
+function createReleaseLabels(octokit) {
+	return async function createLabels({ owner, repo }) {
+		const labelCreation = Object.keys(ReleaseLabel).map(async (key) => {
+			const label = ReleaseLabel[key];
+			return createLabelIfNotExists(octokit)(owner, repo, {
+				name: label.name,
+				color: label.color
+			});
+		});
+		await Promise.all(labelCreation);
 	};
 }
 
@@ -20088,8 +20239,14 @@ async function run() {
 		(0, import_core.setFailed)("GITHUB_TOKEN is not set");
 		process.exit(1);
 	}
-	const isPreRelease = (0, import_core.getInput)("isPreRelease") === "true";
 	const octokit = (0, import_github.getOctokit)(GITHUB_TOKEN);
+	const owner = import_github.context.repo.owner;
+	const repo = import_github.context.repo.repo;
+	await createReleaseLabels(octokit)({
+		owner,
+		repo
+	});
+	const isPreRelease = (0, import_core.getInput)("isPreRelease") === "true";
 	await setLabelForPullRequest(octokit)(isPreRelease);
 }
 run();

@@ -39957,8 +39957,10 @@ async function run() {
 	const patchReleaseScript = (0, import_core.getInput)("patch-release-script");
 	const minorReleaseScript = (0, import_core.getInput)("minor-release-script");
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
+	const preReleaseScript = (0, import_core.getInput)("pre-release-script");
 	const releaseBranchName = (0, import_core.getInput)("release-branch-name") || "main";
 	const currentVersionScript = (0, import_core.getInput)("get-current-version-script");
+	(0, import_core.debug)("preReleaseScript: " + preReleaseScript);
 	(0, import_core.debug)("patchScript: " + patchReleaseScript);
 	(0, import_core.debug)("minorScript: " + minorReleaseScript);
 	(0, import_core.debug)("majorScript: " + majorReleaseScript);
@@ -40019,7 +40021,14 @@ async function run() {
 	(0, import_core.debug)(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await checkoutBranch(RELEASE_VERSION_BRANCH_NAME);
 	(0, import_core.debug)(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`);
-	if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
+	if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
+		if (!preReleaseScript) {
+			(0, import_core.setFailed)("Pre-release script is not provided");
+			return;
+		}
+		const response = await executeBuildScript(preReleaseScript);
+		(0, import_core.info)(`Pre-release script executed with response: ${response}`);
+	} else if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
 		const response = await executeBuildScript(patchReleaseScript);
 		(0, import_core.info)(`Patch release script executed with response: ${response}`);
 	} else if (labels.includes(ReleaseLabelName.VersionMinor) && minorReleaseScript) {
