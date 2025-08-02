@@ -1,5 +1,5 @@
-import { setFailed } from '@actions/core'
-import { Octokit } from '../../types/models/github/octokit.js'
+import { info, setFailed } from '@actions/core'
+import { exec } from 'node:child_process'
 
 export type GitPushParams = {
   owner: string
@@ -25,30 +25,17 @@ export type GitPushParams = {
  * The `commitMessage` parameter is used as the SHA for the updateRef call, which should be the commit SHA you want the branch to point to.
  * If an error occurs during the push, the function will call `setFailed` with an appropriate error message.
  */
-export function gitPush(octokit: Octokit) {
-  return async function pushGit({
-    owner,
-    repo,
-    branchName,
-    commitMessage = 'Update branch',
-  }: GitPushParams) {
-    try {
-      // Push the changes to the specified branch
-      const { data: pushData } = await octokit.rest.git.updateRef({
-        owner,
-        repo,
-        ref: `heads/${branchName}`,
-        sha: commitMessage, // This should be the SHA of the commit you want to push
-        force: true, // Use force if necessary
-      })
-
-      return pushData
-    } catch (error) {
-      if (error instanceof Error) {
-        setFailed(`Failed to push git changes: ${error.message}`)
-      } else {
-        setFailed('Failed to push git changes: Unknown error')
-      }
+export function gitPush(branchName: string) {
+return new Promise<void>((resolve, reject) => {
+  exec(`git push origin ${branchName}`, (error, stdout, stderr) => {
+    if (error) {
+      setFailed(`Failed to push changes: ${error.message}`)
+      reject(error)
+      return
     }
-  }
+
+    info(`Successfully pushed changes to branch: ${branchName}`)
+    resolve()
+  })
+})
 }

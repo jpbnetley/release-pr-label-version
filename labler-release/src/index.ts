@@ -17,6 +17,7 @@ import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest
 import { executeReleaseScript } from './utils/execute-release-script.js'
 import { gitStatus } from 'lib/utils/git/git-status.js'
 import { gitBranchName } from 'lib/utils/git/git-branch-name.js'
+import { gitPush } from 'lib/utils/git/push-git.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -149,7 +150,7 @@ async function run() {
 
   debug('Committing files to git.')
   await commitFilesToGit({
-    commitMessage: `Update release version to ${currentVersion}`
+    commitMessage: `Update release version to ${currentVersion}`,
   })
   debug('Files committed to git.')
 
@@ -162,6 +163,8 @@ async function run() {
     setFailed('Changes were not committed to git.')
     return
   }
+
+  await gitPush(RELEASE_VERSION_BRANCH_NAME)
 
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   await createPullRequest(octokit)({
