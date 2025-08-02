@@ -1,4 +1,4 @@
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from '../../types/models/github/octokit.js'
 
 export type AddLabelToPullRequestParams = {
   owner: string
