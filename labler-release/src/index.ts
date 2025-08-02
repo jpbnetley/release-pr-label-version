@@ -167,7 +167,7 @@ async function run() {
   await gitPush(RELEASE_VERSION_BRANCH_NAME)
 
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
-  await createPullRequest(octokit)({
+  const newVersionPr = await createPullRequest(octokit)({
     owner,
     repo,
     title: `Release PR for #${pullRequest.number}`,
@@ -179,15 +179,25 @@ async function run() {
   })
   debug(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
 
+  if (!newVersionPr) {
+    setFailed('Failed to create pull request for new version branch.')
+    return
+  }
+
   await addLabelToPullRequest(octokit)({
     owner,
     repo,
-    pullNumber: pullRequest.number,
+    pullNumber: newVersionPr.number,
     labels: [ReleaseLabelName.VersionBump],
   })
   info(
-    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${pullRequest.number}`
+    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`
   )
+
+  await summary
+      .addHeading('Release version pull request')
+      .addRaw(`New version pull request: ${newVersionPr.html_url}`)
+      .write()
 
   info('Release process completed successfully.')
 }

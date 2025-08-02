@@ -37,8 +37,7 @@ export function createPullRequest(octokit: Octokit) {
         title,
         head,
         base,
-        body,
-        labels: ['release-pr-label-version'],
+        body
       })
 
       return pullRequest
