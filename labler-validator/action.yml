@@ -1,6 +1,11 @@
 name: 'labeler-validator'
 description: 'Validates that the required labels are present on a pull request.'
 
+inputs:
+  isPreRelease:
+    description: 'Indicates if the release is a pre-release'
+    default: false
+  
 runs:
   using: 'node20'
   main: 'dist/index.js'
