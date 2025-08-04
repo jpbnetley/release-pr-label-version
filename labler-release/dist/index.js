@@ -40030,26 +40030,6 @@ async function executeReleaseScript({ labels, majorReleaseScript, minorReleaseSc
 }
 
 //#endregion
-//#region ../lib/dist/utils/git/git-status.js
-/**
-* Executes the `git status --porcelain` command and returns its output as a trimmed string.
-*
-* @returns A promise that resolves with the output of `git status --porcelain`.
-* @throws If the git command fails, the promise is rejected with an error message.
-*/
-function gitStatus() {
-	return new Promise((resolve, reject) => {
-		exec("git status --porcelain", { encoding: "utf-8" }, (error$1, stdout, stderr) => {
-			if (error$1) {
-				if (stderr) return reject(`Error getting git status: ${stderr}`);
-				return reject(`Error getting git status: ${error$1.message}`);
-			}
-			resolve(stdout.trim());
-		});
-	});
-}
-
-//#endregion
 //#region ../lib/dist/utils/git/git-branch-name.js
 /**
 * Retrieves the current Git branch name by executing the appropriate Git command.
@@ -40119,12 +40099,14 @@ async function run() {
 	const preReleaseScript = (0, import_core.getInput)("pre-release-script");
 	const releaseBranchName = (0, import_core.getInput)("release-branch-name") || "main";
 	const currentVersionScript = (0, import_core.getInput)("get-current-version-script");
+	const releaseScript = (0, import_core.getInput)("release-script");
 	(0, import_core.debug)("preReleaseScript: " + preReleaseScript);
 	(0, import_core.debug)("patchScript: " + patchReleaseScript);
 	(0, import_core.debug)("minorScript: " + minorReleaseScript);
 	(0, import_core.debug)("majorScript: " + majorReleaseScript);
 	(0, import_core.debug)("releaseBranchName: " + releaseBranchName);
 	(0, import_core.debug)("currentVersionScript: " + currentVersionScript);
+	(0, import_core.debug)("releaseScript: " + releaseScript);
 	const octokit = (0, import_github.getOctokit)(token);
 	const owner = import_github.context.repo.owner;
 	const repo = import_github.context.repo.repo;
@@ -40146,6 +40128,11 @@ async function run() {
 		if (!currentVersion$1) {
 			(0, import_core.setFailed)("Current version could not be determined");
 			return;
+		}
+		if (releaseScript) {
+			(0, import_core.debug)("Executing release script");
+			await executeBuildScript(releaseScript);
+			(0, import_core.info)(`Release script executed successfully.`);
 		}
 		await createGitHubRelease(octokit)({
 			owner,
@@ -40206,15 +40193,9 @@ async function run() {
 	(0, import_core.debug)("Committing files to git.");
 	await commitFilesToGit({ commitMessage: `Update release version to ${currentVersion}` });
 	(0, import_core.debug)("Files committed to git.");
-	const gitStatusText = await gitStatus();
-	(0, import_core.info)("git status: " + gitStatusText);
-	const hasChangesAfterCommit = await hasGitChanges();
-	(0, import_core.info)(`Has changes after commit: ${hasChangesAfterCommit}`);
-	if (hasChangesAfterCommit) {
-		(0, import_core.setFailed)("Changes were not committed to git.");
-		return;
-	}
+	(0, import_core.debug)("Pushing files to remote.");
 	await gitPush(RELEASE_VERSION_BRANCH_NAME);
+	(0, import_core.debug)("Pushed files to remote.");
 	(0, import_core.debug)(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 	const newVersionPr = await createPullRequest(octokit)({
 		owner,

@@ -83,6 +83,12 @@ permissions:
 #### Inputs
   ```yml
 inputs:
+  pre-release-script:
+      description: 'Script to run for pre-release'
+      required: false
+  release-script:
+      description: 'Script to run for release'
+      required: false
   patch-release-script:
     description: 'Script to run for patch release'
     required: true
@@ -93,11 +99,11 @@ inputs:
     description: 'Script to run for major release'
     required: true
   release-branch-name: 
-      description: The release branch name
-      required: false
+    description: The release branch name
+    required: false
   get-current-version-script:
-      description: 'Script to get the current version'
-      required: true
+    description: 'Script to get the current version'
+    required: true
 env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   ```

@@ -18,6 +18,8 @@ import { executeReleaseScript } from './utils/execute-release-script.js'
 import { gitStatus } from 'lib/utils/git/git-status.js'
 import { gitBranchName } from 'lib/utils/git/git-branch-name.js'
 import { gitPush } from 'lib/utils/git/push-git.js'
+import { get } from 'node:http'
+import { executeBuildScript } from './utils/execute-build-script.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -32,6 +34,7 @@ async function run() {
   const preReleaseScript = getInput('pre-release-script')
   const releaseBranchName = getInput('release-branch-name') || 'main'
   const currentVersionScript = getInput('get-current-version-script')
+  const releaseScript = getInput('release-script')
 
   debug('preReleaseScript: ' + preReleaseScript)
   debug('patchScript: ' + patchReleaseScript)
@@ -39,6 +42,7 @@ async function run() {
   debug('majorScript: ' + majorReleaseScript)
   debug('releaseBranchName: ' + releaseBranchName)
   debug('currentVersionScript: ' + currentVersionScript)
+  debug('releaseScript: ' + releaseScript)
 
   const octokit = getOctokit(token)
   const owner = context.repo.owner
@@ -49,6 +53,7 @@ async function run() {
     repo,
     releaseBranchName
   )
+
   if (!pullRequest) {
     setFailed('No merged pull request found')
     return
@@ -75,6 +80,12 @@ async function run() {
     if (!currentVersion) {
       setFailed('Current version could not be determined')
       return
+    }
+
+    if (releaseScript) {
+      debug('Executing release script')
+      await executeBuildScript(releaseScript)
+      info(`Release script executed successfully.`)
     }
 
     await createGitHubRelease(octokit)({
@@ -156,17 +167,9 @@ async function run() {
   })
   debug('Files committed to git.')
 
-  const gitStatusText = await gitStatus()
-  info('git status: ' + gitStatusText)
-
-  const hasChangesAfterCommit = await hasGitChanges()
-  info(`Has changes after commit: ${hasChangesAfterCommit}`)
-  if (hasChangesAfterCommit) {
-    setFailed('Changes were not committed to git.')
-    return
-  }
-
+  debug('Pushing files to remote.')
   await gitPush(RELEASE_VERSION_BRANCH_NAME)
+  debug('Pushed files to remote.')
 
   debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
   const newVersionPr = await createPullRequest(octokit)({

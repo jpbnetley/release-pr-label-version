@@ -5,6 +5,9 @@ inputs:
   pre-release-script:
       description: 'Script to run for pre-release'
       required: false
+  release-script:
+      description: 'Script to run for release'
+      required: false
   patch-release-script:
     description: 'Script to run for patch release'
     required: true

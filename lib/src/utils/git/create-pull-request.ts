@@ -37,7 +37,7 @@ export function createPullRequest(octokit: Octokit) {
         title,
         head,
         base,
-        body
+        body,
       })
 
       return pullRequest
