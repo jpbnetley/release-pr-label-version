@@ -1,2 +1,2 @@
-import { ReleaseLabelDescription } from "../../release-label-description-B3418Kgo.js";
+import { ReleaseLabelDescription } from "../../release-label-description-7oOsOrzD.js";
 export { ReleaseLabelDescription };
