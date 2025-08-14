@@ -20033,6 +20033,7 @@ var require_github$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/@ac
 
 //#endregion
 //#region src/utils/get-last-merged-pull-request.ts
+var import_github = /* @__PURE__ */ __toESM$2(require_github$1(), 1);
 /**
 * Returns a function that retrieves the number of the most recently merged pull request
 * for a given GitHub repository using the provided Octokit instance.
@@ -40086,7 +40087,6 @@ function gitPush(branchName) {
 //#endregion
 //#region src/index.ts
 var import_core = /* @__PURE__ */ __toESM$2(require_core$1(), 1);
-var import_github = /* @__PURE__ */ __toESM$2(require_github$1(), 1);
 async function run() {
 	const token = process.env.GITHUB_TOKEN;
 	if (!token) {
@@ -40223,3 +40223,4 @@ async function run() {
 run().catch((error$1) => (0, import_core.setFailed)(`Action failed with error: ${error$1?.message ?? error$1}`));
 
 //#endregion
+export {  };

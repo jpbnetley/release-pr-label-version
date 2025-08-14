@@ -19991,6 +19991,8 @@ var require_github = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@action
 
 //#endregion
 //#region ../lib/dist/release-label-name-BCtlmcDc.js
+var import_github$1 = /* @__PURE__ */ __toESM$1(require_github(), 1);
+var import_core$2 = /* @__PURE__ */ __toESM$1(require_core(), 1);
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 	ReleaseLabelName$1["VersionRequired"] = "release:version-required";
 	ReleaseLabelName$1["VersionPatch"] = "release:version-patch";
@@ -20004,8 +20006,6 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 
 //#endregion
 //#region src/utils/github/set-label-for-pull-request.ts
-var import_core$2 = /* @__PURE__ */ __toESM$1(require_core(), 1);
-var import_github$1 = /* @__PURE__ */ __toESM$1(require_github(), 1);
 /**
 * Sets or updates version-related labels on a pull request.
 *
@@ -20045,7 +20045,8 @@ function setLabelForPullRequest(octokit) {
 				ReleaseLabelName.VersionMinor,
 				ReleaseLabelName.VersionMajor,
 				ReleaseLabelName.VersionSkip,
-				ReleaseLabelName.VersionPreRelease
+				ReleaseLabelName.VersionPreRelease,
+				ReleaseLabelName.VersionBump
 			];
 			const hasVersionLabel = versionLabels.some((label) => labelNames.includes(label));
 			if (!hasVersionLabel) {
@@ -20252,3 +20253,4 @@ async function run() {
 run();
 
 //#endregion
+export {  };

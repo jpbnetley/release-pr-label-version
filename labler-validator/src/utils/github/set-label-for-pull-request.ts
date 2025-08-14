@@ -47,6 +47,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
         ReleaseLabelName.VersionMajor,
         ReleaseLabelName.VersionSkip,
         ReleaseLabelName.VersionPreRelease,
+        ReleaseLabelName.VersionBump,
       ]
 
       const hasVersionLabel = versionLabels.some((label) =>
