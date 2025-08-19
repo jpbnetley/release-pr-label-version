@@ -21,7 +21,7 @@ async function run() {
 
   const isPreRelease = getInput('isPreRelease') === 'true'
 
-  await setLabelForPullRequest(octokit)(isPreRelease)
+  await setLabelForPullRequest(octokit)({ isPreRelease })
 }
 
 run()
