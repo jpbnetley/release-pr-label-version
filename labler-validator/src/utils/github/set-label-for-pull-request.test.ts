@@ -16,7 +16,7 @@ vi.mock('@actions/github', () => ({
   },
 }))
 
-function getOctokitMock(labels: string[] = []) {
+function getOctokitMock(labels: string[] = []): any {
   return {
     rest: {
       issues: {
@@ -42,7 +42,7 @@ describe('setLabelForPullRequest', () => {
   it('calls setFailed if no pull request number is found', async () => {
     context.payload.pull_request = undefined
     const octokit = getOctokitMock()
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(setFailed).toHaveBeenCalledWith(
       'No pull request number found in context'
     )
@@ -50,7 +50,7 @@ describe('setLabelForPullRequest', () => {
 
   it('adds version-required label and fails if no version label is present', async () => {
     const octokit = getOctokitMock(['other-label'])
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(octokit.rest.issues.addLabels).toHaveBeenCalledWith({
       owner: 'test-owner',
       repo: 'test-repo',
@@ -68,7 +68,7 @@ describe('setLabelForPullRequest', () => {
       ReleaseLabelName.VersionPatch,
       ReleaseLabelName.VersionRequired,
     ])
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(info).toHaveBeenCalledWith(
       'Version label already present in PR #123'
     )
@@ -89,7 +89,7 @@ describe('setLabelForPullRequest', () => {
 
   it('does nothing if a version label is present and version-required is not present', async () => {
     const octokit = getOctokitMock([ReleaseLabelName.VersionMinor])
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(info).toHaveBeenCalledWith(
       'Version label already present in PR #123'
     )
@@ -102,7 +102,7 @@ describe('setLabelForPullRequest', () => {
     octokit.rest.issues.listLabelsOnIssue = vi
       .fn()
       .mockRejectedValue(new Error('API error'))
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(setFailed).toHaveBeenCalledWith(
       'Failed to set label for pull request: API error'
     )
@@ -113,7 +113,7 @@ describe('setLabelForPullRequest', () => {
     octokit.rest.issues.listLabelsOnIssue = vi
       .fn()
       .mockRejectedValue('some string error')
-    await setLabelForPullRequest(octokit as any)
+    await setLabelForPullRequest(octokit)()
     expect(setFailed).toHaveBeenCalledWith(
       'Failed to set label for pull request: Unknown error'
     )

@@ -3,6 +3,10 @@ import { context } from '@actions/github'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
 import { Octokit } from 'lib/types/models/github/octokit.js'
 
+export type PrLabelConfig = {
+  isPreRelease?: boolean
+}
+
 /**
  * Sets or updates version-related labels on a pull request.
  *
@@ -22,8 +26,9 @@ import { Octokit } from 'lib/types/models/github/octokit.js'
  * @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
  */
 export function setLabelForPullRequest(octokit: Octokit) {
-  return async function setLabel(isPreRelease: boolean) {
+  return async function setLabel(config?: PrLabelConfig) {
     try {
+      const isPreRelease = config?.isPreRelease ?? false
       const prNumber = context.payload.pull_request?.number
       const owner = context.repo.owner
       const repo = context.repo.repo
