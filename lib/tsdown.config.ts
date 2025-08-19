@@ -4,5 +4,5 @@ export default defineConfig({
   entry: ['src/**/*.ts'],
   dts: true,
   outDir: 'dist',
-  sourcemap: 'inline'
+  sourcemap: 'hidden'
 })

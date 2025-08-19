@@ -15,10 +15,8 @@ import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
 import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
 import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
 import { executeReleaseScript } from './utils/execute-release-script.js'
-import { gitStatus } from 'lib/utils/git/git-status.js'
 import { gitBranchName } from 'lib/utils/git/git-branch-name.js'
 import { gitPush } from 'lib/utils/git/push-git.js'
-import { get } from 'node:http'
 import { executeBuildScript } from './utils/execute-build-script.js'
 
 async function run() {
