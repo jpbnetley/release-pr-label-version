@@ -20024,8 +20024,9 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName$1) {
 * @throws Will call `setFailed` if the pull request number is missing or if an error occurs during label operations.
 */
 function setLabelForPullRequest(octokit) {
-	return async function setLabel(isPreRelease) {
+	return async function setLabel(config) {
 		try {
+			const isPreRelease = config?.isPreRelease ?? false;
 			const prNumber = import_github$1.context.payload.pull_request?.number;
 			const owner = import_github$1.context.repo.owner;
 			const repo = import_github$1.context.repo.repo;
@@ -20247,7 +20248,7 @@ async function run() {
 		repo
 	});
 	const isPreRelease = (0, import_core.getInput)("isPreRelease") === "true";
-	await setLabelForPullRequest(octokit)(isPreRelease);
+	await setLabelForPullRequest(octokit)({ isPreRelease });
 }
 run();
 
