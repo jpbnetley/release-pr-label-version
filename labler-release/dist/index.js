@@ -11241,7 +11241,6 @@ var require_fetch$1 = /* @__PURE__ */ __commonJS$1({ "../node_modules/.pnpm/undi
 		let httpRequest = null;
 		let response = null;
 		const httpCache = null;
-		const revalidatingFlag = false;
 		if (request$2.window === "no-window" && request$2.redirect === "error") {
 			httpFetchParams = fetchParams;
 			httpRequest = request$2;
@@ -20087,7 +20086,7 @@ function getCurrentReleaseVersion(script) {
 }
 
 //#endregion
-//#region ../lib/dist/core-Bd4l5kNc.js
+//#region ../lib/dist/core-CQ1wL5Ef.js
 var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -37511,7 +37510,7 @@ var require_dist_node$6 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 		}
 		return to;
 	};
-	var __toESM$1$1 = (mod, isNodeMode, target) => (target = mod != null ? __create$3(__getProtoOf$3(mod)) : {}, __copyProps$6$1(isNodeMode || !mod || !mod.__esModule ? __defProp$6$1(target, "default", {
+	var __toESM$3 = (mod, isNodeMode, target) => (target = mod != null ? __create$3(__getProtoOf$3(mod)) : {}, __copyProps$6$1(isNodeMode || !mod || !mod.__esModule ? __defProp$6$1(target, "default", {
 		value: mod,
 		enumerable: true
 	}) : target, mod));
@@ -37520,7 +37519,7 @@ var require_dist_node$6 = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/@o
 	__export$6$1(dist_src_exports$4$1, { RequestError: () => RequestError$1 });
 	module$1.exports = __toCommonJS$6$1(dist_src_exports$4$1);
 	var import_deprecation$1 = require_dist_node$7();
-	var import_once$1 = __toESM$1$1(require_once());
+	var import_once$1 = __toESM$3(require_once());
 	var logOnceCode$1 = (0, import_once$1.default)((deprecation) => console.warn(deprecation));
 	var logOnceHeaders$1 = (0, import_once$1.default)((deprecation) => console.warn(deprecation));
 	var RequestError$1 = class extends Error {

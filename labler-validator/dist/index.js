@@ -11240,7 +11240,6 @@ var require_fetch = /* @__PURE__ */ __commonJS({ "../node_modules/.pnpm/undici@5
 		let httpRequest = null;
 		let response = null;
 		const httpCache = null;
-		const revalidatingFlag = false;
 		if (request$2.window === "no-window" && request$2.redirect === "error") {
 			httpFetchParams = fetchParams;
 			httpRequest = request$2;
