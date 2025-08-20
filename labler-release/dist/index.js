@@ -40151,10 +40151,10 @@ async function run() {
 		(0, import_core.debug)("Creating summary");
 		await import_core.summary.addHeading("Release version").addRaw(`Created for: ${currentVersion$1}`).write();
 		(0, import_core.debug)("Created summary");
-		const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
 		if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
+			const branchNameReleaseToPreRelease = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
 			await createNewGitBranch(octokit)({
-				branchName: releaseBranchName,
+				branchName: branchNameReleaseToPreRelease,
 				owner,
 				repo,
 				baseBranch: preReleaseBranchName
@@ -40162,8 +40162,8 @@ async function run() {
 			await createPullRequest(octokit)({
 				owner,
 				repo,
-				title: `Merge changes from ${RELEASE_VERSION_BRANCH_NAME} to ${preReleaseBranchName}`,
-				head: branchName,
+				title: `Merge changes from ${releaseBranchName} to ${preReleaseBranchName}`,
+				head: branchNameReleaseToPreRelease,
 				base: preReleaseBranchName
 			});
 		}
