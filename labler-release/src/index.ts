@@ -118,7 +118,7 @@ async function run() {
       preReleaseBranchName
     ) {
       await createNewGitBranch(octokit)({
-        branchName,
+        branchName: releaseBranchName,
         owner,
         repo,
         baseBranch: preReleaseBranchName,

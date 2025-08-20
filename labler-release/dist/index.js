@@ -40154,7 +40154,7 @@ async function run() {
 		const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
 		if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
 			await createNewGitBranch(octokit)({
-				branchName,
+				branchName: releaseBranchName,
 				owner,
 				repo,
 				baseBranch: preReleaseBranchName
