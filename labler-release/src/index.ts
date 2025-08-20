@@ -31,6 +31,7 @@ async function run() {
   const majorReleaseScript = getInput('major-release-script')
   const preReleaseScript = getInput('pre-release-script')
   const releaseBranchName = getInput('release-branch-name') || 'main'
+  const preReleaseBranchName = getInput('pre-release-branch-name')
   const currentVersionScript = getInput('get-current-version-script')
   const releaseScript = getInput('release-script')
 
@@ -72,6 +73,13 @@ async function run() {
 
   const isPreRelease = labels.includes(ReleaseLabelName.VersionPreRelease)
 
+  if (isPreRelease && !preReleaseBranchName) {
+    setFailed('Pre-release branch name is required for pre-release versions')
+    return
+  }
+
+  const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`
+
   if (labels.includes(ReleaseLabelName.VersionBump)) {
     const currentVersion = await getCurrentReleaseVersion(currentVersionScript)
     debug(`Current version: ${currentVersion}`)
@@ -103,6 +111,22 @@ async function run() {
       .write()
 
     debug('Created summary')
+    const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`
+
+    await createNewGitBranch(octokit)({
+      branchName,
+      owner,
+      repo,
+      baseBranch: preReleaseBranchName,
+    })
+
+    await createPullRequest(octokit)({
+      owner,
+      repo,
+      title: `Merge changes from ${RELEASE_VERSION_BRANCH_NAME} to ${preReleaseBranchName}`,
+      head: branchName,
+      base: preReleaseBranchName,
+    })
 
     return
   }
@@ -117,7 +141,6 @@ async function run() {
     return
   }
 
-  const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`
   debug(`Release version branch name: ${RELEASE_VERSION_BRANCH_NAME}`)
   await createNewGitBranch(octokit)({
     owner,
