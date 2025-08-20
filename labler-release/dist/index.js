@@ -40097,6 +40097,7 @@ async function run() {
 	const majorReleaseScript = (0, import_core.getInput)("major-release-script");
 	const preReleaseScript = (0, import_core.getInput)("pre-release-script");
 	const releaseBranchName = (0, import_core.getInput)("release-branch-name") || "main";
+	const preReleaseBranchName = (0, import_core.getInput)("pre-release-branch-name");
 	const currentVersionScript = (0, import_core.getInput)("get-current-version-script");
 	const releaseScript = (0, import_core.getInput)("release-script");
 	(0, import_core.debug)("preReleaseScript: " + preReleaseScript);
@@ -40121,6 +40122,11 @@ async function run() {
 		return;
 	}
 	const isPreRelease = labels.includes(ReleaseLabelName.VersionPreRelease);
+	if (isPreRelease && !preReleaseBranchName) {
+		(0, import_core.setFailed)("Pre-release branch name is required for pre-release versions");
+		return;
+	}
+	const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`;
 	if (labels.includes(ReleaseLabelName.VersionBump)) {
 		const currentVersion$1 = await getCurrentReleaseVersion(currentVersionScript);
 		(0, import_core.debug)(`Current version: ${currentVersion$1}`);
@@ -40145,6 +40151,20 @@ async function run() {
 		(0, import_core.debug)("Creating summary");
 		await import_core.summary.addHeading("Release version").addRaw(`Created for: ${currentVersion$1}`).write();
 		(0, import_core.debug)("Created summary");
+		const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
+		await createNewGitBranch(octokit)({
+			branchName,
+			owner,
+			repo,
+			baseBranch: preReleaseBranchName
+		});
+		await createPullRequest(octokit)({
+			owner,
+			repo,
+			title: `Merge changes from ${RELEASE_VERSION_BRANCH_NAME} to ${preReleaseBranchName}`,
+			head: branchName,
+			base: preReleaseBranchName
+		});
 		return;
 	}
 	if (labels.includes(ReleaseLabelName.VersionSkip)) {
@@ -40155,7 +40175,6 @@ async function run() {
 		(0, import_core.setFailed)("Version required is invalid label for a release.");
 		return;
 	}
-	const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`;
 	(0, import_core.debug)(`Release version branch name: ${RELEASE_VERSION_BRANCH_NAME}`);
 	await createNewGitBranch(octokit)({
 		owner,
