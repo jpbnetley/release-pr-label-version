@@ -40152,7 +40152,7 @@ async function run() {
 		await import_core.summary.addHeading("Release version").addRaw(`Created for: ${currentVersion$1}`).write();
 		(0, import_core.debug)("Created summary");
 		const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
-		if (!labels.includes(ReleaseLabelName.VersionPreRelease)) {
+		if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
 			await createNewGitBranch(octokit)({
 				branchName,
 				owner,

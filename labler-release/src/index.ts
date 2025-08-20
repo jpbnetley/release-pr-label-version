@@ -113,7 +113,10 @@ async function run() {
     debug('Created summary')
     const branchName = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`
 
-    if (!labels.includes(ReleaseLabelName.VersionPreRelease)) {
+    if (
+      !labels.includes(ReleaseLabelName.VersionPreRelease) &&
+      preReleaseBranchName
+    ) {
       await createNewGitBranch(octokit)({
         branchName,
         owner,
