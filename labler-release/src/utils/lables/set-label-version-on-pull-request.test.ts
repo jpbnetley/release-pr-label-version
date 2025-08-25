@@ -38,7 +38,7 @@ describe('setLabelVersionOnPullRequest', () => {
   it('should call addLabels with correct parameters', async () => {
     const label = ReleaseLabel[versionType]
     const fn = setLabelVersionOnPullRequest(octokit)
-    await fn(owner, repo, pullNumber, versionType)
+    await fn({ owner, repo, pullNumber, versionType })
     expect(octokit.rest.issues.addLabels).toHaveBeenCalledWith({
       owner,
       repo,
@@ -51,7 +51,7 @@ describe('setLabelVersionOnPullRequest', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {})
     const label = ReleaseLabel[versionType]
     const fn = setLabelVersionOnPullRequest(octokit)
-    await fn(owner, repo, pullNumber, versionType)
+    await fn({ owner, repo, pullNumber, versionType })
     expect(consoleSpy).toHaveBeenCalledWith(
       `Label ${label.name} added to pull request #${pullNumber}`
     )
@@ -62,7 +62,7 @@ describe('setLabelVersionOnPullRequest', () => {
     const error = new Error('API error')
     octokit.rest.issues.addLabels.mockRejectedValueOnce(error)
     const fn = setLabelVersionOnPullRequest(octokit)
-    await fn(owner, repo, pullNumber, versionType)
+    await fn({ owner, repo, pullNumber, versionType })
     expect(setFailed).toHaveBeenCalledWith(
       `Failed to set label on pull request: ${error.message}`
     )
@@ -71,7 +71,7 @@ describe('setLabelVersionOnPullRequest', () => {
   it('should call setFailed with unknown error if addLabels throws non-Error', async () => {
     octokit.rest.issues.addLabels.mockRejectedValueOnce('some error')
     const fn = setLabelVersionOnPullRequest(octokit)
-    await fn(owner, repo, pullNumber, versionType)
+    await fn({ owner, repo, pullNumber, versionType })
     expect(setFailed).toHaveBeenCalledWith(
       'Failed to set label on pull request: Unknown error'
     )

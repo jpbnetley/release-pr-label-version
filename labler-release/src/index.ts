@@ -1,9 +1,23 @@
-import { getInput, setFailed, debug, info } from '@actions/core'
+import { getInput, setFailed, debug, info, summary } from '@actions/core'
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
-import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
 import { context, getOctokit } from '@actions/github'
 import { getLastMergedPullRequest } from './utils/get-last-merged-pull-request.js'
+import { RELEASE_BRANCH_NAME } from './constants/release-branch-name.js'
+import { getCurrentReleaseVersion } from './utils/version/get-current-release-version.js'
+import { createPullRequest } from 'lib/utils/git/create-pull-request.js'
+import { createGitHubRelease } from 'lib/utils/github/create-github-release.js'
+import { createNewGitBranch } from 'lib/utils/git/create-new-git-branch.js'
+import { checkoutBranch } from 'lib/utils/git/checkout-branch-git.js'
+import { addFilesToGit } from 'lib/utils/git/add-files-to-git.js'
+import { commitFilesToGit } from 'lib/utils/git/commit-files-to-git.js'
+import { hasGitChanges } from 'lib/utils/git/has-changes-git.js'
+import { setGitIdentity } from 'lib/utils/git/set-git-identity.js'
+import { addLabelToPullRequest } from 'lib/utils/github/add-label-to-pullrequest.js'
+import { executeReleaseScript } from './utils/execute-release-script.js'
+import { gitBranchName } from 'lib/utils/git/git-branch-name.js'
+import { gitPush } from 'lib/utils/git/push-git.js'
+import { executeBuildScript } from './utils/execute-build-script.js'
 
 async function run() {
   const token = process.env.GITHUB_TOKEN
@@ -15,21 +29,30 @@ async function run() {
   const patchReleaseScript = getInput('patch-release-script')
   const minorReleaseScript = getInput('minor-release-script')
   const majorReleaseScript = getInput('major-release-script')
+  const preReleaseScript = getInput('pre-release-script')
   const releaseBranchName = getInput('release-branch-name') || 'main'
+  const preReleaseBranchName = getInput('pre-release-branch-name')
+  const currentVersionScript = getInput('get-current-version-script')
+  const releaseScript = getInput('release-script')
 
+  debug('preReleaseScript: ' + preReleaseScript)
   debug('patchScript: ' + patchReleaseScript)
   debug('minorScript: ' + minorReleaseScript)
   debug('majorScript: ' + majorReleaseScript)
   debug('releaseBranchName: ' + releaseBranchName)
+  debug('currentVersionScript: ' + currentVersionScript)
+  debug('releaseScript: ' + releaseScript)
 
   const octokit = getOctokit(token)
   const owner = context.repo.owner
   const repo = context.repo.repo
+
   const pullRequest = await getLastMergedPullRequest(octokit)(
     owner,
     repo,
     releaseBranchName
   )
+
   if (!pullRequest) {
     setFailed('No merged pull request found')
     return
@@ -48,6 +71,72 @@ async function run() {
     return
   }
 
+  const isPreRelease = labels.includes(ReleaseLabelName.VersionPreRelease)
+
+  if (isPreRelease && !preReleaseBranchName) {
+    setFailed('Pre-release branch name is required for pre-release versions')
+    return
+  }
+
+  const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`
+
+  if (labels.includes(ReleaseLabelName.VersionBump)) {
+    const currentVersion = await getCurrentReleaseVersion(currentVersionScript)
+    debug(`Current version: ${currentVersion}`)
+    if (!currentVersion) {
+      setFailed('Current version could not be determined')
+      return
+    }
+
+    if (releaseScript) {
+      debug('Executing release script')
+      await executeBuildScript(releaseScript)
+      info(`Release script executed successfully.`)
+    }
+
+    await createGitHubRelease(octokit)({
+      owner,
+      repo,
+      tagName: `${currentVersion}`,
+      releaseName: `Release for version: ${currentVersion}`,
+      body: `Release ${currentVersion}`,
+      isPreRelease: isPreRelease,
+    })
+    info('Release created successfully.')
+
+    debug('Creating summary')
+    await summary
+      .addHeading('Release version')
+      .addRaw(`Created for: ${currentVersion}`)
+      .write()
+
+    debug('Created summary')
+
+    if (
+      !labels.includes(ReleaseLabelName.VersionPreRelease) &&
+      preReleaseBranchName
+    ) {
+      const branchNameReleaseToPreRelease = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`
+
+      await createNewGitBranch(octokit)({
+        branchName: branchNameReleaseToPreRelease,
+        owner,
+        repo,
+        baseBranch: preReleaseBranchName,
+      })
+
+      await createPullRequest(octokit)({
+        owner,
+        repo,
+        title: `Merge changes from ${releaseBranchName} to ${preReleaseBranchName}`,
+        head: branchNameReleaseToPreRelease,
+        base: preReleaseBranchName,
+      })
+    }
+
+    return
+  }
+
   if (labels.includes(ReleaseLabelName.VersionSkip)) {
     info('Version skip was added, skipping action.')
     return
@@ -55,16 +144,95 @@ async function run() {
 
   if (labels.includes(ReleaseLabelName.VersionRequired)) {
     setFailed('Version required is invalid label for a release.')
-  } else if (labels.includes(ReleaseLabelName.VersionPatch)) {
-    const response = await executeBuildScript(patchReleaseScript)
-    info(`Patch release script executed with response: ${response}`)
-  } else if (labels.includes(ReleaseLabelName.VersionMinor)) {
-    const response = await executeBuildScript(minorReleaseScript)
-    info(`Minor release script executed with response: ${response}`)
-  } else if (labels.includes(ReleaseLabelName.VersionMajor)) {
-    const response = await executeBuildScript(majorReleaseScript)
-    info(`Major release script executed with response: ${response}`)
+    return
   }
+
+  debug(`Release version branch name: ${RELEASE_VERSION_BRANCH_NAME}`)
+  await createNewGitBranch(octokit)({
+    owner,
+    repo,
+    branchName: RELEASE_VERSION_BRANCH_NAME,
+    baseBranch: pullRequest.base.ref,
+  })
+
+  debug(`Created new branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+  debug(`Checking out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+  await checkoutBranch(RELEASE_VERSION_BRANCH_NAME)
+  debug(`Checked out to branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+
+  const currentBranchName = await gitBranchName()
+  info(`Now on branch: ${currentBranchName}`)
+
+  await executeReleaseScript({
+    labels,
+    majorReleaseScript,
+    minorReleaseScript,
+    patchReleaseScript,
+    preReleaseScript,
+  })
+
+  const hasChanges = await hasGitChanges()
+  debug(`Has changes after script execution: ${hasChanges}`)
+  if (!hasChanges) {
+    setFailed('No changes found to commit to git.')
+    return
+  }
+
+  debug('Set git identity')
+  await setGitIdentity()
+
+  debug('Adding files to git staging area.')
+  await addFilesToGit()
+  debug('Files added to git staging area.')
+
+  const currentVersion = await getCurrentReleaseVersion(currentVersionScript)
+  debug(`Current version for commit: ${currentVersion}`)
+
+  debug('Committing files to git.')
+  await commitFilesToGit({
+    commitMessage: `Update release version to ${currentVersion}`,
+  })
+  debug('Files committed to git.')
+
+  debug('Pushing files to remote.')
+  await gitPush(RELEASE_VERSION_BRANCH_NAME)
+  debug('Pushed files to remote.')
+
+  debug(`Creating pull request for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+  const newVersionPr = await createPullRequest(octokit)({
+    owner,
+    repo,
+    title: `Release PR for #${pullRequest.number}`,
+    head: RELEASE_VERSION_BRANCH_NAME,
+    base: pullRequest.base.ref,
+    body: `This PR was automatically created by the labler-release action for pull request #${
+      pullRequest.number
+    }.\n\nLabels: ${labels.join(', ')}`,
+  })
+  debug(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`)
+
+  if (!newVersionPr) {
+    setFailed('Failed to create pull request for new version branch.')
+    return
+  }
+
+  await addLabelToPullRequest(octokit)({
+    owner,
+    repo,
+    pullNumber: newVersionPr.number,
+    labels: [
+      ReleaseLabelName.VersionBump,
+      isPreRelease && ReleaseLabelName.VersionPreRelease,
+    ].filter(Boolean) as string[],
+  })
+  info(
+    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`
+  )
+
+  await summary
+    .addHeading('Release version pull request')
+    .addRaw(`New version pull request: ${newVersionPr.html_url}`)
+    .write()
 
   info('Release process completed successfully.')
 }

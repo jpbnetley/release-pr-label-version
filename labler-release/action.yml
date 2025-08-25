@@ -1,20 +1,32 @@
-name: 'labler-release'
-description: 'Handles semantic versioning based on labels applied to pull requests.'
+name: labler-release
+description: Handles semantic versioning based on labels applied to pull requests.
 
 inputs:
+  pre-release-script:
+      description: Script to run for pre-release
+      required: false
+  release-script:
+      description: Script to run for release
+      required: false
   patch-release-script:
-    description: 'Script to run for patch release'
+    description: Script to run for patch release
     required: true
   minor-release-script:
-    description: 'Script to run for minor release'
+    description: Script to run for minor release
     required: true
   major-release-script:
-    description: 'Script to run for major release'
+    description: Script to run for major release
     required: true
   release-branch-name: 
     description: The release branch name
     required: false
+  pre-release-branch-name:
+    description: The pre-release branch name
+    required: false
+  get-current-version-script:
+    description: Script to get the current version
+    required: true
 
 runs:
-  using: 'node20'
-  main: 'dist/index.js'
+  using: node24
+  main: dist/index.js

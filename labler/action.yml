@@ -1,6 +1,0 @@
-name: 'labeler'
-description: 'Adds missing labels, and validates that the labels are added.'
-
-runs:
-  using: 'node20'
-  main: 'dist/index.js'
