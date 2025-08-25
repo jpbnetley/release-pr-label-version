@@ -15,7 +15,7 @@ importers:
         specifier: ^6.0.1
         version: 6.0.1
       '@types/node':
-        specifier: ^24.03.0
+        specifier: ^24.3.0
         version: 24.3.0
       tsdown:
         specifier: ^0.14.2
