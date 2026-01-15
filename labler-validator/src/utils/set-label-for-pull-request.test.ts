@@ -1,6 +1,6 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { setLabelForPullRequest } from './set-label-for-pull-request.js'
-import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
+import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs'
 import { setFailed, info } from '@actions/core'
 import { context } from '@actions/github'
 

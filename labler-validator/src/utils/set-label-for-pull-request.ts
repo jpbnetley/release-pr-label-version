@@ -1,7 +1,7 @@
 import { setFailed, info } from '@actions/core'
 import { context } from '@actions/github'
-import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
-import { Octokit } from "lib/types/models/github/octokit.js"
+import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs'
+import { Octokit } from "lib/types/models/github/octokit.mjs"
 
 /**
  * Sets or updates version-related labels on a pull request.
