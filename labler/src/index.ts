@@ -2,7 +2,7 @@
 import { getOctokit, context } from '@actions/github'
 import { setFailed } from '@actions/core'
 import { createLabelIfNotExists } from './utils/create-label-if-not-exists.js'
-import { ReleaseLabel } from 'lib/types/models/release-label.js'
+import { ReleaseLabel } from 'lib/types/models/release-label.mjs'
 
 const token = process.env.GITHUB_TOKEN
 if (!token) {
