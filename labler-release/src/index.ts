@@ -1,5 +1,5 @@
 import { getInput, setFailed, debug, info } from '@actions/core'
-import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
+import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs'
 import { executeBuildScript } from './utils/execute-build-script.js'
 import { getMergedPullRequestLabels } from './utils/get-merged-pull-request-labels.js'
 import { context, getOctokit } from '@actions/github'

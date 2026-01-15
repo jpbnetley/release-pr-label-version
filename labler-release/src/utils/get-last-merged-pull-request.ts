@@ -1,4 +1,4 @@
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from 'lib/types/models/github/octokit.mjs'
 
 /**
  * Returns a function that retrieves the number of the most recently merged pull request

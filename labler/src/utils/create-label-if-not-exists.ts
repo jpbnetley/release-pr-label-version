@@ -1,5 +1,5 @@
 import { setFailed, info, error as logError } from '@actions/core'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from 'lib/types/models/github/octokit.mjs'
 
 /**
  * Returns a function that ensures a GitHub label exists in the specified repository.

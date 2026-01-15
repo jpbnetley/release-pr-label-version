@@ -1,5 +1,5 @@
 import { setFailed } from "@actions/core"
-import { Octokit } from "lib/types/models/github/octokit.js"
+import { Octokit } from "lib/types/models/github/octokit.mjs"
 
 /**
  * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
