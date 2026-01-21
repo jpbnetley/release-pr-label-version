@@ -3,4 +3,4 @@ description: 'Adds missing labels, and validates that the labels are added.'
 
 runs:
   using: 'node24'
-  main: 'dist/index.js'
+  main: 'dist/index.mjs'
