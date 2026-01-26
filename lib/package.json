@@ -19,5 +19,9 @@
       "import": "./dist/index.mjs"
     },
     "./types/*": "./dist/types/*"
+  },
+  "peerDependencies": {
+    "@actions/core":"^2",
+    "@actions/github":"^7"
   }
 }
