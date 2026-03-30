@@ -1,5 +1,5 @@
-import { setFailed } from "@actions/core"
-import { Octokit } from "lib/types/models/github/octokit.mjs"
+import { setFailed } from '@actions/core';
+import { Octokit } from 'lib/types/models/github/octokit.mjs';
 
 /**
  * Returns a function that retrieves the labels of a merged pull request using the provided Octokit instance.
@@ -14,22 +14,22 @@ export function getMergedPullRequestLabels(octokit: Octokit) {
   return async function getMergedPullRequestLabels(
     owner: string,
     repo: string,
-    pullNumber: number
+    pullNumber: number,
   ) {
     try {
       const { data: pullRequest } = await octokit.rest.pulls.get({
         owner,
         repo,
         pull_number: pullNumber,
-      })
+      });
 
-      return pullRequest.labels.map((label) => label.name)
+      return pullRequest.labels.map(label => label.name);
     } catch (error) {
       if (error instanceof Error) {
-        setFailed(`Failed to get merged pull request labels: ${error.message}`)
+        setFailed(`Failed to get merged pull request labels: ${error.message}`);
       } else {
-        setFailed('Failed to get merged pull request labels: Unknown error')
+        setFailed('Failed to get merged pull request labels: Unknown error');
       }
     }
-  }
+  };
 }

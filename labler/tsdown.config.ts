@@ -1,6 +1,6 @@
-import { defineConfig } from 'tsdown/config'
+import { defineConfig } from 'tsdown/config';
 
 export default defineConfig({
-   entry: 'src/index.ts',
-   outDir: 'dist'
-})
+  entry: 'src/index.ts',
+  outDir: 'dist',
+});

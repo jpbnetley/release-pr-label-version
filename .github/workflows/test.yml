@@ -10,23 +10,29 @@ concurrency:
 jobs:
   test:
     permissions:
-        contents: read
+      contents: read
 
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v5
 
       - name: Set up Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version-file: '.nvmrc'
 
       - name: Install dependencies
         run: pnpm install
 
       - name: Type check
         run: pnpm run tsc:check
+
+      - name: Lint code
+        run: pnpm run lint
+
+      - name: Format code
+        run: pnpm run fmt:check
 
       - name: Run tests
         run: pnpm test

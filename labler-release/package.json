@@ -1,22 +1,22 @@
 {
   "name": "labler-release",
   "version": "1.0.0",
-  "description": "",
   "private": true,
-  "module": "dist/index.mjs",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "module": "dist/index.mjs",
   "scripts": {
     "build": "tsdown",
     "tsc:check": "tsc --noEmit"
   },
-   "devDependencies": {
+  "devDependencies": {
     "lib": "workspace:*"
   },
-   "peerDependencies": {
-    "@actions/core":"^2",
-    "@actions/github":"^7"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "peerDependencies": {
+    "@actions/core": "^2",
+    "@actions/github": "^7"
+  }
 }
