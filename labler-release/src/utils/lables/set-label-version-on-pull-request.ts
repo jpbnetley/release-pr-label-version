@@ -1,9 +1,9 @@
 import { setFailed } from '@actions/core'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from 'lib/types/models/github/octokit.mjs'
 import {
   ReleaseLabel,
   ReleaseLabelKey,
-} from 'lib/types/models/release-label.js'
+} from 'lib/types/models/release-label.mjs'
 
 /**
  * Returns a function that sets a release label on a pull request using the provided Octokit instance.

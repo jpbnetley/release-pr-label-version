@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "type": "module",
   "scripts": {
     "build": "tsdown",
@@ -15,5 +15,9 @@
   "packageManager": "pnpm@10.13.1",
   "devDependencies": {
     "lib": "workspace:*"
+  },
+   "peerDependencies": {
+    "@actions/core":"^2",
+    "@actions/github":"^7"
   }
 }

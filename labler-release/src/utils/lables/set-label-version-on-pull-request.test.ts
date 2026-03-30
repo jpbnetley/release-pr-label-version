@@ -3,7 +3,7 @@ import { setLabelVersionOnPullRequest } from './set-label-version-on-pull-reques
 import {
   ReleaseLabel,
   ReleaseLabelKey,
-} from 'lib/types/models/release-label.js'
+} from 'lib/types/models/release-label.mjs'
 import { setFailed } from '@actions/core'
 
 // Mock @actions/core
