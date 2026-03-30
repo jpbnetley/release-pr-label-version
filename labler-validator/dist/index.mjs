@@ -1,6 +1,5 @@
 import { info, setFailed } from "@actions/core";
 import { context, getOctokit } from "@actions/github";
-
 //#region ../lib/dist/types/enums/release-label-name.mjs
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
 	ReleaseLabelName["VersionRequired"] = "release:version-required";
@@ -10,7 +9,6 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
 	ReleaseLabelName["VersionSkip"] = "release:version-skip";
 	return ReleaseLabelName;
 }({});
-
 //#endregion
 //#region src/utils/set-label-for-pull-request.ts
 /**
@@ -79,7 +77,6 @@ async function setLabelForPullRequest(octokit) {
 		else setFailed("Failed to set label for pull request: Unknown error");
 	}
 }
-
 //#endregion
 //#region src/index.ts
 function run() {
@@ -91,6 +88,5 @@ function run() {
 	setLabelForPullRequest(getOctokit(GITHUB_TOKEN));
 }
 run();
-
 //#endregion
-export {  };
+export {};

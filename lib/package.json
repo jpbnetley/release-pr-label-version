@@ -2,17 +2,13 @@
   "name": "lib",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "description": "",
+  "license": "ISC",
+  "author": "",
   "files": [
     "dist"
   ],
-  "scripts": {
-    "build": "tsdown",
-    "tsc:check": "tsc --noEmit"
-  },
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "type": "module",
   "exports": {
     ".": {
       "types": "./dist/index.d.mts",
@@ -20,8 +16,12 @@
     },
     "./types/*": "./dist/types/*"
   },
+  "scripts": {
+    "build": "tsdown",
+    "tsc:check": "tsc --noEmit"
+  },
   "peerDependencies": {
-    "@actions/core":"^2",
-    "@actions/github":"^7"
+    "@actions/core": "^2",
+    "@actions/github": "^7"
   }
 }

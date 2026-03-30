@@ -1,6 +1,5 @@
 import { context, getOctokit } from "@actions/github";
 import { error, info, setFailed } from "@actions/core";
-
 //#region src/utils/create-label-if-not-exists.ts
 /**
 * Returns a function that ensures a GitHub label exists in the specified repository.
@@ -37,7 +36,6 @@ function createLabelIfNotExists(octokit) {
 		}
 	};
 }
-
 //#endregion
 //#region ../lib/dist/types/enums/release-label-colors.mjs
 let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors) {
@@ -63,7 +61,6 @@ let ReleaseLabelColors = /* @__PURE__ */ function(ReleaseLabelColors) {
 	ReleaseLabelColors["VersionSkip"] = "bfd4f2";
 	return ReleaseLabelColors;
 }({});
-
 //#endregion
 //#region ../lib/dist/types/enums/release-label-description.mjs
 let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription) {
@@ -74,7 +71,6 @@ let ReleaseLabelDescription = /* @__PURE__ */ function(ReleaseLabelDescription) 
 	ReleaseLabelDescription["VersionSkip"] = "Skip version release";
 	return ReleaseLabelDescription;
 }({});
-
 //#endregion
 //#region ../lib/dist/types/enums/release-label-name.mjs
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
@@ -85,7 +81,6 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
 	ReleaseLabelName["VersionSkip"] = "release:version-skip";
 	return ReleaseLabelName;
 }({});
-
 //#endregion
 //#region ../lib/dist/types/models/release-label.mjs
 const ReleaseLabel = {
@@ -115,7 +110,6 @@ const ReleaseLabel = {
 		color: ReleaseLabelColors.VersionSkip
 	}
 };
-
 //#endregion
 //#region src/index.ts
 const token = process.env.GITHUB_TOKEN;
@@ -137,6 +131,5 @@ async function run() {
 	await Promise.all(labelCreation);
 }
 run();
-
 //#endregion
-export {  };
+export {};

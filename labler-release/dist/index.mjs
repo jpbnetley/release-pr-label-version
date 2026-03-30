@@ -1,7 +1,6 @@
 import { debug, getInput, info, setFailed } from "@actions/core";
 import { exec } from "node:child_process";
 import { context, getOctokit } from "@actions/github";
-
 //#region ../lib/dist/types/enums/release-label-name.mjs
 let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
 	ReleaseLabelName["VersionRequired"] = "release:version-required";
@@ -11,7 +10,6 @@ let ReleaseLabelName = /* @__PURE__ */ function(ReleaseLabelName) {
 	ReleaseLabelName["VersionSkip"] = "release:version-skip";
 	return ReleaseLabelName;
 }({});
-
 //#endregion
 //#region src/utils/execute-build-script.ts
 /**
@@ -30,7 +28,6 @@ function executeBuildScript(script) {
 		});
 	});
 }
-
 //#endregion
 //#region src/utils/get-merged-pull-request-labels.ts
 /**
@@ -57,7 +54,6 @@ function getMergedPullRequestLabels(octokit) {
 		}
 	};
 }
-
 //#endregion
 //#region src/utils/get-last-merged-pull-request.ts
 /**
@@ -87,7 +83,6 @@ function getLastMergedPullRequest(octokit) {
 		}
 	};
 }
-
 //#endregion
 //#region src/index.ts
 async function run() {
@@ -129,6 +124,5 @@ async function run() {
 	info("Release process completed successfully.");
 }
 run().catch((error) => setFailed(`Action failed with error: ${error?.message ?? error}`));
-
 //#endregion
-export {  };
+export {};

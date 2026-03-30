@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Executes a given shell script asynchronously and returns a promise that resolves when the script completes.
@@ -12,10 +12,10 @@ export function executeBuildScript(script: string): Promise<string> {
   return new Promise((resolve, reject) => {
     exec(script, (error, stdout, stderr) => {
       if (error) {
-        reject(`Error executing script: ${error.message}\n${stderr}`)
+        reject(`Error executing script: ${error.message}\n${stderr}`);
       } else {
-        resolve(stdout)
+        resolve(stdout);
       }
-    })
-  })
+    });
+  });
 }
