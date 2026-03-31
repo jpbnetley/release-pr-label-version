@@ -1,4 +1,4 @@
-import { Octokit } from "../../types/models/github/octokit.mjs";
+import { t as Octokit } from "../../octokit-CLjRk6ts.mjs";
 
 //#region src/utils/github/create-github-release.d.ts
 type CreateGitHubReleaseParam = {

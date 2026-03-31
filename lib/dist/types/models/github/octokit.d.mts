@@ -1,7 +1,2 @@
-import { getOctokit } from "@actions/github";
-
-//#region src/types/models/github/octokit.d.ts
-type Octokit = ReturnType<typeof getOctokit>;
-//#endregion
+import { t as Octokit } from "../../../octokit-CLjRk6ts.mjs";
 export { Octokit };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoib2N0b2tpdC5kLm10cyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyIuLi8uLi8uLi8uLi9zcmMvdHlwZXMvbW9kZWxzL2dpdGh1Yi9vY3Rva2l0LmQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiaW1wb3J0IHsgZ2V0T2N0b2tpdCB9IGZyb20gJ0BhY3Rpb25zL2dpdGh1Yic7XG5leHBvcnQgdHlwZSBPY3Rva2l0ID0gUmV0dXJuVHlwZTx0eXBlb2YgZ2V0T2N0b2tpdD47XG4iXSwibWFwcGluZ3MiOiI7OztBQUNBLElBQVcsVUFBVTtDQUFDO09BQUEsQ0FBVSxZQUFRLFdBQVc7Q0FBQSxDQUFBLElBQUEsR0FBQTtDQUFBIn0=
