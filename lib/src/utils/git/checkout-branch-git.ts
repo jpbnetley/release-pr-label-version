@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Creates and checks out a new Git branch from the specified base branch.
@@ -8,11 +8,11 @@ import { exec } from 'node:child_process'
  */
 export function checkoutBranch(baseBranch: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    exec(`git checkout -b ${baseBranch}`, (error) => {
+    exec(`git checkout -b ${baseBranch}`, error => {
       if (error) {
-        return reject(`Error checking out branch: ${error.message}`)
+        return reject(`Error checking out branch: ${error.message}`);
       }
-      resolve()
-    })
-  })
+      resolve();
+    });
+  });
 }

@@ -1,11 +1,11 @@
-import { setFailed, info } from '@actions/core'
-import { context } from '@actions/github'
-import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { setFailed, info } from '@actions/core';
+import { context } from '@actions/github';
+import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs';
+import { Octokit } from 'lib/types/models/github/octokit.mjs';
 
 export type PrLabelConfig = {
-  isPreRelease?: boolean
-}
+  isPreRelease?: boolean;
+};
 
 /**
  * Sets or updates version-related labels on a pull request.
@@ -28,14 +28,14 @@ export type PrLabelConfig = {
 export function setLabelForPullRequest(octokit: Octokit) {
   return async function setLabel(config?: PrLabelConfig) {
     try {
-      const isPreRelease = config?.isPreRelease ?? false
-      const prNumber = context.payload.pull_request?.number
-      const owner = context.repo.owner
-      const repo = context.repo.repo
+      const isPreRelease = config?.isPreRelease ?? false;
+      const prNumber = context.payload.pull_request?.number;
+      const owner = context.repo.owner;
+      const repo = context.repo.repo;
 
       if (!prNumber) {
-        setFailed('No pull request number found in context')
-        return
+        setFailed('No pull request number found in context');
+        return;
       }
 
       // Get labels on the PR
@@ -43,9 +43,9 @@ export function setLabelForPullRequest(octokit: Octokit) {
         owner,
         repo,
         issue_number: prNumber,
-      })
+      });
 
-      const labelNames = labels.map((label) => label.name)
+      const labelNames = labels.map(label => label.name);
       const versionLabels = [
         ReleaseLabelName.VersionPatch,
         ReleaseLabelName.VersionMinor,
@@ -53,53 +53,44 @@ export function setLabelForPullRequest(octokit: Octokit) {
         ReleaseLabelName.VersionSkip,
         ReleaseLabelName.VersionPreRelease,
         ReleaseLabelName.VersionBump,
-      ]
+      ];
 
-      const hasVersionLabel = versionLabels.some((label) =>
-        labelNames.includes(label)
-      )
+      const hasVersionLabel = versionLabels.some(label => labelNames.includes(label));
 
       if (!hasVersionLabel) {
         const label = isPreRelease
           ? ReleaseLabelName.VersionPreRelease
-          : ReleaseLabelName.VersionRequired
+          : ReleaseLabelName.VersionRequired;
 
         await octokit.rest.issues.addLabels({
           owner,
           repo,
           issue_number: prNumber,
           labels: [label],
-        })
-        info(`Added '${label}' label to PR #${prNumber}`)
+        });
+        info(`Added '${label}' label to PR #${prNumber}`);
         if (!isPreRelease) {
-          setFailed(`PR #${prNumber} is missing a version label`)
+          setFailed(`PR #${prNumber} is missing a version label`);
         }
       } else {
-        info(`Version label already present in PR #${prNumber}`)
-        if (
-          hasVersionLabel &&
-          labelNames.includes(ReleaseLabelName.VersionRequired)
-        ) {
-          info(
-            `Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`
-          )
+        info(`Version label already present in PR #${prNumber}`);
+        if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
+          info(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
           await octokit.rest.issues.removeLabel({
             owner,
             repo,
             issue_number: prNumber,
             name: ReleaseLabelName.VersionRequired,
-          })
-          info(
-            `Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`
-          )
+          });
+          info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
         }
       }
     } catch (error) {
       if (error instanceof Error) {
-        setFailed(`Failed to set label for pull request: ${error.message}`)
+        setFailed(`Failed to set label for pull request: ${error.message}`);
       } else {
-        setFailed('Failed to set label for pull request: Unknown error')
+        setFailed('Failed to set label for pull request: Unknown error');
       }
     }
-  }
+  };
 }

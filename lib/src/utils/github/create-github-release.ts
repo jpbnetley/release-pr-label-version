@@ -1,16 +1,16 @@
-import { error, info } from '@actions/core'
-import { Octokit } from '../../types/models/github/octokit.js'
+import { error, info } from '@actions/core';
+import { Octokit } from '../../types/models/github/octokit.js';
 
 export type CreateGitHubReleaseParam = {
-  owner: string
-  repo: string
-  tagName: string
-  releaseName: string
-  body: string
-  isDraft?: boolean
-  isPreRelease?: boolean
-  generate_release_notes?: boolean
-}
+  owner: string;
+  repo: string;
+  tagName: string;
+  releaseName: string;
+  body: string;
+  isDraft?: boolean;
+  isPreRelease?: boolean;
+  generate_release_notes?: boolean;
+};
 
 /**
  * Creates a function to publish a new GitHub release using the provided Octokit instance.
@@ -40,29 +40,29 @@ export function createGitHubRelease(octokit: Octokit) {
     releaseName,
     repo,
     tagName,
-    generate_release_notes = true
+    generate_release_notes = true,
   }: CreateGitHubReleaseParam): Promise<void> {
-    return new Promise(async (resolve, reject) => {
-      try {
-        await octokit.rest.repos.createRelease({
-          owner,
-          repo,
-          tag_name: tagName,
-          name: releaseName,
-          body,
-          draft: isDraft,
-          prerelease: isPreRelease,
-          generate_release_notes,
-        })
+    return new Promise((resolve, reject) => {
+      (async () => {
+        try {
+          await octokit.rest.repos.createRelease({
+            owner,
+            repo,
+            tag_name: tagName,
+            name: releaseName,
+            body,
+            draft: isDraft,
+            prerelease: isPreRelease,
+            generate_release_notes,
+          });
 
-        info(`Created GitHub release: ${releaseName} (${tagName})`)
-        resolve()
-      } catch (err) {
-        error(
-          err instanceof Error ? err : `Error creating GitHub release: ${err}`
-        )
-        reject(err)
-      }
-    })
-  }
+          info(`Created GitHub release: ${releaseName} (${tagName})`);
+          resolve();
+        } catch (err) {
+          error(err instanceof Error ? err : `Error creating GitHub release: ${err}`);
+          reject(err);
+        }
+      })();
+    });
+  };
 }

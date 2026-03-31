@@ -1,5 +1,5 @@
-import { info, error } from '@actions/core'
-import { execSync } from 'node:child_process'
+import { info, error } from '@actions/core';
+import { execSync } from 'node:child_process';
 /**
  * Adds the specified files to the current Git staging area using the `git add` command.
  *
@@ -11,18 +11,18 @@ import { execSync } from 'node:child_process'
 export function addFilesToGit(files: string[] = ['.']): Promise<void> {
   return new Promise<void>((resolve, reject) => {
     if (!files || files.length === 0) {
-      info('No files to add to git.')
-      resolve()
-      return
+      info('No files to add to git.');
+      resolve();
+      return;
     }
 
     try {
-      execSync(`git add ${files.join(' ')}`, { stdio: 'inherit' })
-      info(`Added files to git: ${files.join(', ')}`)
-      resolve()
+      execSync(`git add ${files.join(' ')}`, { stdio: 'inherit' });
+      info(`Added files to git: ${files.join(', ')}`);
+      resolve();
     } catch (err) {
-      error(err instanceof Error ? err : `Error adding files to git: ${err}`)
-      reject(err)
+      error(err instanceof Error ? err : `Error adding files to git: ${err}`);
+      reject(err);
     }
-  })
+  });
 }

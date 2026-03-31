@@ -2,23 +2,30 @@
   "name": "lib",
   "version": "1.0.0",
   "private": true,
-  "type": "module",
+  "description": "",
+  "license": "ISC",
+  "author": "",
   "files": [
     "dist"
   ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./utils/*": {
+      "types": "./dist/utils/*.d.mts",
+      "import": "./dist/utils/*"
+    },
+    "./types/*": "./dist/types/*"
+  },
   "scripts": {
     "build": "tsdown",
     "tsc:check": "tsc --noEmit"
   },
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    },
-    "./types/*": "./dist/types/*",
-    "./utils/*":"./dist/utils/*"
+  "peerDependencies": {
+    "@actions/core": "^3",
+    "@actions/github": "^9"
   }
 }

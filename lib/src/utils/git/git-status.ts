@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Executes the `git status --porcelain` command and returns its output as a trimmed string.
@@ -8,18 +8,14 @@ import { exec } from 'node:child_process'
  */
 export function gitStatus(): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec(
-      'git status --porcelain',
-      { encoding: 'utf-8' },
-      (error, stdout, stderr) => {
-        if (error) {
-          if (stderr) {
-            return reject(`Error getting git status: ${stderr}`)
-          }
-          return reject(`Error getting git status: ${error.message}`)
+    exec('git status --porcelain', { encoding: 'utf-8' }, (error, stdout, stderr) => {
+      if (error) {
+        if (stderr) {
+          return reject(`Error getting git status: ${stderr}`);
         }
-        resolve(stdout.trim())
+        return reject(`Error getting git status: ${error.message}`);
       }
-    )
-  })
+      resolve(stdout.trim());
+    });
+  });
 }

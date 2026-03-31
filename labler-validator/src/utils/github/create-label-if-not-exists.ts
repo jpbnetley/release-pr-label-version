@@ -1,5 +1,5 @@
-import { setFailed, info, error as logError } from '@actions/core'
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { setFailed, info, error as logError } from '@actions/core';
+import { Octokit } from 'lib/types/models/github/octokit.mjs';
 
 /**
  * Returns a function that ensures a GitHub label exists in the specified repository.
@@ -17,34 +17,34 @@ export function createLabelIfNotExists(octokit: Octokit) {
   return async function createLabelIfNotExists(
     owner: string,
     repo: string,
-    label: { name: string; color: string }
+    label: { name: string; color: string },
   ) {
     try {
       // Check if the label already exists
       const { data: labels } = await octokit.rest.issues.listLabelsForRepo({
         owner,
         repo,
-      })
+      });
 
-      if (!labels.some((labelCheck) => labelCheck.name === label.name)) {
+      if (!labels.some(labelCheck => labelCheck.name === label.name)) {
         // Create the label if it does not exist
         await octokit.rest.issues.createLabel({
           owner,
           repo,
           name: label.name,
           color: label.color,
-        })
-        info(`Label created: ${label.name}`)
+        });
+        info(`Label created: ${label.name}`);
       } else {
-        info(`Label already exists: ${label.name}`)
+        info(`Label already exists: ${label.name}`);
       }
     } catch (error) {
-      logError(`Failed to create label: ${error}`)
+      logError(`Failed to create label: ${error}`);
       if (error instanceof Error) {
-        setFailed(`Failed to create label: ${error.message}`)
+        setFailed(`Failed to create label: ${error.message}`);
       } else {
-        setFailed('Failed to create label: Unknown error')
+        setFailed('Failed to create label: Unknown error');
       }
     }
-  }
+  };
 }

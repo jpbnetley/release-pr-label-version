@@ -1,4 +1,4 @@
-import { Octokit } from 'lib/types/models/github/octokit.js'
+import { Octokit } from 'lib/types/models/github/octokit.mjs';
 
 /**
  * Returns a function that retrieves the number of the most recently merged pull request
@@ -14,7 +14,7 @@ export function getLastMergedPullRequest(octokit: Octokit) {
   return async function lastMergedPullRequestNumber(
     owner: string,
     repo: string,
-    branchName: string
+    branchName: string,
   ) {
     try {
       const { data: pullRequests } = await octokit.rest.pulls.list({
@@ -23,19 +23,14 @@ export function getLastMergedPullRequest(octokit: Octokit) {
         state: 'closed',
         sort: 'updated',
         direction: 'desc',
-      })
+      });
 
-      const mergedPullRequest = pullRequests.find(
-        (pr) => pr.base.ref === branchName && pr.merged_at
-      )
+      const mergedPullRequest = pullRequests.find(pr => pr.base.ref === branchName && pr.merged_at);
 
-      return mergedPullRequest
+      return mergedPullRequest;
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : String(error)
-      throw new Error(
-        `Failed to get last merged pull request number: ${errorMessage}`
-      )
+      const errorMessage = error instanceof Error ? error.message : String(error);
+      throw new Error(`Failed to get last merged pull request number: ${errorMessage}`);
     }
-  }
+  };
 }

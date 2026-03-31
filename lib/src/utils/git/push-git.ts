@@ -1,12 +1,12 @@
-import { info, setFailed } from '@actions/core'
-import { exec } from 'node:child_process'
+import { info, setFailed } from '@actions/core';
+import { exec } from 'node:child_process';
 
 export type GitPushParams = {
-  owner: string
-  repo: string
-  branchName: string
-  commitMessage?: string
-}
+  owner: string;
+  repo: string;
+  branchName: string;
+  commitMessage?: string;
+};
 
 /**
  * Returns an async function to push changes to a specified branch in a GitHub repository using Octokit.
@@ -26,16 +26,16 @@ export type GitPushParams = {
  * If an error occurs during the push, the function will call `setFailed` with an appropriate error message.
  */
 export function gitPush(branchName: string) {
-return new Promise<void>((resolve, reject) => {
-  exec(`git push origin ${branchName}`, (error, stdout, stderr) => {
-    if (error) {
-      setFailed(`Failed to push changes: ${error.message}`)
-      reject(error)
-      return
-    }
+  return new Promise<void>((resolve, reject) => {
+    exec(`git push origin ${branchName}`, error => {
+      if (error) {
+        setFailed(`Failed to push changes: ${error.message}`);
+        reject(error);
+        return;
+      }
 
-    info(`Successfully pushed changes to branch: ${branchName}`)
-    resolve()
-  })
-})
+      info(`Successfully pushed changes to branch: ${branchName}`);
+      resolve();
+    });
+  });
 }

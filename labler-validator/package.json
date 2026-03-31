@@ -1,19 +1,22 @@
 {
   "name": "labler-validator",
   "version": "1.0.0",
-  "description": "",
   "private": true,
-  "module": "dist/index.js",
+  "description": "",
+  "keywords": [],
+  "license": "ISC",
+  "author": "",
   "type": "module",
+  "module": "dist/index.mjs",
   "scripts": {
     "build": "tsdown",
     "tsc:check": "tsc --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "packageManager": "pnpm@10.13.1",
-   "devDependencies": {
+  "devDependencies": {
     "lib": "workspace:*"
+  },
+  "peerDependencies": {
+    "@actions/core": "^3",
+    "@actions/github": "^9"
   }
 }

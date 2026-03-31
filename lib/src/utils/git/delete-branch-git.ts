@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Deletes a local Git branch with the specified name.
@@ -11,11 +11,11 @@ import { exec } from 'node:child_process'
  */
 export function deleteGitBranch(branchName: string): Promise<void> {
   return new Promise<void>((resolve, reject) => {
-    exec(`git branch -d ${branchName}`, (error) => {
+    exec(`git branch -d ${branchName}`, error => {
       if (error) {
-        return reject(`Error deleting branch: ${error.message}`)
+        return reject(`Error deleting branch: ${error.message}`);
       }
-      resolve()
-    })
-  })
+      resolve();
+    });
+  });
 }

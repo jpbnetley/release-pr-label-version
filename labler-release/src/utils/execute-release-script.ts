@@ -1,14 +1,14 @@
-import { info, setFailed } from '@actions/core'
-import { ReleaseLabelName } from 'lib/types/enums/release-label-name.js'
-import { executeBuildScript } from './execute-build-script.js'
+import { info, setFailed } from '@actions/core';
+import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs';
+import { executeBuildScript } from './execute-build-script.js';
 
 export type ExecuteReleaseScriptParams = {
-  labels: string[]
-  preReleaseScript?: string
-  patchReleaseScript?: string
-  minorReleaseScript?: string
-  majorReleaseScript?: string
-}
+  labels: string[];
+  preReleaseScript?: string;
+  patchReleaseScript?: string;
+  minorReleaseScript?: string;
+  majorReleaseScript?: string;
+};
 
 /**
  * Executes the appropriate release script based on the provided release labels.
@@ -40,28 +40,19 @@ export async function executeReleaseScript({
 }: ExecuteReleaseScriptParams) {
   if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
     if (!preReleaseScript) {
-      setFailed('Pre-release script is not provided')
-      return
+      setFailed('Pre-release script is not provided');
+      return;
     }
-    const response = await executeBuildScript(preReleaseScript)
-    info(`Pre-release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionPatch) &&
-    patchReleaseScript
-  ) {
-    const response = await executeBuildScript(patchReleaseScript)
-    info(`Patch release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionMinor) &&
-    minorReleaseScript
-  ) {
-    const response = await executeBuildScript(minorReleaseScript)
-    info(`Minor release script executed with response: ${response}`)
-  } else if (
-    labels.includes(ReleaseLabelName.VersionMajor) &&
-    majorReleaseScript
-  ) {
-    const response = await executeBuildScript(majorReleaseScript)
-    info(`Major release script executed with response: ${response}`)
+    const response = await executeBuildScript(preReleaseScript);
+    info(`Pre-release script executed with response: ${response}`);
+  } else if (labels.includes(ReleaseLabelName.VersionPatch) && patchReleaseScript) {
+    const response = await executeBuildScript(patchReleaseScript);
+    info(`Patch release script executed with response: ${response}`);
+  } else if (labels.includes(ReleaseLabelName.VersionMinor) && minorReleaseScript) {
+    const response = await executeBuildScript(minorReleaseScript);
+    info(`Minor release script executed with response: ${response}`);
+  } else if (labels.includes(ReleaseLabelName.VersionMajor) && majorReleaseScript) {
+    const response = await executeBuildScript(majorReleaseScript);
+    info(`Major release script executed with response: ${response}`);
   }
 }

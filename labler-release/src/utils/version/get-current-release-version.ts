@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Executes the provided shell script to retrieve the current release version.
@@ -10,13 +10,13 @@ export function getCurrentReleaseVersion(script: string): Promise<string> {
   return new Promise<string>((resolve, reject) => {
     exec(script, (error, stdout) => {
       if (error) {
-        return reject(`Error getting current release version: ${error.message}`)
+        return reject(`Error getting current release version: ${error.message}`);
       }
-      const version = stdout.trim()
+      const version = stdout.trim();
       if (!version) {
-        return reject('No release version found')
+        return reject('No release version found');
       }
-      resolve(version)
-    })
-  })
+      resolve(version);
+    });
+  });
 }

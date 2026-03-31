@@ -5,7 +5,7 @@ inputs:
   isPreRelease:
     description: Indicates if the release is a pre-release
     default: false
-  
+
 runs:
-  using: node24
-  main: dist/index.js
+  using: 'node24'
+  main: 'dist/index.mjs'

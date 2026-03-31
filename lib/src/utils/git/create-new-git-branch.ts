@@ -1,13 +1,13 @@
-import { setFailed } from '@actions/core'
-import { context } from '@actions/github'
-import { Octokit } from '../../types/models/github/octokit.js'
+import { setFailed } from '@actions/core';
+import { context } from '@actions/github';
+import { Octokit } from '../../types/models/github/octokit.js';
 
 export type CreateNewGitBranchParams = {
-  owner: string
-  repo: string
-  branchName: string
-  baseBranch?: string
-}
+  owner: string;
+  repo: string;
+  branchName: string;
+  baseBranch?: string;
+};
 
 /**
  * Factory function that returns an async function to create a new Git branch in a GitHub repository using Octokit.
@@ -38,7 +38,7 @@ export function createNewGitBranch(octokit: Octokit) {
         owner,
         repo,
         ref: `heads/${baseBranch}`,
-      })
+      });
 
       // Create a new branch from the latest commit
       const { data: newBranch } = await octokit.rest.git.createRef({
@@ -46,15 +46,15 @@ export function createNewGitBranch(octokit: Octokit) {
         repo,
         ref: `refs/heads/${branchName}`,
         sha: refData.object.sha,
-      })
+      });
 
-      return newBranch
+      return newBranch;
     } catch (error) {
       if (error instanceof Error) {
-        setFailed(`Failed to create new git branch: ${error.message}`)
+        setFailed(`Failed to create new git branch: ${error.message}`);
       } else {
-        setFailed('Failed to create new git branch: Unknown error')
+        setFailed('Failed to create new git branch: Unknown error');
       }
     }
-  }
+  };
 }

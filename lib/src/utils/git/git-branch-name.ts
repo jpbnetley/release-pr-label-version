@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Retrieves the current Git branch name by executing the appropriate Git command.
@@ -8,16 +8,12 @@ import { exec } from 'node:child_process'
  */
 export function gitBranchName(): Promise<string> {
   return new Promise((resolve, reject) => {
-    exec(
-      'git rev-parse --abbrev-ref HEAD',
-      { encoding: 'utf-8' },
-      (error, stdout) => {
-        if (error) {
-          reject(`Error getting git branch name: ${error.message}`)
-          return
-        }
-        resolve(stdout.trim())
+    exec('git rev-parse --abbrev-ref HEAD', { encoding: 'utf-8' }, (error, stdout) => {
+      if (error) {
+        reject(`Error getting git branch name: ${error.message}`);
+        return;
       }
-    )
-  })
+      resolve(stdout.trim());
+    });
+  });
 }

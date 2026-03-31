@@ -1,0 +1,18 @@
+//#region src/utils/git/commit-files-to-git.d.ts
+type CommitFilesToGitParams = {
+  commitMessage: string;
+};
+/**
+ * Stages the specified files and creates a Git commit with the provided commit message and author information.
+ *
+ * @param commitMessage - The commit message to use for the Git commit.
+ * @param authorName - The name of the commit author.
+ * @param authorEmail - The email address of the commit author.
+ * @returns A Promise that resolves when the files have been committed, or rejects with an error message if the operation fails.
+ */
+declare function commitFilesToGit({
+  commitMessage
+}: CommitFilesToGitParams): Promise<void>;
+//#endregion
+export { CommitFilesToGitParams, commitFilesToGit };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiY29tbWl0LWZpbGVzLXRvLWdpdC5kLm10cyIsIm5hbWVzIjpbXSwic291cmNlcyI6WyIuLi8uLi8uLi9zcmMvdXRpbHMvZ2l0L2NvbW1pdC1maWxlcy10by1naXQuZC50cyJdLCJzb3VyY2VzQ29udGVudCI6WyJleHBvcnQgdHlwZSBDb21taXRGaWxlc1RvR2l0UGFyYW1zID0ge1xuICAgIGNvbW1pdE1lc3NhZ2U6IHN0cmluZztcbn07XG4vKipcbiAqIFN0YWdlcyB0aGUgc3BlY2lmaWVkIGZpbGVzIGFuZCBjcmVhdGVzIGEgR2l0IGNvbW1pdCB3aXRoIHRoZSBwcm92aWRlZCBjb21taXQgbWVzc2FnZSBhbmQgYXV0aG9yIGluZm9ybWF0aW9uLlxuICpcbiAqIEBwYXJhbSBjb21taXRNZXNzYWdlIC0gVGhlIGNvbW1pdCBtZXNzYWdlIHRvIHVzZSBmb3IgdGhlIEdpdCBjb21taXQuXG4gKiBAcGFyYW0gYXV0aG9yTmFtZSAtIFRoZSBuYW1lIG9mIHRoZSBjb21taXQgYXV0aG9yLlxuICogQHBhcmFtIGF1dGhvckVtYWlsIC0gVGhlIGVtYWlsIGFkZHJlc3Mgb2YgdGhlIGNvbW1pdCBhdXRob3IuXG4gKiBAcmV0dXJucyBBIFByb21pc2UgdGhhdCByZXNvbHZlcyB3aGVuIHRoZSBmaWxlcyBoYXZlIGJlZW4gY29tbWl0dGVkLCBvciByZWplY3RzIHdpdGggYW4gZXJyb3IgbWVzc2FnZSBpZiB0aGUgb3BlcmF0aW9uIGZhaWxzLlxuICovXG5leHBvcnQgZGVjbGFyZSBmdW5jdGlvbiBjb21taXRGaWxlc1RvR2l0KHsgY29tbWl0TWVzc2FnZSB9OiBDb21taXRGaWxlc1RvR2l0UGFyYW1zKTogUHJvbWlzZTx2b2lkPjtcbiJdLCJtYXBwaW5ncyI6IjtBQUFBLElBQVcseUJBQXlCO0NBQUM7T0FBQSxFQUFBO0NBQUEsQ0FBQSxHQUFBO0NBQUE7QUFDckMsSUFBSSxtQkFBcUI7Q0FBQTtPQUFBO0VBQUE7RUFBQTtFQUFBO0VBQUE7Q0FBQTtFQUFBO0VBQUE7RUFBQTtFQUFBO0VBQUE7Q0FBQSJ9

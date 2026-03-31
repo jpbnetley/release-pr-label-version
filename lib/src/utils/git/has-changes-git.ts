@@ -1,4 +1,4 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 /**
  * Checks if there are any uncommitted changes in the current Git repository.
@@ -12,15 +12,15 @@ export function hasGitChanges(): Promise<boolean> {
   return new Promise((resolve, reject) => {
     exec('git status --porcelain', { encoding: 'utf-8' }, (error, stdout) => {
       if (error) {
-        reject(`Error executing git status: ${error}`)
-        return
+        reject(`Error executing git status: ${error}`);
+        return;
       }
 
       if (stdout) {
-        resolve(true)
+        resolve(true);
       } else {
-        resolve(false)
+        resolve(false);
       }
-    })
-  })
+    });
+  });
 }

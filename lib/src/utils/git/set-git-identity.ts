@@ -1,9 +1,9 @@
-import { exec } from 'node:child_process'
+import { exec } from 'node:child_process';
 
 export type SetGitIdentityParams = {
-  name?: string
-  email?: string
-}
+  name?: string;
+  email?: string;
+};
 
 /**
  * Sets the Git user identity (name and email) for the current repository.
@@ -22,20 +22,20 @@ export function setGitIdentity({
   email = 'action@github.com',
 }: SetGitIdentityParams = {}): Promise<void> {
   return new Promise((resolve, reject) => {
-    exec(`git config user.name "${name}"`, (error) => {
+    exec(`git config user.name "${name}"`, error => {
       if (error) {
-        reject(`Error setting Git user name: ${error}`)
-        return
+        reject(`Error setting Git user name: ${error}`);
+        return;
       }
 
-      exec(`git config user.email "${email}"`, (error) => {
+      exec(`git config user.email "${email}"`, error => {
         if (error) {
-          reject(`Error setting Git user email: ${error}`)
-          return
+          reject(`Error setting Git user email: ${error}`);
+          return;
         }
 
-        resolve()
-      })
-    })
-  })
+        resolve();
+      });
+    });
+  });
 }

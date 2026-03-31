@@ -1,0 +1,11 @@
+//#region src/utils/git/git-branch-name.d.ts
+/**
+ * Retrieves the current Git branch name by executing the appropriate Git command.
+ *
+ * @returns A promise that resolves to the name of the current Git branch as a string.
+ * @throws Will reject the promise with an error message if the Git command fails.
+ */
+declare function gitBranchName(): Promise<string>;
+//#endregion
+export { gitBranchName };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2l0LWJyYW5jaC1uYW1lLmQubXRzIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9naXQvZ2l0LWJyYW5jaC1uYW1lLmQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBSZXRyaWV2ZXMgdGhlIGN1cnJlbnQgR2l0IGJyYW5jaCBuYW1lIGJ5IGV4ZWN1dGluZyB0aGUgYXBwcm9wcmlhdGUgR2l0IGNvbW1hbmQuXG4gKlxuICogQHJldHVybnMgQSBwcm9taXNlIHRoYXQgcmVzb2x2ZXMgdG8gdGhlIG5hbWUgb2YgdGhlIGN1cnJlbnQgR2l0IGJyYW5jaCBhcyBhIHN0cmluZy5cbiAqIEB0aHJvd3MgV2lsbCByZWplY3QgdGhlIHByb21pc2Ugd2l0aCBhbiBlcnJvciBtZXNzYWdlIGlmIHRoZSBHaXQgY29tbWFuZCBmYWlscy5cbiAqL1xuZXhwb3J0IGRlY2xhcmUgZnVuY3Rpb24gZ2l0QnJhbmNoTmFtZSgpOiBQcm9taXNlPHN0cmluZz47XG4iXSwibWFwcGluZ3MiOiI7QUFBQSxJQUFFLGdCQUFBO0NBQUE7T0FBQSxDQUFBLFFBQUE7Q0FBQSxDQUFBLEdBQUE7Q0FBQSJ9

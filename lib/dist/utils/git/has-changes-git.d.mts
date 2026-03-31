@@ -1,0 +1,13 @@
+//#region src/utils/git/has-changes-git.d.ts
+/**
+ * Checks if there are any uncommitted changes in the current Git repository.
+ *
+ * Executes `git status --porcelain` to determine if the working directory is clean.
+ *
+ * @returns A promise that resolves to `true` if there are uncommitted changes, or `false` if the working directory is clean.
+ * @throws If there is an error executing the Git command.
+ */
+declare function hasGitChanges(): Promise<boolean>;
+//#endregion
+export { hasGitChanges };
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaGFzLWNoYW5nZXMtZ2l0LmQubXRzIiwibmFtZXMiOltdLCJzb3VyY2VzIjpbIi4uLy4uLy4uL3NyYy91dGlscy9naXQvaGFzLWNoYW5nZXMtZ2l0LmQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiLyoqXG4gKiBDaGVja3MgaWYgdGhlcmUgYXJlIGFueSB1bmNvbW1pdHRlZCBjaGFuZ2VzIGluIHRoZSBjdXJyZW50IEdpdCByZXBvc2l0b3J5LlxuICpcbiAqIEV4ZWN1dGVzIGBnaXQgc3RhdHVzIC0tcG9yY2VsYWluYCB0byBkZXRlcm1pbmUgaWYgdGhlIHdvcmtpbmcgZGlyZWN0b3J5IGlzIGNsZWFuLlxuICpcbiAqIEByZXR1cm5zIEEgcHJvbWlzZSB0aGF0IHJlc29sdmVzIHRvIGB0cnVlYCBpZiB0aGVyZSBhcmUgdW5jb21taXR0ZWQgY2hhbmdlcywgb3IgYGZhbHNlYCBpZiB0aGUgd29ya2luZyBkaXJlY3RvcnkgaXMgY2xlYW4uXG4gKiBAdGhyb3dzIElmIHRoZXJlIGlzIGFuIGVycm9yIGV4ZWN1dGluZyB0aGUgR2l0IGNvbW1hbmQuXG4gKi9cbmV4cG9ydCBkZWNsYXJlIGZ1bmN0aW9uIGhhc0dpdENoYW5nZXMoKTogUHJvbWlzZTxib29sZWFuPjtcbiJdLCJtYXBwaW5ncyI6IjtBQUFBLElBQUUsZ0JBQUE7Q0FBQTtPQUFBLENBQUEsUUFBQTtDQUFBLENBQUEsR0FBQTtDQUFBIn0=
