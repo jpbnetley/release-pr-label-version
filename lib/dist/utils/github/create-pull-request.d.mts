@@ -1,4 +1,4 @@
-import { t as Octokit } from "../../octokit-CLjRk6ts.mjs";
+import { Octokit } from "../../types/models/github/octokit.mjs";
 
 //#region src/utils/github/create-pull-request.d.ts
 type CreatePullRequestParams = {
