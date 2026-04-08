@@ -19895,9 +19895,9 @@ async function run() {
 			isPreRelease
 		});
 		info("Release created successfully.");
-		debug("Creating summary");
+		debug("Creating release version summary");
 		await summary.addHeading("Release version").addRaw(`Created for: ${currentVersion}`).write();
-		debug("Created summary");
+		debug("Created release version summary");
 		if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
 			const branchNameReleaseToPreRelease = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
 			await createNewGitBranch(octokit)({
