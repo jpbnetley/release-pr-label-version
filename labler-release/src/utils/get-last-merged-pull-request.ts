@@ -14,7 +14,7 @@ export function getLastMergedPullRequest(octokit: Octokit) {
   return async function lastMergedPullRequestNumber(
     owner: string,
     repo: string,
-    branchName: string,
+    branchName: string
   ) {
     try {
       const { data: pullRequests } = await octokit.rest.pulls.list({
@@ -22,7 +22,7 @@ export function getLastMergedPullRequest(octokit: Octokit) {
         repo,
         state: 'closed',
         sort: 'updated',
-        direction: 'desc',
+        direction: 'desc'
       });
 
       const mergedPullRequest = pullRequests.find(pr => pr.base.ref === branchName && pr.merged_at);

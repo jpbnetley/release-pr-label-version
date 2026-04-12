@@ -5,7 +5,7 @@ import { setFailed } from '@actions/core';
 
 // Mock @actions/core
 vi.mock('@actions/core', () => ({
-  setFailed: vi.fn(),
+  setFailed: vi.fn()
 }));
 
 // Helper to create a mock Octokit
@@ -13,9 +13,9 @@ function createMockOctokit() {
   return {
     rest: {
       issues: {
-        addLabels: vi.fn(),
-      },
-    },
+        addLabels: vi.fn()
+      }
+    }
   };
 }
 
@@ -40,7 +40,7 @@ describe('setLabelVersionOnPullRequest', () => {
       owner,
       repo,
       issue_number: pullNumber,
-      labels: [label.name],
+      labels: [label.name]
     });
   });
 
@@ -50,7 +50,7 @@ describe('setLabelVersionOnPullRequest', () => {
     const fn = setLabelVersionOnPullRequest(octokit);
     await fn({ owner, repo, pullNumber, versionType });
     expect(consoleSpy).toHaveBeenCalledWith(
-      `Label ${label.name} added to pull request #${pullNumber}`,
+      `Label ${label.name} added to pull request #${pullNumber}`
     );
     consoleSpy.mockRestore();
   });

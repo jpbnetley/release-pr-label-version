@@ -36,7 +36,7 @@ export async function executeReleaseScript({
   majorReleaseScript,
   minorReleaseScript,
   patchReleaseScript,
-  preReleaseScript,
+  preReleaseScript
 }: ExecuteReleaseScriptParams) {
   if (labels.includes(ReleaseLabelName.VersionPreRelease)) {
     if (!preReleaseScript) {

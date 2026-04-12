@@ -28,7 +28,7 @@ export function setLabelVersionOnPullRequest(octokit: Octokit) {
     owner,
     pullNumber,
     repo,
-    versionType,
+    versionType
   }: SetLabelVersionOnPullRequestParams) {
     try {
       const label = ReleaseLabel[versionType];
@@ -37,7 +37,7 @@ export function setLabelVersionOnPullRequest(octokit: Octokit) {
         owner,
         repo,
         issue_number: pullNumber,
-        labels: [label.name],
+        labels: [label.name]
       });
 
       console.log(`Label ${label.name} added to pull request #${pullNumber}`);

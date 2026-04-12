@@ -19869,10 +19869,6 @@ async function run() {
 		info("No relevant labels found");
 		return;
 	}
-	if (isPreRelease && !preReleaseBranchName) {
-		setFailed("Pre-release branch name is required for pre-release versions");
-		return;
-	}
 	const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`;
 	if (labels.includes(ReleaseLabelName.VersionBump)) {
 		const currentVersion = await getCurrentReleaseVersion(currentVersionScript);
@@ -19898,21 +19894,29 @@ async function run() {
 		debug("Creating release version summary");
 		await summary.addHeading("Release version").addRaw(`Created for: ${currentVersion}`).write();
 		debug("Created release version summary");
+		/**
+		* Error: Failed to create new git branch: Reference already exists - https://docs.github.com/rest/git/refs#create-a-reference
+		* Error: Failed to create pull request: Validation Failed: {"resource":"PullRequest","code":"custom","message":"No commits between dev and release/version-to-dev"} - https://docs.github.com/rest/pulls/pulls#create-a-pull-request
+		*/
 		if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
 			const branchNameReleaseToPreRelease = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
+			info(`Creating new branch '${branchNameReleaseToPreRelease}' from '${preReleaseBranchName}'`);
 			await createNewGitBranch(octokit)({
 				branchName: branchNameReleaseToPreRelease,
 				owner,
 				repo,
 				baseBranch: preReleaseBranchName
 			});
-			await createPullRequest(octokit)({
+			info(`Creating pull request from '${branchNameReleaseToPreRelease}' to '${preReleaseBranchName}'`);
+			const pr = await createPullRequest(octokit)({
 				owner,
 				repo,
 				title: `Merge changes from ${releaseBranchName} to ${preReleaseBranchName}`,
 				head: branchNameReleaseToPreRelease,
 				base: preReleaseBranchName
 			});
+			if (!pr) info(`No pull request created for branch '${branchNameReleaseToPreRelease}'`);
+			else info(`Pull request created: ${pr.html_url}`);
 		}
 		return;
 	}

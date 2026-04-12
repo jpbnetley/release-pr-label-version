@@ -23,7 +23,7 @@ export function createReleaseLabels(octokit: Octokit) {
       const label = ReleaseLabel[key as keyof typeof ReleaseLabel];
       return createLabelIfNotExists(octokit)(owner, repo, {
         name: label.name,
-        color: label.color,
+        color: label.color
       });
     });
 

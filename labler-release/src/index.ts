@@ -77,11 +77,6 @@ async function run() {
     return;
   }
 
-  if (isPreRelease && !preReleaseBranchName) {
-    setFailed('Pre-release branch name is required for pre-release versions');
-    return;
-  }
-
   const RELEASE_VERSION_BRANCH_NAME = `${RELEASE_BRANCH_NAME}-${pullRequest.number}`;
 
   if (labels.includes(ReleaseLabelName.VersionBump)) {
@@ -104,7 +99,7 @@ async function run() {
       tagName: `${currentVersion}`,
       releaseName: `Release for version: ${currentVersion}`,
       body: `Release ${currentVersion}`,
-      isPreRelease: isPreRelease,
+      isPreRelease: isPreRelease
     });
     info('Release created successfully.');
 
@@ -112,23 +107,37 @@ async function run() {
     await summary.addHeading('Release version').addRaw(`Created for: ${currentVersion}`).write();
     debug('Created release version summary');
 
+    // TODO: bug when production release gets created, the following errors happen
+    /**
+     * Error: Failed to create new git branch: Reference already exists - https://docs.github.com/rest/git/refs#create-a-reference
+     * Error: Failed to create pull request: Validation Failed: {"resource":"PullRequest","code":"custom","message":"No commits between dev and release/version-to-dev"} - https://docs.github.com/rest/pulls/pulls#create-a-pull-request
+     */
     if (!labels.includes(ReleaseLabelName.VersionPreRelease) && preReleaseBranchName) {
       const branchNameReleaseToPreRelease = `${RELEASE_BRANCH_NAME}-to-${preReleaseBranchName}`;
 
+      info(`Creating new branch '${branchNameReleaseToPreRelease}' from '${preReleaseBranchName}'`);
       await createNewGitBranch(octokit)({
         branchName: branchNameReleaseToPreRelease,
         owner,
         repo,
-        baseBranch: preReleaseBranchName,
+        baseBranch: preReleaseBranchName
       });
 
-      await createPullRequest(octokit)({
+      info(
+        `Creating pull request from '${branchNameReleaseToPreRelease}' to '${preReleaseBranchName}'`
+      );
+      const pr = await createPullRequest(octokit)({
         owner,
         repo,
         title: `Merge changes from ${releaseBranchName} to ${preReleaseBranchName}`,
         head: branchNameReleaseToPreRelease,
-        base: preReleaseBranchName,
+        base: preReleaseBranchName
       });
+      if (!pr) {
+        info(`No pull request created for branch '${branchNameReleaseToPreRelease}'`);
+      } else {
+        info(`Pull request created: ${pr.html_url}`);
+      }
     }
 
     return;
@@ -149,7 +158,7 @@ async function run() {
     owner,
     repo,
     branchName: RELEASE_VERSION_BRANCH_NAME,
-    baseBranch: pullRequest.base.ref,
+    baseBranch: pullRequest.base.ref
   });
 
   debug(`Created new branch: ${RELEASE_VERSION_BRANCH_NAME}`);
@@ -165,7 +174,7 @@ async function run() {
     majorReleaseScript,
     minorReleaseScript,
     patchReleaseScript,
-    preReleaseScript,
+    preReleaseScript
   });
 
   const hasChanges = await hasGitChanges();
@@ -187,7 +196,7 @@ async function run() {
 
   debug('Committing files to git.');
   await commitFilesToGit({
-    commitMessage: `Update release version to ${currentVersion}`,
+    commitMessage: `Update release version to ${currentVersion}`
   });
   debug('Files committed to git.');
 
@@ -204,7 +213,7 @@ async function run() {
     base: pullRequest.base.ref,
     body: `This PR was automatically created by the labler-release action for pull request #${
       pullRequest.number
-    }.\n\nLabels: ${labels.join(', ')}`,
+    }.\n\nLabels: ${labels.join(', ')}`
   });
   debug(`Pull request created for branch: ${RELEASE_VERSION_BRANCH_NAME}`);
 
@@ -219,11 +228,11 @@ async function run() {
     pullNumber: newVersionPr.number,
     labels: [
       ReleaseLabelName.VersionBump,
-      isPreRelease && ReleaseLabelName.VersionPreRelease,
-    ].filter(Boolean) as string[],
+      isPreRelease && ReleaseLabelName.VersionPreRelease
+    ].filter(Boolean) as string[]
   });
   info(
-    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`,
+    `Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`
   );
 
   await summary

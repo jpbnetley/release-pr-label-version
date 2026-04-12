@@ -28,7 +28,7 @@ export function createPullRequest(octokit: Octokit) {
     title,
     head,
     base = 'main',
-    body,
+    body
   }: CreatePullRequestParams) {
     try {
       const { data: pullRequest } = await octokit.rest.pulls.create({
@@ -37,7 +37,7 @@ export function createPullRequest(octokit: Octokit) {
         title,
         head,
         base,
-        body,
+        body
       });
 
       return pullRequest;

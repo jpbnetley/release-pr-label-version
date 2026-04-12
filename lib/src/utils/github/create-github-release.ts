@@ -40,7 +40,7 @@ export function createGitHubRelease(octokit: Octokit) {
     releaseName,
     repo,
     tagName,
-    generate_release_notes = true,
+    generate_release_notes = true
   }: CreateGitHubReleaseParam): Promise<void> {
     return new Promise((resolve, reject) => {
       (async () => {
@@ -53,7 +53,7 @@ export function createGitHubRelease(octokit: Octokit) {
             body,
             draft: isDraft,
             prerelease: isPreRelease,
-            generate_release_notes,
+            generate_release_notes
           });
 
           info(`Created GitHub release: ${releaseName} (${tagName})`);

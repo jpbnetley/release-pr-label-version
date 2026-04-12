@@ -6,7 +6,7 @@ import { setFailed, info, error as logError } from '@actions/core';
 vi.mock('@actions/core', () => ({
   setFailed: vi.fn(),
   info: vi.fn(),
-  error: vi.fn(),
+  error: vi.fn()
 }));
 
 describe('createLabelIfNotExists', () => {
@@ -22,16 +22,16 @@ describe('createLabelIfNotExists', () => {
       rest: {
         issues: {
           listLabelsForRepo: vi.fn(),
-          createLabel: vi.fn(),
-        },
-      },
+          createLabel: vi.fn()
+        }
+      }
     };
     ensureLabel = createLabelIfNotExists(octokit);
   });
 
   it('creates the label if it does not exist', async () => {
     octokit.rest.issues.listLabelsForRepo.mockResolvedValue({
-      data: [{ name: 'feature' }],
+      data: [{ name: 'feature' }]
     });
     octokit.rest.issues.createLabel.mockResolvedValue({});
 
@@ -39,20 +39,20 @@ describe('createLabelIfNotExists', () => {
 
     expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
       owner,
-      repo,
+      repo
     });
   });
 
   it('does not create the label if it already exists', async () => {
     octokit.rest.issues.listLabelsForRepo.mockResolvedValue({
-      data: [{ name: 'bug' }],
+      data: [{ name: 'bug' }]
     });
 
     await ensureLabel(owner, repo, label);
 
     expect(octokit.rest.issues.listLabelsForRepo).toHaveBeenCalledWith({
       owner,
-      repo,
+      repo
     });
     expect(octokit.rest.issues.createLabel).not.toHaveBeenCalled();
     expect(info).toHaveBeenCalledWith(`Label already exists: ${label.name}`);

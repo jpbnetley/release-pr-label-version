@@ -30,14 +30,14 @@ export function createNewGitBranch(octokit: Octokit) {
     baseBranch = context.ref.split('/').pop() || 'main',
     branchName,
     owner,
-    repo,
+    repo
   }: CreateNewGitBranchParams) {
     try {
       // Get the latest commit from the base branch
       const { data: refData } = await octokit.rest.git.getRef({
         owner,
         repo,
-        ref: `heads/${baseBranch}`,
+        ref: `heads/${baseBranch}`
       });
 
       // Create a new branch from the latest commit
@@ -45,7 +45,7 @@ export function createNewGitBranch(octokit: Octokit) {
         owner,
         repo,
         ref: `refs/heads/${branchName}`,
-        sha: refData.object.sha,
+        sha: refData.object.sha
       });
 
       return newBranch;

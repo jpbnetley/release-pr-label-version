@@ -27,7 +27,7 @@ export function addLabelToPullRequest(octokit: Octokit) {
       owner,
       repo,
       issue_number: pullNumber,
-      labels,
+      labels
     });
   };
 }

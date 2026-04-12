@@ -28,5 +28,5 @@ export enum ReleaseLabelColors {
   /**
    * Yellow
    */
-  VersionPreRelease = 'fbca04',
+  VersionPreRelease = 'fbca04'
 }

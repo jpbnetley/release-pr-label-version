@@ -42,7 +42,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
       const { data: labels } = await octokit.rest.issues.listLabelsOnIssue({
         owner,
         repo,
-        issue_number: prNumber,
+        issue_number: prNumber
       });
 
       const labelNames = labels.map(label => label.name);
@@ -52,7 +52,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
         ReleaseLabelName.VersionMajor,
         ReleaseLabelName.VersionSkip,
         ReleaseLabelName.VersionPreRelease,
-        ReleaseLabelName.VersionBump,
+        ReleaseLabelName.VersionBump
       ];
 
       const hasVersionLabel = versionLabels.some(label => labelNames.includes(label));
@@ -66,7 +66,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
           owner,
           repo,
           issue_number: prNumber,
-          labels: [label],
+          labels: [label]
         });
         info(`Added '${label}' label to PR #${prNumber}`);
         if (!isPreRelease) {
@@ -80,7 +80,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
             owner,
             repo,
             issue_number: prNumber,
-            name: ReleaseLabelName.VersionRequired,
+            name: ReleaseLabelName.VersionRequired
           });
           info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
         }

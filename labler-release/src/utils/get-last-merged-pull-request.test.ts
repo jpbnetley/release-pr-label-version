@@ -6,9 +6,9 @@ const mockList = vi.fn();
 const mockOctokit = {
   rest: {
     pulls: {
-      list: mockList,
-    },
-  },
+      list: mockList
+    }
+  }
 } as any;
 
 const owner = 'test-owner';
@@ -24,15 +24,15 @@ describe('getLastMergedPullRequest', () => {
     const mergedPR = {
       number: 42,
       base: { ref: `${branchName}` },
-      merged_at: '2023-01-01T00:00:00Z',
+      merged_at: '2023-01-01T00:00:00Z'
     };
     const otherPR = {
       number: 41,
       base: { ref: `refs/heads/other-branch` },
-      merged_at: '2023-01-01T00:00:00Z',
+      merged_at: '2023-01-01T00:00:00Z'
     };
     mockList.mockResolvedValueOnce({
-      data: [mergedPR, otherPR],
+      data: [mergedPR, otherPR]
     });
 
     const fn = getLastMergedPullRequest(mockOctokit);
@@ -43,7 +43,7 @@ describe('getLastMergedPullRequest', () => {
       repo,
       state: 'closed',
       sort: 'updated',
-      direction: 'desc',
+      direction: 'desc'
     });
   });
 
@@ -53,14 +53,14 @@ describe('getLastMergedPullRequest', () => {
         {
           number: 43,
           base: { ref: `refs/heads/other-branch` },
-          merged_at: '2023-01-01T00:00:00Z',
+          merged_at: '2023-01-01T00:00:00Z'
         },
         {
           number: 44,
           base: { ref: `refs/heads/${branchName}` },
-          merged_at: null,
-        },
-      ],
+          merged_at: null
+        }
+      ]
     });
 
     const fn = getLastMergedPullRequest(mockOctokit);
@@ -73,7 +73,7 @@ describe('getLastMergedPullRequest', () => {
 
     const fn = getLastMergedPullRequest(mockOctokit);
     await expect(fn(owner, repo, branchName)).rejects.toThrow(
-      /Failed to get last merged pull request number: API error/,
+      /Failed to get last merged pull request number: API error/
     );
   });
 
@@ -82,7 +82,7 @@ describe('getLastMergedPullRequest', () => {
 
     const fn = getLastMergedPullRequest(mockOctokit);
     await expect(fn(owner, repo, branchName)).rejects.toThrow(
-      /Failed to get last merged pull request number: some string error/,
+      /Failed to get last merged pull request number: some string error/
     );
   });
 });

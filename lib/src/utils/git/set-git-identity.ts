@@ -19,7 +19,7 @@ export type SetGitIdentityParams = {
  */
 export function setGitIdentity({
   name = 'GitHub Action',
-  email = 'action@github.com',
+  email = 'action@github.com'
 }: SetGitIdentityParams = {}): Promise<void> {
   return new Promise((resolve, reject) => {
     exec(`git config user.name "${name}"`, error => {

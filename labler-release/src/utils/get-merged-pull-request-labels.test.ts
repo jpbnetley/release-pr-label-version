@@ -3,7 +3,7 @@ import { getMergedPullRequestLabels } from './get-merged-pull-request-labels.js'
 import { setFailed } from '@actions/core';
 
 vi.mock('@actions/core', () => ({
-  setFailed: vi.fn(),
+  setFailed: vi.fn()
 }));
 
 describe('getMergedPullRequestLabels', () => {
@@ -18,16 +18,16 @@ describe('getMergedPullRequestLabels', () => {
     octokit = {
       rest: {
         pulls: {
-          get: vi.fn(),
-        },
-      },
+          get: vi.fn()
+        }
+      }
     };
   });
 
   it('returns label names when pull request has labels', async () => {
     const labels = [{ name: 'bug' }, { name: 'feature' }, { name: 'enhancement' }];
     octokit.rest.pulls.get.mockResolvedValue({
-      data: { labels },
+      data: { labels }
     });
 
     const fn = getMergedPullRequestLabels(octokit);
@@ -36,13 +36,13 @@ describe('getMergedPullRequestLabels', () => {
     expect(octokit.rest.pulls.get).toHaveBeenCalledWith({
       owner,
       repo,
-      pull_number: pullNumber,
+      pull_number: pullNumber
     });
   });
 
   it('returns an empty array when pull request has no labels', async () => {
     octokit.rest.pulls.get.mockResolvedValue({
-      data: { labels: [] },
+      data: { labels: [] }
     });
 
     const fn = getMergedPullRequestLabels(octokit);
@@ -66,7 +66,7 @@ describe('getMergedPullRequestLabels', () => {
     const fn = getMergedPullRequestLabels(octokit);
     const result = await fn(owner, repo, pullNumber);
     expect(setFailed).toHaveBeenCalledWith(
-      'Failed to get merged pull request labels: Unknown error',
+      'Failed to get merged pull request labels: Unknown error'
     );
     expect(result).toBeUndefined();
   });

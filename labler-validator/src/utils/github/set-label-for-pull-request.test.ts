@@ -7,13 +7,13 @@ import { context } from '@actions/github';
 // Mocks
 vi.mock('@actions/core', () => ({
   setFailed: vi.fn(),
-  info: vi.fn(),
+  info: vi.fn()
 }));
 vi.mock('@actions/github', () => ({
   context: {
     payload: { pull_request: { number: 123 } },
-    repo: { owner: 'test-owner', repo: 'test-repo' },
-  },
+    repo: { owner: 'test-owner', repo: 'test-repo' }
+  }
 }));
 
 function getOctokitMock(labels: string[] = []): any {
@@ -21,12 +21,12 @@ function getOctokitMock(labels: string[] = []): any {
     rest: {
       issues: {
         listLabelsOnIssue: vi.fn().mockResolvedValue({
-          data: labels.map(name => ({ name })),
+          data: labels.map(name => ({ name }))
         }),
         addLabels: vi.fn().mockResolvedValue({}),
-        removeLabel: vi.fn().mockResolvedValue({}),
-      },
-    },
+        removeLabel: vi.fn().mockResolvedValue({})
+      }
+    }
   };
 }
 
@@ -53,7 +53,7 @@ describe('setLabelForPullRequest', () => {
       owner: 'test-owner',
       repo: 'test-repo',
       issue_number: 123,
-      labels: ['release:version-required'],
+      labels: ['release:version-required']
     });
     expect(info).toHaveBeenCalledWith("Added 'release:version-required' label to PR #123");
     expect(setFailed).toHaveBeenCalledWith('PR #123 is missing a version label');
@@ -62,20 +62,20 @@ describe('setLabelForPullRequest', () => {
   it('removes version-required label if a version label is present', async () => {
     const octokit = getOctokitMock([
       ReleaseLabelName.VersionPatch,
-      ReleaseLabelName.VersionRequired,
+      ReleaseLabelName.VersionRequired
     ]);
     await setLabelForPullRequest(octokit)();
     expect(info).toHaveBeenCalledWith(
-      `Removing ${ReleaseLabelName.VersionRequired} label for PR #123`,
+      `Removing ${ReleaseLabelName.VersionRequired} label for PR #123`
     );
     expect(octokit.rest.issues.removeLabel).toHaveBeenCalledWith({
       owner: 'test-owner',
       repo: 'test-repo',
       issue_number: 123,
-      name: ReleaseLabelName.VersionRequired,
+      name: ReleaseLabelName.VersionRequired
     });
     expect(info).toHaveBeenCalledWith(
-      `Removed ${ReleaseLabelName.VersionRequired} label from PR #123`,
+      `Removed ${ReleaseLabelName.VersionRequired} label from PR #123`
     );
     expect(setFailed).not.toHaveBeenCalled();
   });
