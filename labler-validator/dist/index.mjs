@@ -16126,6 +16126,21 @@ var ExitCode;
 	ExitCode[ExitCode["Failure"] = 1] = "Failure";
 })(ExitCode || (ExitCode = {}));
 /**
+* Gets the value of an input.
+* Unless trimWhitespace is set to false in InputOptions, the value is also trimmed.
+* Returns an empty string if the value is not defined.
+*
+* @param     name     name of the input to get
+* @param     options  optional. See InputOptions.
+* @returns   string
+*/
+function getInput(name, options) {
+	const val = process.env[`INPUT_${name.replace(/ /g, "_").toUpperCase()}`] || "";
+	if (options && options.required && !val) throw new Error(`Input required and not supplied: ${name}`);
+	if (options && options.trimWhitespace === false) return val;
+	return val.trim();
+}
+/**
 * Sets the action status to failed.
 * When the action exits it will be with an exit code of 1
 * @param message add error issue message
@@ -19455,13 +19470,14 @@ function setLabelForPullRequest(octokit) {
 }
 //#endregion
 //#region src/index.ts
-function run() {
+async function run() {
+	const isPreRelease = getInput("isPreRelease") === "true";
 	const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 	if (!GITHUB_TOKEN) {
 		setFailed("GITHUB_TOKEN is not set");
 		process.exit(1);
 	}
-	setLabelForPullRequest(getOctokit(GITHUB_TOKEN));
+	await setLabelForPullRequest(getOctokit(GITHUB_TOKEN))({ isPreRelease });
 }
 run();
 //#endregion

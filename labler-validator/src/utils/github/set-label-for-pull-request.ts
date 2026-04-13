@@ -46,7 +46,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
       });
 
       const labelNames = labels.map(label => label.name);
-      
+
       debug(`Current labels on PR #${prNumber}: ` + labelNames.join(', '));
       const versionLabels = [
         ReleaseLabelName.VersionPatch,
@@ -71,7 +71,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
           issue_number: prNumber,
           labels: [label]
         });
-        
+
         info(`Added '${label}' label to PR #${prNumber}`);
         if (!isPreRelease) {
           setFailed(`PR #${prNumber} is missing a version label`);
