@@ -1,4 +1,4 @@
-import { setFailed, info } from '@actions/core';
+import { setFailed, info, debug } from '@actions/core';
 import { context } from '@actions/github';
 import { ReleaseLabelName } from 'lib/types/enums/release-label-name.mjs';
 import { Octokit } from 'lib/types/models/github/octokit.mjs';
@@ -46,6 +46,8 @@ export function setLabelForPullRequest(octokit: Octokit) {
       });
 
       const labelNames = labels.map(label => label.name);
+      
+      debug(`Current labels on PR #${prNumber}: ` + labelNames.join(', '));
       const versionLabels = [
         ReleaseLabelName.VersionPatch,
         ReleaseLabelName.VersionMinor,
@@ -53,9 +55,10 @@ export function setLabelForPullRequest(octokit: Octokit) {
         ReleaseLabelName.VersionSkip,
         ReleaseLabelName.VersionPreRelease,
         ReleaseLabelName.VersionBump
-      ];
+      ] as const;
 
       const hasVersionLabel = versionLabels.some(label => labelNames.includes(label));
+      debug(`Has version label: ${hasVersionLabel}`);
 
       if (!hasVersionLabel) {
         const label = isPreRelease
@@ -68,6 +71,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
           issue_number: prNumber,
           labels: [label]
         });
+        
         info(`Added '${label}' label to PR #${prNumber}`);
         if (!isPreRelease) {
           setFailed(`PR #${prNumber} is missing a version label`);
