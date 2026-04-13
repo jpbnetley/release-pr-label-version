@@ -78,7 +78,7 @@ export function setLabelForPullRequest(octokit: Octokit) {
         }
         return;
       }
-      
+
       info(`Version label already present in PR #${prNumber}`);
       if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
         info(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
