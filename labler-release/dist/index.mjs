@@ -3839,6 +3839,12 @@ var require_util$6 = /* @__PURE__ */ __commonJSMin(((exports, module) => {
 				if (isURLPotentiallyTrustworthy(referrerURL) && !isURLPotentiallyTrustworthy(currentURL)) return "no-referrer";
 				return referrerOrigin;
 			}
+			/**
+			* 1. If referrerURL is a potentially trustworthy URL and
+			* request’s current URL is not a potentially trustworthy URL,
+			* then return no referrer.
+			* 2. Return referrerOrigin
+			*/
 			default: return isNonPotentiallyTrustWorthy ? "no-referrer" : referrerOrigin;
 		}
 	}
@@ -16205,7 +16211,7 @@ function getMergedPullRequestLabels(octokit) {
 	};
 }
 //#endregion
-//#region ../node_modules/.pnpm/@actions+github@9.0.0/node_modules/@actions/github/lib/context.js
+//#region ../node_modules/.pnpm/@actions+github@9.1.0/node_modules/@actions/github/lib/context.js
 var Context = class {
 	/**
 	* Hydrate the context from the environment
@@ -16305,7 +16311,7 @@ var require_proxy = /* @__PURE__ */ __commonJSMin(((exports) => {
 	};
 }));
 //#endregion
-//#region ../node_modules/.pnpm/@actions+github@9.0.0/node_modules/@actions/github/lib/internal/utils.js
+//#region ../node_modules/.pnpm/@actions+github@9.1.0/node_modules/@actions/github/lib/internal/utils.js
 var import_lib = /* @__PURE__ */ __toESM((/* @__PURE__ */ __commonJSMin(((exports) => {
 	var __createBinding = exports && exports.__createBinding || (Object.create ? (function(o, m, k, k2) {
 		if (k2 === void 0) k2 = k;
@@ -16940,6 +16946,16 @@ function getProxyFetch(destinationUrl) {
 function getApiBaseUrl() {
 	return process.env["GITHUB_API_URL"] || "https://api.github.com";
 }
+function getUserAgentWithOrchestrationId(baseUserAgent) {
+	var _a;
+	const orchId = (_a = process.env["ACTIONS_ORCHESTRATION_ID"]) === null || _a === void 0 ? void 0 : _a.trim();
+	if (orchId) {
+		const tag = `actions_orchestration_id/${orchId.replace(/[^a-z0-9_.-]/gi, "_")}`;
+		if (baseUserAgent === null || baseUserAgent === void 0 ? void 0 : baseUserAgent.includes(tag)) return baseUserAgent;
+		return `${baseUserAgent ? `${baseUserAgent} ` : ""}${tag}`;
+	}
+	return baseUserAgent;
+}
 //#endregion
 //#region ../node_modules/.pnpm/universal-user-agent@7.0.3/node_modules/universal-user-agent/index.js
 function getUserAgent() {
@@ -17040,13 +17056,12 @@ var before_after_hook_default = {
 };
 //#endregion
 //#region ../node_modules/.pnpm/@octokit+endpoint@11.0.3/node_modules/@octokit/endpoint/dist-bundle/index.js
-var userAgent = `octokit-endpoint.js/0.0.0-development ${getUserAgent()}`;
 var DEFAULTS = {
 	method: "GET",
 	baseUrl: "https://api.github.com",
 	headers: {
 		accept: "application/vnd.github.v3+json",
-		"user-agent": userAgent
+		"user-agent": `octokit-endpoint.js/0.0.0-development ${getUserAgent()}`
 	},
 	mediaType: { format: "" }
 };
@@ -17536,8 +17551,7 @@ var RequestError = class extends Error {
 };
 //#endregion
 //#region ../node_modules/.pnpm/@octokit+request@10.0.8/node_modules/@octokit/request/dist-bundle/index.js
-var VERSION$4 = "10.0.8";
-var defaults_default = { headers: { "user-agent": `octokit-request.js/${VERSION$4} ${getUserAgent()}` } };
+var defaults_default = { headers: { "user-agent": `octokit-request.js/10.0.8 ${getUserAgent()}` } };
 function isPlainObject(value) {
 	if (typeof value !== "object" || value === null) return false;
 	if (Object.prototype.toString.call(value) !== "[object Object]") return false;
@@ -19389,10 +19403,12 @@ function getOctokitOptions(token, options) {
 	const opts = Object.assign({}, options || {});
 	const auth = getAuthString(token, opts);
 	if (auth) opts.auth = auth;
+	const userAgent = getUserAgentWithOrchestrationId(opts.userAgent);
+	if (userAgent) opts.userAgent = userAgent;
 	return opts;
 }
 //#endregion
-//#region ../node_modules/.pnpm/@actions+github@9.0.0/node_modules/@actions/github/lib/github.js
+//#region ../node_modules/.pnpm/@actions+github@9.1.0/node_modules/@actions/github/lib/github.js
 const context = new Context();
 /**
 * Returns a hydrated octokit ready to use for GitHub Actions
