@@ -76,18 +76,19 @@ export function setLabelForPullRequest(octokit: Octokit) {
         if (!isPreRelease) {
           setFailed(`PR #${prNumber} is missing a version label`);
         }
-      } else {
-        info(`Version label already present in PR #${prNumber}`);
-        if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
-          info(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
-          await octokit.rest.issues.removeLabel({
-            owner,
-            repo,
-            issue_number: prNumber,
-            name: ReleaseLabelName.VersionRequired
-          });
-          info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
-        }
+        return;
+      }
+      
+      info(`Version label already present in PR #${prNumber}`);
+      if (hasVersionLabel && labelNames.includes(ReleaseLabelName.VersionRequired)) {
+        info(`Removing ${ReleaseLabelName.VersionRequired} label for PR #${prNumber}`);
+        await octokit.rest.issues.removeLabel({
+          owner,
+          repo,
+          issue_number: prNumber,
+          name: ReleaseLabelName.VersionRequired
+        });
+        info(`Removed ${ReleaseLabelName.VersionRequired} label from PR #${prNumber}`);
       }
     } catch (error) {
       if (error instanceof Error) {

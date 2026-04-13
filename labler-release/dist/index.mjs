@@ -20003,7 +20003,7 @@ async function run() {
 		labels: [ReleaseLabelName.VersionBump, isPreRelease && ReleaseLabelName.VersionPreRelease].filter(Boolean)
 	});
 	info(`Added label '${ReleaseLabelName.VersionBump}' to pull request #${newVersionPr.number}: ${newVersionPr.html_url}`);
-	await summary.addHeading("Release version pull request").addRaw(`New version pull request: ${newVersionPr.html_url}`).write();
+	await summary.addHeading("Release version pull request").addRaw(`New version pull request: [#${newVersionPr.number}](${newVersionPr.html_url})`).write();
 	info("Release process completed successfully.");
 }
 run().catch((error) => setFailed(`Action failed with error: ${error?.message ?? error}`));

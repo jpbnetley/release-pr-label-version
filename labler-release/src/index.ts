@@ -237,7 +237,7 @@ async function run() {
 
   await summary
     .addHeading('Release version pull request')
-    .addRaw(`New version pull request: ${newVersionPr.html_url}`)
+    .addRaw(`New version pull request: [#${newVersionPr.number}](${newVersionPr.html_url})`)
     .write();
 
   info('Release process completed successfully.');
