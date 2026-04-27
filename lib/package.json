@@ -25,8 +25,8 @@
     "tsc:check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@actions/core": "^3.0.0",
-    "@actions/github": "^9.1.0"
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1"
   },
   "peerDependencies": {
     "@actions/core": "^3",
