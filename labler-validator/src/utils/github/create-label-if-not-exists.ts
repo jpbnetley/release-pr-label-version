@@ -17,13 +17,13 @@ export function createLabelIfNotExists(octokit: Octokit) {
   return async function createLabelIfNotExists(
     owner: string,
     repo: string,
-    label: { name: string; color: string },
+    label: { name: string; color: string }
   ) {
     try {
       // Check if the label already exists
       const { data: labels } = await octokit.rest.issues.listLabelsForRepo({
         owner,
-        repo,
+        repo
       });
 
       if (!labels.some(labelCheck => labelCheck.name === label.name)) {
@@ -32,7 +32,7 @@ export function createLabelIfNotExists(octokit: Octokit) {
           owner,
           repo,
           name: label.name,
-          color: label.color,
+          color: label.color
         });
         info(`Label created: ${label.name}`);
       } else {

@@ -19,8 +19,16 @@ declare enum ReleaseLabelColors {
   /**
    * Light Gray
    */
-  VersionSkip = "bfd4f2"
+  VersionSkip = "bfd4f2",
+  /**
+   * Purple
+   */
+  VersionBump = "A020F0",
+  /**
+   * Yellow
+   */
+  VersionPreRelease = "fbca04"
 }
 //#endregion
 export { ReleaseLabelColors };
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVsZWFzZS1sYWJlbC1jb2xvcnMuZC5tdHMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3R5cGVzL2VudW1zL3JlbGVhc2UtbGFiZWwtY29sb3JzLmQudHMiXSwic291cmNlc0NvbnRlbnQiOlsiZXhwb3J0IGRlY2xhcmUgZW51bSBSZWxlYXNlTGFiZWxDb2xvcnMge1xuICAgIC8qKlxuICAgICAqIFJlZFxuICAgICAqL1xuICAgIFZlcnNpb25SZXF1aXJlZCA9IFwiYjYwMjA1XCIsXG4gICAgLyoqXG4gICAgICogR3JlZW5cbiAgICAgKi9cbiAgICBWZXJzaW9uUGF0Y2ggPSBcIjBlOGExNlwiLFxuICAgIC8qKlxuICAgICAqIEJsdWVcbiAgICAgKi9cbiAgICBWZXJzaW9uTWlub3IgPSBcIjAwNTJjY1wiLFxuICAgIC8qKlxuICAgICAqIE9yYW5nZVxuICAgICAqL1xuICAgIFZlcnNpb25NYWpvciA9IFwiZDkzZjBiXCIsXG4gICAgLyoqXG4gICAgICogTGlnaHQgR3JheVxuICAgICAqL1xuICAgIFZlcnNpb25Ta2lwID0gXCJiZmQ0ZjJcIlxufVxuIl0sIm1hcHBpbmdzIjoiO0FBQUEsSUFBTyxxQkFBYTtDQUFBO09BQW1CLEVBQUE7Q0FBQTtFQUFBO0VBQUE7RUFBQTtFQUFBO0VBQUE7RUFBQTtDQUFBIn0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoicmVsZWFzZS1sYWJlbC1jb2xvcnMuZC5tdHMiLCJuYW1lcyI6W10sInNvdXJjZXMiOlsiLi4vLi4vLi4vc3JjL3R5cGVzL2VudW1zL3JlbGVhc2UtbGFiZWwtY29sb3JzLnRzIl0sIm1hcHBpbmdzIjoiO2FBQVksa0JBQUE7RUFBQTs7O0VBSVYsZUFBQTtFQUFBOzs7RUFJQSxZQUFBO0VBWUE7OztFQVJBLFlBQUE7RUFrQmlCOzs7RUFkakIsWUFBQTs7OztFQUlBLFdBQUE7Ozs7RUFLQSxXQUFBOzs7O0VBS0EsaUJBQUE7QUFBQSJ9

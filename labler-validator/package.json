@@ -13,11 +13,8 @@
     "tsc:check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1",
     "lib": "workspace:*"
-  },
-  "peerDependencies": {
-    "@actions/core": "^2",
-    "@actions/github": "^7"
-  },
-  "packageManager": "pnpm@10.13.1"
+  }
 }

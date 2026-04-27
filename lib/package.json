@@ -14,14 +14,22 @@
       "types": "./dist/index.d.mts",
       "import": "./dist/index.mjs"
     },
+    "./utils/*": {
+      "types": "./dist/utils/*.d.mts",
+      "import": "./dist/utils/*"
+    },
     "./types/*": "./dist/types/*"
   },
   "scripts": {
     "build": "tsdown",
     "tsc:check": "tsc --noEmit"
   },
+  "devDependencies": {
+    "@actions/core": "^3.0.1",
+    "@actions/github": "^9.1.1"
+  },
   "peerDependencies": {
-    "@actions/core": "^2",
-    "@actions/github": "^7"
+    "@actions/core": "^3",
+    "@actions/github": "^9"
   }
 }

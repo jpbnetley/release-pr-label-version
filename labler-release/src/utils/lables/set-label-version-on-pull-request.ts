@@ -2,6 +2,13 @@ import { setFailed } from '@actions/core';
 import { Octokit } from 'lib/types/models/github/octokit.mjs';
 import { ReleaseLabel, ReleaseLabelKey } from 'lib/types/models/release-label.mjs';
 
+export type SetLabelVersionOnPullRequestParams = {
+  owner: string;
+  repo: string;
+  pullNumber: number;
+  versionType: ReleaseLabelKey;
+};
+
 /**
  * Returns a function that sets a release label on a pull request using the provided Octokit instance.
  *
@@ -17,12 +24,12 @@ import { ReleaseLabel, ReleaseLabelKey } from 'lib/types/models/release-label.mj
  * @param versionType - The release label key indicating the type of version (e.g., major, minor, patch).
  */
 export function setLabelVersionOnPullRequest(octokit: Octokit) {
-  return async function setLabelVersionOnPullRequest(
-    owner: string,
-    repo: string,
-    pullNumber: number,
-    versionType: ReleaseLabelKey,
-  ) {
+  return async function setLabelVersionOnPullRequest({
+    owner,
+    pullNumber,
+    repo,
+    versionType
+  }: SetLabelVersionOnPullRequestParams) {
     try {
       const label = ReleaseLabel[versionType];
 
@@ -30,7 +37,7 @@ export function setLabelVersionOnPullRequest(octokit: Octokit) {
         owner,
         repo,
         issue_number: pullNumber,
-        labels: [label.name],
+        labels: [label.name]
       });
 
       console.log(`Label ${label.name} added to pull request #${pullNumber}`);

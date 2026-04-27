@@ -3,7 +3,7 @@ import { executeBuildScript } from './execute-build-script.js';
 import { exec } from 'node:child_process';
 
 vi.mock('node:child_process', () => ({
-  exec: vi.fn(),
+  exec: vi.fn()
 }));
 
 describe('executeBuildScript', () => {
@@ -28,7 +28,7 @@ describe('executeBuildScript', () => {
     });
 
     await expect(executeBuildScript('badcommand')).rejects.toMatch(
-      /Error executing script: fail[\s\S]*error output/,
+      /Error executing script: fail[\s\S]*error output/
     );
     expect(mockedExec).toHaveBeenCalledWith('badcommand', expect.any(Function));
   });

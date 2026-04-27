@@ -5,7 +5,7 @@ import { setFailed } from '@actions/core';
 
 // Mock @actions/core
 vi.mock('@actions/core', () => ({
-  setFailed: vi.fn(),
+  setFailed: vi.fn()
 }));
 
 // Helper to create a mock Octokit
@@ -13,9 +13,9 @@ function createMockOctokit() {
   return {
     rest: {
       issues: {
-        addLabels: vi.fn(),
-      },
-    },
+        addLabels: vi.fn()
+      }
+    }
   };
 }
 
@@ -35,12 +35,12 @@ describe('setLabelVersionOnPullRequest', () => {
   it('should call addLabels with correct parameters', async () => {
     const label = ReleaseLabel[versionType];
     const fn = setLabelVersionOnPullRequest(octokit);
-    await fn(owner, repo, pullNumber, versionType);
+    await fn({ owner, repo, pullNumber, versionType });
     expect(octokit.rest.issues.addLabels).toHaveBeenCalledWith({
       owner,
       repo,
       issue_number: pullNumber,
-      labels: [label.name],
+      labels: [label.name]
     });
   });
 
@@ -48,9 +48,9 @@ describe('setLabelVersionOnPullRequest', () => {
     const consoleSpy = vi.spyOn(console, 'log').mockImplementation(() => {});
     const label = ReleaseLabel[versionType];
     const fn = setLabelVersionOnPullRequest(octokit);
-    await fn(owner, repo, pullNumber, versionType);
+    await fn({ owner, repo, pullNumber, versionType });
     expect(consoleSpy).toHaveBeenCalledWith(
-      `Label ${label.name} added to pull request #${pullNumber}`,
+      `Label ${label.name} added to pull request #${pullNumber}`
     );
     consoleSpy.mockRestore();
   });
@@ -59,14 +59,14 @@ describe('setLabelVersionOnPullRequest', () => {
     const error = new Error('API error');
     octokit.rest.issues.addLabels.mockRejectedValueOnce(error);
     const fn = setLabelVersionOnPullRequest(octokit);
-    await fn(owner, repo, pullNumber, versionType);
+    await fn({ owner, repo, pullNumber, versionType });
     expect(setFailed).toHaveBeenCalledWith(`Failed to set label on pull request: ${error.message}`);
   });
 
   it('should call setFailed with unknown error if addLabels throws non-Error', async () => {
     octokit.rest.issues.addLabels.mockRejectedValueOnce('some error');
     const fn = setLabelVersionOnPullRequest(octokit);
-    await fn(owner, repo, pullNumber, versionType);
+    await fn({ owner, repo, pullNumber, versionType });
     expect(setFailed).toHaveBeenCalledWith('Failed to set label on pull request: Unknown error');
   });
 });

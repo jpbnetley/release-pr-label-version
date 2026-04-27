@@ -14,13 +14,13 @@ export function getMergedPullRequestLabels(octokit: Octokit) {
   return async function getMergedPullRequestLabels(
     owner: string,
     repo: string,
-    pullNumber: number,
+    pullNumber: number
   ) {
     try {
       const { data: pullRequest } = await octokit.rest.pulls.get({
         owner,
         repo,
-        pull_number: pullNumber,
+        pull_number: pullNumber
       });
 
       return pullRequest.labels.map(label => label.name);
